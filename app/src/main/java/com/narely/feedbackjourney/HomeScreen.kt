@@ -28,10 +28,10 @@ fun HomeScreen() {
                 showBottomSheet = true
             }
         )
-    }) { content ->
+    }) {
         if (showBottomSheet) {
             CreateUserScreen{
-                showCreateForm ->
+                    showCreateForm ->
                 showBottomSheet = showCreateForm
             }
         }

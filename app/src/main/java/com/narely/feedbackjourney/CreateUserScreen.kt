@@ -2,39 +2,45 @@ package com.narely.feedbackjourney
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 import kotlinx.coroutines.launch
+import java.nio.file.WatchEvent
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -42,48 +48,46 @@ import kotlinx.coroutines.launch
 @Composable
 fun CreateUserScreen(onClickCreate: (Boolean) -> Unit) {
     val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
-    var showBottomSheet by remember { mutableStateOf(false) }
 
-    ModalBottomSheet(onDismissRequest = { showBottomSheet = false
-                                        onClickCreate(false)
-                                        },
+    ModalBottomSheet(
+        onDismissRequest = { onClickCreate(false) },
         sheetState = sheetState) {
-        Row() {
-            Button(onClick = {
-                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
-                        onClickCreate(false)
-                        showBottomSheet = false
-                    }
-                }
-            }) {
-                Text("Close Sheet")
-            }
-            Button(onClick = {
-                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
-                        onClickCreate(false)
-                        showBottomSheet = false
-                    }
-                }
-            }) {
-                Text("Save Forms")
-            }
+        Row(modifier = Modifier
+            .padding(vertical = 4.dp, horizontal = 16.dp)
+            .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            ActionsFormCreateUser("Close", sheetState, onClickCreate)
+            ActionsFormCreateUser("Save", sheetState, onClickCreate)
         }
         FormCreateEditUserScreen()
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ActionsFormCreateUser(label: String, sheetState: SheetState, onClickCreate: (Boolean) -> Unit) {
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
+    Button(onClick = {
+        scope.launch { sheetState.hide() }.invokeOnCompletion {
+            if (!sheetState.isVisible) {
+                onClickCreate(false)
+                showBottomSheet = false
+            }
+        }
+    }) {
+        Text(label)
+    }
+}
+
 @Composable
 fun FormCreateEditUserScreen() {
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column() {
         TextInputForm("Name")
         TextInputForm("Email")
         TextInputForm("Password")
-        SelectedTypeUser()
-        SelectedPDMUser()
-
+        ChooseTypeUser()
+        ChoosePDMUser()
     }
 }
 
@@ -99,94 +103,67 @@ fun TextInputForm(label: String) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChooseUser(option: String) {
-    val textFieldState = rememberTextFieldState(initialText = "")
-    TextField(
-        state = textFieldState,
-        label = { Text(option) },
-        placeholder = { Text(option) },
-        readOnly = true,
-        enabled = false
-    )
-}
+fun DropDownChooseUsers(label: String, options: List<String>) {
+    var expanded by remember { mutableStateOf(false) }
+    val textFieldState = rememberTextFieldState("")
+    var checkedIndex: Int by remember { mutableIntStateOf(0) }
 
-@Composable
-fun MenuSelected(typeUser: String, onClick: () -> Unit) {
-    Row() {
-        ChooseUser(typeUser)
-        IconButton(onClick = onClick) {
-            Icon(
-                painterResource(R.drawable.codicons_ic_chevron_down),
-                contentDescription = null
-            )
-        }
-    }
-}
-
-@Composable
-fun DropDownUserSelected(expanded: Boolean, listItems: List<String>, onDismiss: () -> Unit, onClick: (String) -> Unit) {
-
-    DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = onDismiss
+    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it}, modifier =
+        Modifier
+            .padding(vertical = 4.dp, horizontal = 16.dp)
     ) {
-        listItems.forEach { option ->
-            DropdownMenuItem(
-                text = { Text(option) },
-                onClick = { onClick(option) }
-            )
+        TextField(
+            modifier = Modifier
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+                .fillMaxWidth(),
+            state = textFieldState,
+            readOnly = true,
+            label = { Text(label) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            containerColor = MenuDefaults.containerColor,
+            shape = MenuDefaults.shape
+        ) {
+            options.forEachIndexed { index, option ->
+                DropdownMenuItem(
+                    text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
+                    onClick = {
+                        textFieldState.setTextAndPlaceCursorAtEnd(option)
+                        checkedIndex = index
+                        expanded = false
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                )
+            }
         }
     }
 }
 
 @Composable
-fun SelectedTypeUser() {
-    var expanded by remember { mutableStateOf(false) }
-    var typeUser by remember { mutableStateOf("Choose a type") }
-    val menuTypeUser: List<String> = listOf("Admin", "Collaborator", "PDM")
-    Box() {
-        MenuSelected(
-            typeUser
-        ) { expanded = !expanded }
-
-        DropDownUserSelected(expanded,
-            menuTypeUser,
-            { expanded = false },
-            { option ->
-                typeUser = option
-                expanded = false
-            }
-        )
-    }
+fun ChooseTypeUser() {
+    val options: List<String> = listOf("Admin", "Collaborator", "PDM")
+    DropDownChooseUsers("Choose a type", options)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectedPDMUser() {
-    var expanded by remember { mutableStateOf(false) }
-    var typeUser by remember { mutableStateOf("Choose a PDM") }
-    val menuPDMEmail: List<String> = listOf("maria@ciandt.com", "joao@ciandt.com", "fernando@ciandt.com")
-
-    Box() {
-        MenuSelected(
-            typeUser
-        ) { expanded = !expanded }
-
-        DropDownUserSelected(expanded,
-            menuPDMEmail,
-            { expanded = false },
-            { option ->
-                typeUser = option
-                expanded = false
-            }
-        )
-    }
+fun ChoosePDMUser() {
+    val options: List<String> = listOf("maria@ciandt.com", "joao@ciandt.com", "fernando@ciandt.com")
+    DropDownChooseUsers("Choose a PDM", options)
 }
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun CreateUserScreenPreview() {
     FeedbackJourneyTheme {
-        CreateUserScreen { }
+        CreateUserScreen {}
+//        FormCreateEditUserScreen()
     }
+
 }
