@@ -5,6 +5,9 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -24,8 +27,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 import kotlinx.coroutines.launch
@@ -73,12 +79,13 @@ fun CreateUserScreen() {
                 FormCreateEditUserScreen()
             }
         }
+        ListUsersScreen()
     }
 }
 
 @Composable
 fun FormCreateEditUserScreen() {
-    Column() {
+    Column(modifier = Modifier.padding(16.dp)) {
         TextInputForm("Name")
         TextInputForm("Email")
         TextInputForm("Password")
@@ -93,7 +100,10 @@ fun TextInputForm(label: String) {
     val textFieldState = rememberTextFieldState(initialText = label)
     TextField(
         state = textFieldState,
-        label = { Text(label) }
+        label = { Text(label) },
+        modifier = Modifier
+            .padding(vertical = 4.dp, horizontal = 16.dp)
+            .fillMaxWidth()
     )
 }
 
@@ -108,7 +118,7 @@ fun ChooseUser(option: String) {
         enabled = false
     )
 }
-
+//dropdown
 @Composable
 fun MenuSelected(typeUser: String, onClick: () -> Unit) {
     Row() {
