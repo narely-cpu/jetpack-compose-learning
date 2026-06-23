@@ -40,46 +40,38 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateUserScreen() {
+fun CreateUserScreen(onClickCreate: (Boolean) -> Unit) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
-    Scaffold(floatingActionButton = {
-        ExtendedFloatingActionButton(
-            text = { Text("Create User") },
-            icon = { },
-            onClick = {
-                showBottomSheet = true
-            }
-        )
-    }) { content ->
-        if (showBottomSheet) {
-            ModalBottomSheet(onDismissRequest = { showBottomSheet = false}, sheetState = sheetState) {
-                Row() {
-                    Button(onClick = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
-                        }
-                    }) {
-                        Text("Close Sheet")
-                    }
-                    Button(onClick = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
-                        }
-                    }) {
-                        Text("Save Forms")
+    ModalBottomSheet(onDismissRequest = { showBottomSheet = false
+                                        onClickCreate(false)
+                                        },
+        sheetState = sheetState) {
+        Row() {
+            Button(onClick = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        onClickCreate(false)
+                        showBottomSheet = false
                     }
                 }
-                FormCreateEditUserScreen()
+            }) {
+                Text("Close Sheet")
+            }
+            Button(onClick = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        onClickCreate(false)
+                        showBottomSheet = false
+                    }
+                }
+            }) {
+                Text("Save Forms")
             }
         }
-        ListUsersScreen()
+        FormCreateEditUserScreen()
     }
 }
 
@@ -118,7 +110,7 @@ fun ChooseUser(option: String) {
         enabled = false
     )
 }
-//dropdown
+
 @Composable
 fun MenuSelected(typeUser: String, onClick: () -> Unit) {
     Row() {
@@ -195,6 +187,6 @@ fun SelectedPDMUser() {
 @Composable
 fun CreateUserScreenPreview() {
     FeedbackJourneyTheme {
-        CreateUserScreen()
+        CreateUserScreen { }
     }
 }

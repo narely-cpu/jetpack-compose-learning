@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FeedbackJourneyTheme {
-                CreateUserScreen()
+                HomeScreen()
             }
         }
     }
@@ -26,6 +26,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     FeedbackJourneyTheme {
-        CreateUserScreen()
+        HomeScreen()
     }
 }
