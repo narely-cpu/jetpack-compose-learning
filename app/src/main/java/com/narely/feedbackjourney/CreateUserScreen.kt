@@ -1,82 +1,86 @@
 package com.narely.feedbackjourney
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
-import kotlinx.coroutines.launch
-import java.nio.file.WatchEvent
+import com.composables.icons.codicons.R
 
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateUserScreen(onClickCreate: (Boolean) -> Unit) {
-    val sheetState = rememberModalBottomSheetState()
+fun CreateUserScreen(context: Context) {
 
-    ModalBottomSheet(
-        onDismissRequest = { onClickCreate(false) },
-        sheetState = sheetState) {
-        Row(modifier = Modifier
-            .padding(vertical = 4.dp, horizontal = 16.dp)
-            .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween) {
-            ActionsFormCreateUser("Close", sheetState, onClickCreate)
-            ActionsFormCreateUser("Save", sheetState, onClickCreate)
+    Scaffold(topBar = {
+        TopAppBar(
+            title = { },
+            navigationIcon = {
+                BackFormCreateUser(context)
+            }
+        )
+    }) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            FormCreateEditUserScreen()
+            SaveButtonCreateUser(context)
         }
-        FormCreateEditUserScreen()
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ActionsFormCreateUser(label: String, sheetState: SheetState, onClickCreate: (Boolean) -> Unit) {
-    val scope = rememberCoroutineScope()
-    var showBottomSheet by remember { mutableStateOf(false) }
-    Button(onClick = {
-        scope.launch { sheetState.hide() }.invokeOnCompletion {
-            if (!sheetState.isVisible) {
-                onClickCreate(false)
-                showBottomSheet = false
-            }
-        }
+fun BackFormCreateUser(context: Context) {
+    IconButton(onClick = {
+        context.startActivity(Intent(context, MainActivity::class.java))
     }) {
-        Text(label)
+        Icon(
+            painterResource(R.drawable.codicons_ic_arrow_left),
+            contentDescription = "Back",
+            modifier = Modifier.size(12.dp)
+        )
+    }
+}
+
+@Composable
+fun SaveButtonCreateUser(context: Context) {
+    Button(onClick = {
+        context.startActivity(Intent(context, MainActivity::class.java))
+    }, modifier = Modifier
+        .padding(vertical = 4.dp, horizontal = 16.dp)
+        .fillMaxWidth()
+    ) {
+        Text("Save User")
     }
 }
 
@@ -162,7 +166,7 @@ fun ChoosePDMUser() {
 @Composable
 fun CreateUserScreenPreview() {
     FeedbackJourneyTheme {
-        CreateUserScreen {}
+        CreateUserScreen(LocalContext.current)
 //        FormCreateEditUserScreen()
     }
 

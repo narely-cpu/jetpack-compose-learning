@@ -1,5 +1,7 @@
 package com.narely.feedbackjourney
 
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -14,21 +16,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.composables.icons.codicons.R
+import com.narely.feedbackjourney.createuser.CreateUserActivity
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 
 @Composable
-fun ListUsersScreen() {
+fun ListUsersScreen(context: Context) {
     val listUsers: List<String> = listOf("User 1", "User 2", "User 3","User 4","User 5","User 6","User 7","User 8")
     LazyColumn(modifier = Modifier.padding(12.dp)) {
         items(listUsers) { user ->
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(16.dp)
                     .fillMaxWidth()) {
-                ActionButtonsUser(user)
+                ActionButtonsUser(user, context)
             }
         }
     }
@@ -46,12 +50,12 @@ fun ButtonEditDelete(description: String, icon: Int, onClick: () -> Unit) {
 }
 
 @Composable
-fun ActionButtonsUser(user: String) {
+fun ActionButtonsUser(user: String, context: Context) {
     Box(modifier = Modifier.fillMaxWidth()) {
         Text(user, modifier = Modifier.align(Alignment.CenterStart))
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
             ButtonEditDelete("Edit",
-                R.drawable.codicons_ic_edit) { }
+                R.drawable.codicons_ic_edit) { context.startActivity(Intent(context, CreateUserActivity::class.java)) }
             ButtonEditDelete("Delete",
                 R.drawable.codicons_ic_trash) { }
         }
@@ -62,6 +66,6 @@ fun ActionButtonsUser(user: String) {
 @Composable
 fun ListUsersScreenPreview() {
     FeedbackJourneyTheme {
-        ListUsersScreen()
+        ListUsersScreen(LocalContext.current)
     }
 }
