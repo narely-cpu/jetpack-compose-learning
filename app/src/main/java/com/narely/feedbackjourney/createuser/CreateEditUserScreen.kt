@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney
+package com.narely.feedbackjourney.createuser
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.Button
@@ -20,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -41,41 +43,39 @@ import com.composables.icons.codicons.R
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateUserScreen(context: Context) {
-
+fun CreateEditUserScreen(onFinishedActivity: () -> Unit) {
     Scaffold(topBar = {
         TopAppBar(
             title = { },
             navigationIcon = {
-                BackFormCreateUser(context)
+                BackFormCreateUser(onFinishedActivity)
             }
         )
     }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            FormCreateEditUserScreen()
-            SaveButtonCreateUser(context)
+            FormCreateEditUserScreen(onFinishedActivity)
+
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackFormCreateUser(context: Context) {
-    IconButton(onClick = {
-        context.startActivity(Intent(context, MainActivity::class.java))
-    }) {
+fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
+    IconButton(onClick = { onFinishedActivity.invoke() }) {
         Icon(
             painterResource(R.drawable.codicons_ic_arrow_left),
             contentDescription = "Back",
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(20.dp)
         )
     }
 }
 
 @Composable
-fun SaveButtonCreateUser(context: Context) {
+fun SaveButtonCreateUser(name: String, email: String, password: String, onFinishedActivity: () -> Unit) {
     Button(onClick = {
-        context.startActivity(Intent(context, MainActivity::class.java))
+        CreateUserSingleton.createUser(name, email, password)
+        onFinishedActivity.invoke()
     }, modifier = Modifier
         .padding(vertical = 4.dp, horizontal = 16.dp)
         .fillMaxWidth()
@@ -85,22 +85,29 @@ fun SaveButtonCreateUser(context: Context) {
 }
 
 @Composable
-fun FormCreateEditUserScreen() {
+fun FormCreateEditUserScreen(onFinishedActivity: () -> Unit) {
+    val nameTextFieldState = rememberTextFieldState(initialText = "Name")
+    val emailTextFieldState = rememberTextFieldState(initialText = "Email")
+    val passwordTextFieldState = rememberTextFieldState(initialText = "Password")
     Column() {
-        TextInputForm("Name")
-        TextInputForm("Email")
-        TextInputForm("Password")
+        TextInputForm(nameTextFieldState)
+        TextInputForm(emailTextFieldState)
+        TextInputForm(passwordTextFieldState)
         ChooseTypeUser()
         ChoosePDMUser()
+        SaveButtonCreateUser(nameTextFieldState.text.toString(),
+            emailTextFieldState.text.toString(),
+            passwordTextFieldState.text.toString(), onFinishedActivity)
     }
 }
 
 @Composable
-fun TextInputForm(label: String) {
-    val textFieldState = rememberTextFieldState(initialText = label)
-    TextField(
-        state = textFieldState,
-        label = { Text(label) },
+fun TextInputForm(valueState: TextFieldState) {
+    OutlinedTextField(
+        value = valueState.text.toString(),
+        onValueChange = {
+            valueState.setTextAndPlaceCursorAtEnd(it)
+        },
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 16.dp)
             .fillMaxWidth()
@@ -164,10 +171,8 @@ fun ChoosePDMUser() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun CreateUserScreenPreview() {
+fun CreateEditUserScreenPreview() {
     FeedbackJourneyTheme {
-        CreateUserScreen(LocalContext.current)
-//        FormCreateEditUserScreen()
+        CreateEditUserScreen {}
     }
-
 }

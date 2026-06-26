@@ -1,5 +1,6 @@
 package com.narely.feedbackjourney
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -16,25 +17,52 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.createuser.CreateUserActivity
+import com.narely.feedbackjourney.createuser.CreateUserSingleton
+import com.narely.feedbackjourney.createuser.UserData
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 
+@SuppressLint("MutableCollectionMutableState")
 @Composable
-fun ListUsersScreen(context: Context) {
-    val listUsers: List<String> = listOf("User 1", "User 2", "User 3","User 4","User 5","User 6","User 7","User 8")
+fun ListUsersScreen(context: Context, viewModel: ListUsersViewModel) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val uiState = viewModel.uiState.collectAsState().value
+    DisposableEffect(lifecycleOwner) {
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    viewModel.updateList()
+                }
+                else -> Unit
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
     val openAlertDialog = remember { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.padding(12.dp)) {
-        items(listUsers) { user ->
+        items(uiState.list) { user ->
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(16.dp)
                     .fillMaxWidth()) {
@@ -71,9 +99,9 @@ fun ButtonEditDelete(description: String, icon: Int, onClick: () -> Unit) {
 }
 
 @Composable
-fun ActionButtonsUser(user: String, context: Context, showAlertDeleteUser: (Boolean) -> Unit ) {
+fun ActionButtonsUser(user: UserData, context: Context, showAlertDeleteUser: (Boolean) -> Unit ) {
     Box(modifier = Modifier.fillMaxWidth()) {
-        Text(user, modifier = Modifier.align(Alignment.CenterStart))
+        Text(user.name.toString(), modifier = Modifier.align(Alignment.CenterStart))
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
             ButtonEditDelete("Edit",
                 R.drawable.codicons_ic_edit) { context.startActivity(Intent(context, CreateUserActivity::class.java)) }
@@ -125,6 +153,5 @@ fun AlertDialogDeleteUser(
 @Composable
 fun ListUsersScreenPreview() {
     FeedbackJourneyTheme {
-        ListUsersScreen(LocalContext.current)
     }
 }

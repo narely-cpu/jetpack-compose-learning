@@ -14,10 +14,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.narely.feedbackjourney.createuser.CreateUserActivity
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(context: Context) {
+    val viewModel: ListUsersViewModel = ListUsersViewModel()
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(
             text = { Text("Create User") },
@@ -27,7 +28,7 @@ fun HomeScreen(context: Context) {
             }
         )
     }) {
-        ListUsersScreen(context)
+        ListUsersScreen(context, viewModel)
     }
 }
 

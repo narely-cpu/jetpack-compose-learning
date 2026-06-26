@@ -3,12 +3,14 @@ package com.narely.feedbackjourney
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.widget.Adapter
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.narely.feedbackjourney.createuser.CreateUserSingleton
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 
 class MainActivity : ComponentActivity() {

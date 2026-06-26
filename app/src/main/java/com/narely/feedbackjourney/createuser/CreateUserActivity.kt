@@ -8,8 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.narely.feedbackjourney.CreateUserScreen
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
+import kotlin.Unit
 
 class CreateUserActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +17,9 @@ class CreateUserActivity: ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FeedbackJourneyTheme {
-                CreateUserScreen(LocalContext.current)
+                CreateEditUserScreen  {
+                    finish()
+                }
             }
         }
     }
@@ -27,6 +29,8 @@ class CreateUserActivity: ComponentActivity() {
 @Composable
 fun CreateUserPreview() {
     FeedbackJourneyTheme {
-        CreateUserScreen(LocalContext.current)
+//        CreateEditUserScreen {
+//
+//        }
     }
 }
