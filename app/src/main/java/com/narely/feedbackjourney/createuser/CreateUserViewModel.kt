@@ -5,13 +5,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 enum class UserType {
     PDM, COLLABORATOR, ADMIN
 }
 
-data class UserData(val name: String? = null,
+data class UserData(val id: String,
+                    val name: String? = null,
                     val email: String? = null,
                     val password: String? = null)
 //data class UserData(val id: String? = null,

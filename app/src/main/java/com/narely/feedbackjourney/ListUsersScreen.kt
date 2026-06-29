@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.createuser.CreateUserActivity
 import com.narely.feedbackjourney.createuser.UserData
+import com.narely.feedbackjourney.createuser.UserSingleton
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 
 @SuppressLint("MutableCollectionMutableState")
@@ -47,6 +48,7 @@ fun ListUsersScreen(context: Context, viewModel: ListUsersViewModel) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState = viewModel.uiState.collectAsState().value
     val openAlertDialog = remember { mutableStateOf(false) }
+    val currentUserId = remember { mutableStateOf("") }
 
     DisposableEffect(lifecycleOwner) {
         val lifecycleObserver = LifecycleEventObserver { _, event ->
@@ -78,6 +80,7 @@ fun ListUsersScreen(context: Context, viewModel: ListUsersViewModel) {
                     modifier = Modifier.padding(horizontal = 16.dp)
                         .fillMaxWidth()) {
                     ActionButtonsUser(user, context) { showDialog ->
+                        currentUserId.value = user.id
                         openAlertDialog.value = showDialog
                     }
                 }
@@ -90,10 +93,12 @@ fun ListUsersScreen(context: Context, viewModel: ListUsersViewModel) {
             AlertDialogDeleteUser(
                 onDismissRequest = { openAlertDialog.value = false },
                 onConfirmation = {
+                    viewModel.updateList()
                     openAlertDialog.value = false
                 },
                 dialogTitle = "Delete User",
                 dialogText = "Are you sure you want to delete this user?",
+                userId = currentUserId.value
             )
         }
     }
@@ -116,7 +121,9 @@ fun ActionButtonsUser(user: UserData, context: Context, showAlertDeleteUser: (Bo
         Text(user.name.toString(), modifier = Modifier.align(Alignment.CenterStart))
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
             ButtonEditDelete("Edit",
-                R.drawable.codicons_ic_edit) { context.startActivity(Intent(context, CreateUserActivity::class.java)) }
+                R.drawable.codicons_ic_edit) {
+                context.startActivity(Intent(context, CreateUserActivity::class.java))
+            }
             ButtonEditDelete("Delete",
                 R.drawable.codicons_ic_trash) { showAlertDeleteUser(true) }
         }
@@ -129,6 +136,7 @@ fun AlertDialogDeleteUser(
     onConfirmation: () -> Unit,
     dialogTitle: String,
     dialogText: String,
+    userId: String,
 ) {
     AlertDialog(
         title = {
@@ -143,6 +151,7 @@ fun AlertDialogDeleteUser(
         confirmButton = {
             TextButton (
                 onClick = {
+                    UserSingleton.deleteUser(userId)
                     onConfirmation()
                 }
             ) {

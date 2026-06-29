@@ -2,7 +2,7 @@ package com.narely.feedbackjourney
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.narely.feedbackjourney.createuser.CreateUserSingleton
+import com.narely.feedbackjourney.createuser.UserSingleton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +25,7 @@ class ListUsersViewModel: ViewModel() {
 
         updateUiState(
             uiState.value.copy(
-                list = CreateUserSingleton.listUser,
+                list = UserSingleton.listUser,
                 isLoading = false
             )
         )

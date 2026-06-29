@@ -1,8 +1,6 @@
 package com.narely.feedbackjourney.createuser
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +31,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -74,7 +71,7 @@ fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
 @Composable
 fun SaveButtonCreateUser(name: String, email: String, password: String, onFinishedActivity: () -> Unit) {
     Button(onClick = {
-        CreateUserSingleton.createUser(name, email, password)
+        UserSingleton.createUser(name, email, password)
         onFinishedActivity.invoke()
     }, modifier = Modifier
         .padding(vertical = 4.dp, horizontal = 16.dp)
