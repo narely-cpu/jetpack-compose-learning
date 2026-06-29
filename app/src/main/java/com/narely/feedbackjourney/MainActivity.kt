@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FeedbackJourneyTheme {
-                HomeScreen(LocalContext.current)
+                HomeScreen(LocalContext.current, ListUsersViewModel())
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     overrideActivityTransition(android.app.Activity.OVERRIDE_TRANSITION_OPEN,
                         android.R.anim.slide_in_left,
@@ -36,6 +36,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     FeedbackJourneyTheme {
-        HomeScreen(LocalContext.current)
+//        HomeScreen(LocalContext.current)
     }
 }

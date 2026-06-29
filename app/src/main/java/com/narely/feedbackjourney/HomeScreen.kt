@@ -4,11 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.narely.feedbackjourney.createuser.CreateUserActivity
@@ -17,8 +20,7 @@ import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(context: Context) {
-    val viewModel: ListUsersViewModel = ListUsersViewModel()
+fun HomeScreen(context: Context, viewModel: ListUsersViewModel) {
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(
             text = { Text("Create User") },
@@ -27,8 +29,10 @@ fun HomeScreen(context: Context) {
                 context.startActivity(Intent(context, CreateUserActivity::class.java))
             }
         )
-    }) {
-        ListUsersScreen(context, viewModel)
+    }) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            ListUsersScreen(context, viewModel)
+        }
     }
 }
 
@@ -36,6 +40,6 @@ fun HomeScreen(context: Context) {
 @Composable
 fun HomeScreenPreview() {
     FeedbackJourneyTheme {
-        HomeScreen(LocalContext.current)
+//        HomeScreen(LocalContext.current)
     }
 }
