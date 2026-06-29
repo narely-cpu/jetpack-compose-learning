@@ -7,11 +7,8 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,7 +34,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.codicons.R
-import com.narely.feedbackjourney.createuser.CreateUserActivity
+import com.narely.feedbackjourney.createuser.CreateEditUserActivity
 import com.narely.feedbackjourney.createuser.UserData
 import com.narely.feedbackjourney.createuser.UserSingleton
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
@@ -118,11 +115,12 @@ fun ButtonEditDelete(description: String, icon: Int, onClick: () -> Unit) {
 @Composable
 fun ActionButtonsUser(user: UserData, context: Context, showAlertDeleteUser: (Boolean) -> Unit ) {
     Box(modifier = Modifier.fillMaxWidth()) {
-        Text(user.name.toString(), modifier = Modifier.align(Alignment.CenterStart))
+        Text(user.name, modifier = Modifier.align(Alignment.CenterStart))
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
             ButtonEditDelete("Edit",
                 R.drawable.codicons_ic_edit) {
-                context.startActivity(Intent(context, CreateUserActivity::class.java))
+                context.startActivity(Intent(context, CreateEditUserActivity::class.java)
+                    .apply { putExtra("CURRENT_USER_ID", user.id) })
             }
             ButtonEditDelete("Delete",
                 R.drawable.codicons_ic_trash) { showAlertDeleteUser(true) }
@@ -168,11 +166,4 @@ fun AlertDialogDeleteUser(
             }
         }
     )
-}
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun ListUsersScreenPreview() {
-    FeedbackJourneyTheme {
-    }
 }

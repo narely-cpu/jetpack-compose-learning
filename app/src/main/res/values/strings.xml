@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FeedbackJourney</string>
+    <string name="save_user">Save User</string>
 </resources>

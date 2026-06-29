@@ -1,7 +1,6 @@
 package com.narely.feedbackjourney.createuser
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,26 +31,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 import com.composables.icons.codicons.R
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateEditUserScreen(onFinishedActivity: () -> Unit) {
+fun CreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
     Scaffold(topBar = {
         TopAppBar(
-            title = { },
+            title = { Text(text = if (userId == null) "Create User" else "Edit User") },
             navigationIcon = {
                 BackFormCreateUser(onFinishedActivity)
             }
         )
     }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            FormCreateEditUserScreen(onFinishedActivity)
-
+            FormCreateEditUserScreen(userId, onFinishedActivity)
         }
     }
 }
@@ -69,32 +66,52 @@ fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
 }
 
 @Composable
-fun SaveButtonCreateUser(name: String, email: String, password: String, onFinishedActivity: () -> Unit) {
+fun SaveButtonCreateEditUser(onClick: () -> Unit) {
     Button(onClick = {
-        UserSingleton.createUser(name, email, password)
-        onFinishedActivity.invoke()
+        onClick.invoke()
     }, modifier = Modifier
         .padding(vertical = 4.dp, horizontal = 16.dp)
         .fillMaxWidth()
     ) {
-        Text("Save User")
+        Text(stringResource(com.narely.feedbackjourney.R.string.save_user))
     }
 }
 
 @Composable
-fun FormCreateEditUserScreen(onFinishedActivity: () -> Unit) {
-    val nameTextFieldState = rememberTextFieldState(initialText = "Name")
-    val emailTextFieldState = rememberTextFieldState(initialText = "Email")
-    val passwordTextFieldState = rememberTextFieldState(initialText = "Password")
+fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
+    val currentUser = UserSingleton.readUser(userId)
+    var initialName: String = "Name"
+    var initialEmail: String = "Email"
+    var initialPassword: String = "Password"
+    if (currentUser != null) {
+        initialName = currentUser.name
+        initialEmail = currentUser.email
+        initialPassword = currentUser.password
+    }
+    val nameTextFieldState = rememberTextFieldState(initialText = initialName)
+    val emailTextFieldState = rememberTextFieldState(initialText = initialEmail)
+    val passwordTextFieldState = rememberTextFieldState(initialText = initialPassword)
     Column() {
         TextInputForm(nameTextFieldState)
         TextInputForm(emailTextFieldState)
         TextInputForm(passwordTextFieldState)
         ChooseTypeUser()
         ChoosePDMUser()
-        SaveButtonCreateUser(nameTextFieldState.text.toString(),
-            emailTextFieldState.text.toString(),
-            passwordTextFieldState.text.toString(), onFinishedActivity)
+        SaveButtonCreateEditUser {
+            if (currentUser != null && userId != null) {
+                UserSingleton.editUser(userId,
+                    nameTextFieldState.text.toString(),
+                    emailTextFieldState.text.toString(),
+                    passwordTextFieldState.text.toString())
+            } else {
+                UserSingleton.createUser(
+                    nameTextFieldState.text.toString(),
+                    emailTextFieldState.text.toString(),
+                    passwordTextFieldState.text.toString()
+                )
+            }
+            onFinishedActivity.invoke()
+        }
     }
 }
 
@@ -164,12 +181,4 @@ fun ChooseTypeUser() {
 fun ChoosePDMUser() {
     val options: List<String> = listOf("maria@ciandt.com", "joao@ciandt.com", "fernando@ciandt.com")
     DropDownChooseUsers("Choose a PDM", options)
-}
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun CreateEditUserScreenPreview() {
-    FeedbackJourneyTheme {
-        CreateEditUserScreen {}
-    }
 }

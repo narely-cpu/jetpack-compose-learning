@@ -30,12 +30,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun GreetingPreview() {
-    FeedbackJourneyTheme {
-//        HomeScreen(LocalContext.current)
-    }
-}

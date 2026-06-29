@@ -12,9 +12,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.narely.feedbackjourney.createuser.CreateUserActivity
+import com.narely.feedbackjourney.createuser.CreateEditUserActivity
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ViewModelConstructorInComposable")
@@ -26,20 +25,12 @@ fun HomeScreen(context: Context, viewModel: ListUsersViewModel) {
             text = { Text("Create User") },
             icon = { },
             onClick = {
-                context.startActivity(Intent(context, CreateUserActivity::class.java))
+                context.startActivity(Intent(context, CreateEditUserActivity::class.java))
             }
         )
     }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             ListUsersScreen(context, viewModel)
         }
-    }
-}
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun HomeScreenPreview() {
-    FeedbackJourneyTheme {
-//        HomeScreen(LocalContext.current)
     }
 }
