@@ -83,31 +83,38 @@ fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
     var initialName: String = "Name"
     var initialEmail: String = "Email"
     var initialPassword: String = "Password"
+    var initialPdmEmail: String = ""
     if (currentUser != null) {
         initialName = currentUser.name
         initialEmail = currentUser.email
         initialPassword = currentUser.password
+        initialPdmEmail = UserSingleton.getPdmEmailById(currentUser.pdmId).toString()
     }
     val nameTextFieldState = rememberTextFieldState(initialText = initialName)
     val emailTextFieldState = rememberTextFieldState(initialText = initialEmail)
     val passwordTextFieldState = rememberTextFieldState(initialText = initialPassword)
+    val userTypeTextFieldState = rememberTextFieldState(initialText = "")
+    val pdmEmailTextFieldState = rememberTextFieldState(initialText = initialPdmEmail)
     Column() {
         TextInputForm(nameTextFieldState)
         TextInputForm(emailTextFieldState)
         TextInputForm(passwordTextFieldState)
-        ChooseTypeUser()
-        ChoosePDMUser()
+        ChooseTypeUser(userTypeTextFieldState)
+        ChoosePDMUser(pdmEmailTextFieldState)
         SaveButtonCreateEditUser {
             if (currentUser != null && userId != null) {
                 UserSingleton.editUser(userId,
                     nameTextFieldState.text.toString(),
                     emailTextFieldState.text.toString(),
-                    passwordTextFieldState.text.toString())
+                    passwordTextFieldState.text.toString()
+                    )
             } else {
+
                 UserSingleton.createUser(
                     nameTextFieldState.text.toString(),
                     emailTextFieldState.text.toString(),
-                    passwordTextFieldState.text.toString()
+                    passwordTextFieldState.text.toString(),
+                    pdmEmailTextFieldState.text.toString()
                 )
             }
             onFinishedActivity.invoke()
@@ -130,9 +137,8 @@ fun TextInputForm(valueState: TextFieldState) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownChooseUsers(label: String, options: List<String>) {
+fun DropDownChooseUsers(label: String, options: List<String>, valueState: TextFieldState) {
     var expanded by remember { mutableStateOf(false) }
-    val textFieldState = rememberTextFieldState("")
     var checkedIndex: Int by remember { mutableIntStateOf(0) }
 
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it}, modifier =
@@ -143,7 +149,7 @@ fun DropDownChooseUsers(label: String, options: List<String>) {
             modifier = Modifier
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                 .fillMaxWidth(),
-            state = textFieldState,
+            state = valueState,
             readOnly = true,
             label = { Text(label) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -159,7 +165,7 @@ fun DropDownChooseUsers(label: String, options: List<String>) {
                 DropdownMenuItem(
                     text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
                     onClick = {
-                        textFieldState.setTextAndPlaceCursorAtEnd(option)
+                        valueState.setTextAndPlaceCursorAtEnd(option)
                         checkedIndex = index
                         expanded = false
                     },
@@ -171,14 +177,14 @@ fun DropDownChooseUsers(label: String, options: List<String>) {
 }
 
 @Composable
-fun ChooseTypeUser() {
+fun ChooseTypeUser(valueState: TextFieldState) {
     val options: List<String> = listOf("Admin", "Collaborator", "PDM")
-    DropDownChooseUsers("Choose a type", options)
+    DropDownChooseUsers("Choose a type", options, valueState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChoosePDMUser() {
+fun ChoosePDMUser(valueState: TextFieldState) {
     val options: List<String> = listOf("maria@ciandt.com", "joao@ciandt.com", "fernando@ciandt.com")
-    DropDownChooseUsers("Choose a PDM", options)
+    DropDownChooseUsers("Choose a PDM", options, valueState)
 }
