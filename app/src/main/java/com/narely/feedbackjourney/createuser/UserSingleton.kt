@@ -10,11 +10,12 @@ object UserSingleton {
         val user = listUser.find { it.id == id }
         return user
     }
-    fun createUser(name: String, email: String, password: String, pdmEmail: String?) {
+    fun createUser(name: String, email: String, password: String, type: String, pdmEmail: String?) {
         val id = UUID.randomUUID().toString()
         val pdmId = listUser.find { it.email == pdmEmail }?.id
-        listUser.add(UserData(id, name, email, password, pdmId))
-//        listUser.add(UserData(id, name, email, password, userType, pdmId))
+        val userType = UserType.valueOf(type)
+
+        listUser.add(UserData(id, name, email, password, userType, pdmId))
     }
 
     fun deleteUser(id: String) {
@@ -22,9 +23,17 @@ object UserSingleton {
         listUser.remove(user)
     }
 
-    fun editUser(id: String, newName: String, newEmail: String, newPassword: String) {
+    fun editUser(id: String, newName: String, newEmail: String, newPassword: String, newType: String, newPdmEmail: String?) {
         val user = listUser.find { it.id == id }
-        val newUser = listUser[listUser.indexOf(user)].copy(name = newName, email = newEmail, password = newPassword)
+        val newPdmId = listUser.find { it.email == newPdmEmail }?.id
+        val newUserType = UserType.valueOf(newType)
+        val newUser = listUser[listUser.indexOf(user)].copy(name = newName,
+                                                            email = newEmail,
+                                                            password = newPassword,
+                                                            userType = newUserType,
+                                                            pdmId = newPdmId)
+
+
         listUser[listUser.indexOf(user)] = newUser
     }
 

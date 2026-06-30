@@ -83,17 +83,19 @@ fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
     var initialName: String = "Name"
     var initialEmail: String = "Email"
     var initialPassword: String = "Password"
+    var initialUserType: String = ""
     var initialPdmEmail: String = ""
     if (currentUser != null) {
         initialName = currentUser.name
         initialEmail = currentUser.email
         initialPassword = currentUser.password
+        initialUserType = currentUser.userType.userValue
         initialPdmEmail = UserSingleton.getPdmEmailById(currentUser.pdmId).toString()
     }
     val nameTextFieldState = rememberTextFieldState(initialText = initialName)
     val emailTextFieldState = rememberTextFieldState(initialText = initialEmail)
     val passwordTextFieldState = rememberTextFieldState(initialText = initialPassword)
-    val userTypeTextFieldState = rememberTextFieldState(initialText = "")
+    val userTypeTextFieldState = rememberTextFieldState(initialText = initialUserType)
     val pdmEmailTextFieldState = rememberTextFieldState(initialText = initialPdmEmail)
     Column() {
         TextInputForm(nameTextFieldState)
@@ -106,14 +108,16 @@ fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
                 UserSingleton.editUser(userId,
                     nameTextFieldState.text.toString(),
                     emailTextFieldState.text.toString(),
-                    passwordTextFieldState.text.toString()
+                    passwordTextFieldState.text.toString(),
+                    userTypeTextFieldState.text.toString(),
+                    pdmEmailTextFieldState.text.toString()
                     )
             } else {
-
                 UserSingleton.createUser(
                     nameTextFieldState.text.toString(),
                     emailTextFieldState.text.toString(),
                     passwordTextFieldState.text.toString(),
+                    userTypeTextFieldState.text.toString(),
                     pdmEmailTextFieldState.text.toString()
                 )
             }
