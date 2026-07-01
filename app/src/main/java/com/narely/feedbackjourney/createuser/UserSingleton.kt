@@ -52,10 +52,15 @@ object UserSingleton {
         return listUserEmail
     }
 
-    fun isFormValid(name: String, email: String, password: String, userType: String, pdmEmail: String?): Boolean {
-        val isFormValidScope = name.isEmpty() || email.isEmpty() ||
-                password.isEmpty() || userType.isEmpty() || pdmEmail.isNullOrEmpty()
-        return !(isCollaborator(userType) && isFormValidScope)
+    fun isFormValid(name: String, email: String, password: String, userType: String?, pdmEmail: String?): Boolean {
+        val isFormValidLabel = !(name.isEmpty() || email.isEmpty() || password.isEmpty() ||
+                userType.isNullOrEmpty())
+        val showPdmList = if (isCollaborator(userType)) {
+            isFormValidLabel && !pdmEmail.isNullOrEmpty()
+        } else {
+            isFormValidLabel
+        }
+        return showPdmList
     }
 
     fun isCollaborator(userType: String?): Boolean {
