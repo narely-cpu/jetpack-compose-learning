@@ -6,31 +6,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
-import kotlin.Unit
 
-class CreateUserActivity: ComponentActivity() {
+class CreateEditUserActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             FeedbackJourneyTheme {
-                CreateEditUserScreen  {
+                val userId = intent.getStringExtra("CURRENT_USER_ID")
+                CreateEditUserScreen(userId)  {
                     finish()
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun CreateUserPreview() {
-    FeedbackJourneyTheme {
-//        CreateEditUserScreen {
-//
-//        }
     }
 }

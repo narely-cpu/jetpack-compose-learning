@@ -14,32 +14,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.narely.feedbackjourney.createuser.CreateUserActivity
+import com.narely.feedbackjourney.createuser.CreateEditUserActivity
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(context: Context, viewModel: ListUsersViewModel) {
+fun HomeScreen(viewModel: ListUsersViewModel) {
+    val context = LocalContext.current
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(
             text = { Text("Create User") },
             icon = { },
             onClick = {
-                context.startActivity(Intent(context, CreateUserActivity::class.java))
+                context.startActivity(Intent(context, CreateEditUserActivity::class.java))
             }
         )
     }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            ListUsersScreen(context, viewModel)
+            ListUsersScreen(viewModel)
         }
-    }
-}
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun HomeScreenPreview() {
-    FeedbackJourneyTheme {
-//        HomeScreen(LocalContext.current)
     }
 }
