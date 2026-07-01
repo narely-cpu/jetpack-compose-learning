@@ -1,5 +1,6 @@
 package com.narely.feedbackjourney.createuser
 
+import com.narely.feedbackjourney.createuser.UserType.valueOf
 import java.util.UUID
 
 
@@ -13,7 +14,7 @@ object UserSingleton {
     fun createUser(name: String, email: String, password: String, type: String, pdmEmail: String?) {
         val id = UUID.randomUUID().toString()
         val pdmId = listUser.find { it.email == pdmEmail }?.id
-        val userType = UserType.valueOf(type)
+        val userType = valueOf(value = type)
 
         listUser.add(UserData(id, name, email, password, userType, pdmId))
     }
@@ -26,7 +27,7 @@ object UserSingleton {
     fun editUser(id: String, newName: String, newEmail: String, newPassword: String, newType: String, newPdmEmail: String?) {
         val user = listUser.find { it.id == id }
         val newPdmId = listUser.find { it.email == newPdmEmail }?.id
-        val newUserType = UserType.valueOf(newType)
+        val newUserType = valueOf(newType)
         val newUser = listUser[listUser.indexOf(user)].copy(name = newName,
                                                             email = newEmail,
                                                             password = newPassword,
@@ -37,8 +38,31 @@ object UserSingleton {
         listUser[listUser.indexOf(user)] = newUser
     }
 
-    fun getPdmEmailById(id: String?): String? {
+    fun getEmailById(id: String?): String? {
         val userEmail = listUser.find { it.id == id }?.email
         return userEmail
+    }
+
+    fun getListPdm(): List<String> {
+        val user = listUser.filter { it.userType == UserType.PDM }
+        val listUserEmail: MutableList<String> = mutableListOf()
+        user.forEach {
+            listUserEmail.add(it.email)
+        }
+        return listUserEmail
+    }
+
+    fun isFormValid(name: String, email: String, password: String, userType: String, pdmEmail: String?): Boolean {
+        val isFormValidScope = name.isEmpty() || email.isEmpty() ||
+                password.isEmpty() || userType.isEmpty() || pdmEmail.isNullOrEmpty()
+        return !(isCollaborator(userType) && isFormValidScope)
+    }
+
+    fun isCollaborator(userType: String?): Boolean {
+        return if (userType.isNullOrEmpty()) {
+            false
+        } else {
+            valueOf(userType) == UserType.Collaborator
+        }
     }
 }

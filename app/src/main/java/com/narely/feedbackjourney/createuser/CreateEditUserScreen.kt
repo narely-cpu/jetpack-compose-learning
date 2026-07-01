@@ -66,12 +66,13 @@ fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
 }
 
 @Composable
-fun SaveButtonCreateEditUser(onClick: () -> Unit) {
+fun SaveButtonCreateEditUser(isFormValid: Boolean, onClick: () -> Unit) {
     Button(onClick = {
         onClick.invoke()
     }, modifier = Modifier
         .padding(vertical = 4.dp, horizontal = 16.dp)
-        .fillMaxWidth()
+        .fillMaxWidth(),
+        enabled = isFormValid
     ) {
         Text(stringResource(com.narely.feedbackjourney.R.string.save_user))
     }
@@ -90,20 +91,26 @@ fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
         initialEmail = currentUser.email
         initialPassword = currentUser.password
         initialUserType = currentUser.userType.userValue
-        initialPdmEmail = UserSingleton.getPdmEmailById(currentUser.pdmId).toString()
+        initialPdmEmail = UserSingleton.getEmailById(currentUser.pdmId).toString()
     }
     val nameTextFieldState = rememberTextFieldState(initialText = initialName)
     val emailTextFieldState = rememberTextFieldState(initialText = initialEmail)
     val passwordTextFieldState = rememberTextFieldState(initialText = initialPassword)
     val userTypeTextFieldState = rememberTextFieldState(initialText = initialUserType)
     val pdmEmailTextFieldState = rememberTextFieldState(initialText = initialPdmEmail)
+
     Column() {
         TextInputForm(nameTextFieldState)
         TextInputForm(emailTextFieldState)
         TextInputForm(passwordTextFieldState)
         ChooseTypeUser(userTypeTextFieldState)
-        ChoosePDMUser(pdmEmailTextFieldState)
-        SaveButtonCreateEditUser {
+        ChoosePDMUser(pdmEmailTextFieldState, userTypeTextFieldState.text.toString())
+        SaveButtonCreateEditUser(UserSingleton.isFormValid(nameTextFieldState.text.toString(),
+            emailTextFieldState.text.toString(),
+            passwordTextFieldState.text.toString(),
+            userTypeTextFieldState.text.toString(),
+            pdmEmailTextFieldState.text.toString()
+        )) {
             if (currentUser != null && userId != null) {
                 UserSingleton.editUser(userId,
                     nameTextFieldState.text.toString(),
@@ -141,11 +148,10 @@ fun TextInputForm(valueState: TextFieldState) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownChooseUsers(label: String, options: List<String>, valueState: TextFieldState) {
+fun DropDownChooseUsers(label: String, isEnable: Boolean, options: List<String>, valueState: TextFieldState) {
     var expanded by remember { mutableStateOf(false) }
     var checkedIndex: Int by remember { mutableIntStateOf(0) }
-
-    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it}, modifier =
+    ExposedDropdownMenuBox(expanded = (expanded && isEnable), onExpandedChange = { expanded = it }, modifier =
         Modifier
             .padding(vertical = 4.dp, horizontal = 16.dp)
     ) {
@@ -156,11 +162,11 @@ fun DropDownChooseUsers(label: String, options: List<String>, valueState: TextFi
             state = valueState,
             readOnly = true,
             label = { Text(label) },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = (expanded && isEnable)) },
             colors = ExposedDropdownMenuDefaults.textFieldColors()
         )
         ExposedDropdownMenu(
-            expanded = expanded,
+            expanded = (expanded && isEnable),
             onDismissRequest = { expanded = false },
             containerColor = MenuDefaults.containerColor,
             shape = MenuDefaults.shape
@@ -183,12 +189,12 @@ fun DropDownChooseUsers(label: String, options: List<String>, valueState: TextFi
 @Composable
 fun ChooseTypeUser(valueState: TextFieldState) {
     val options: List<String> = listOf("Admin", "Collaborator", "PDM")
-    DropDownChooseUsers("Choose a type", options, valueState)
+    DropDownChooseUsers("Choose a type", true, options, valueState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChoosePDMUser(valueState: TextFieldState) {
-    val options: List<String> = listOf("maria@ciandt.com", "joao@ciandt.com", "fernando@ciandt.com")
-    DropDownChooseUsers("Choose a PDM", options, valueState)
+fun ChoosePDMUser(valueState: TextFieldState, userType: String?) {
+    val options = UserSingleton.getListPdm()
+    DropDownChooseUsers("Choose a PDM", UserSingleton.isCollaborator(userType), options, valueState)
 }
