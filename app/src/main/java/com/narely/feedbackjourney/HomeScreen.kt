@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.narely.feedbackjourney.createuser.CreateEditUserActivity
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
@@ -19,7 +20,8 @@ import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(context: Context, viewModel: ListUsersViewModel) {
+fun HomeScreen(viewModel: ListUsersViewModel) {
+    val context = LocalContext.current
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(
             text = { Text("Create User") },
@@ -30,7 +32,7 @@ fun HomeScreen(context: Context, viewModel: ListUsersViewModel) {
         )
     }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            ListUsersScreen(context, viewModel)
+            ListUsersScreen(viewModel)
         }
     }
 }

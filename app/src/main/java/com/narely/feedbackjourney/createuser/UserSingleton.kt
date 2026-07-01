@@ -4,15 +4,15 @@ import java.util.UUID
 
 
 object UserSingleton {
-    var listUser: MutableList<UserData> = mutableListOf()
+    var listUser: MutableList<UserDataModel> = mutableListOf()
 
-    fun readUser(id: String?): UserData? {
+    fun readUser(id: String?): UserDataModel? {
         val user = listUser.find { it.id == id }
         return user
     }
     fun createUser(name: String, email: String, password: String) {
         val id = UUID.randomUUID().toString()
-        listUser.add(UserData(id, name, email, password))
+        listUser.add(UserDataModel(id, name, email, password))
     }
 
     fun deleteUser(id: String) {
