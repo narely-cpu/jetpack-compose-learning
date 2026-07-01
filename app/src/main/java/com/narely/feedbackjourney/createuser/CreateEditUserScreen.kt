@@ -38,7 +38,8 @@ import com.composables.icons.codicons.R
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
+fun CreateEditUserScreen(userId: String?, viewModel: CreateEditUserViewModel, onFinishedActivity: () -> Unit) {
+
     Scaffold(topBar = {
         TopAppBar(
             title = { Text(text = if (userId == null) "Create User" else "Edit User") },
@@ -51,6 +52,7 @@ fun CreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
             FormCreateEditUserScreen(userId, onFinishedActivity)
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
