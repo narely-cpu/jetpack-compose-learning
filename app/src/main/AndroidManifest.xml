@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".createuser.CreateUserActivity"
+            android:name=".createuser.CreateEditUserActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.FeedbackJourney"
