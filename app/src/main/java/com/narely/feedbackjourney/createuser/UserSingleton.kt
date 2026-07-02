@@ -5,9 +5,9 @@ import java.util.UUID
 
 
 object UserSingleton {
-    var listUser: MutableList<UserData> = mutableListOf()
+    var listUser: MutableList<UserDataModel> = mutableListOf()
 
-    fun readUser(id: String?): UserData? {
+    fun readUser(id: String?): UserDataModel? {
         val user = listUser.find { it.id == id }
         return user
     }
@@ -16,7 +16,7 @@ object UserSingleton {
         val pdmId = listUser.find { it.email == pdmEmail }?.id
         val userType = valueOf(value = type)
 
-        listUser.add(UserData(id, name, email, password, userType, pdmId))
+        listUser.add(UserDataModel(id, name, email, password, userType, pdmId))
     }
 
     fun deleteUser(id: String) {

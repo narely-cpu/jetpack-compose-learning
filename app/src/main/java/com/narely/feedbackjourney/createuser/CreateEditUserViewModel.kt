@@ -1,7 +1,6 @@
 package com.narely.feedbackjourney.createuser
 
 import androidx.lifecycle.ViewModel
-import com.narely.feedbackjourney.ListUsersViewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
