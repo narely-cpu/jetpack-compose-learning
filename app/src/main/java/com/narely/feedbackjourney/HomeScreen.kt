@@ -1,7 +1,6 @@
 package com.narely.feedbackjourney
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -12,13 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import com.narely.feedbackjourney.createuser.CreateEditUserActivity
 import com.narely.feedbackjourney.R.string
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(context: Context, viewModel: ListUsersViewModel) {
+fun HomeScreen(viewModel: ListUsersViewModel) {
+    val context = LocalContext.current
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(
             text = { Text(stringResource(string.create_user)) },
@@ -29,7 +30,7 @@ fun HomeScreen(context: Context, viewModel: ListUsersViewModel) {
         )
     }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            ListUsersScreen(context, viewModel)
+            ListUsersScreen(viewModel)
         }
     }
 }

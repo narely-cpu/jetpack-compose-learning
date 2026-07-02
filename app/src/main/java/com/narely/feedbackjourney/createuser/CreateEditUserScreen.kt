@@ -56,7 +56,7 @@ fun CreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
+private fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
     IconButton(onClick = { onFinishedActivity.invoke() }) {
         Icon(
             painterResource(R.drawable.codicons_ic_arrow_left),
@@ -67,7 +67,7 @@ fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
 }
 
 @Composable
-fun SaveButtonCreateEditUser(isFormValid: Boolean, onClick: () -> Unit) {
+private fun SaveButtonCreateEditUser(isFormValid: Boolean, onClick: () -> Unit) {
     Button(onClick = {
         onClick.invoke()
     }, modifier = Modifier
@@ -80,7 +80,7 @@ fun SaveButtonCreateEditUser(isFormValid: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
+private fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
     val currentUser = UserSingleton.readUser(userId)
     var initialName: String = stringResource(string.name_label)
     var initialEmail: String = stringResource(string.email_label)
@@ -135,7 +135,7 @@ fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
 }
 
 @Composable
-fun TextInputForm(valueState: TextFieldState) {
+private fun TextInputForm(valueState: TextFieldState) {
     OutlinedTextField(
         value = valueState.text.toString(),
         onValueChange = {
@@ -149,7 +149,7 @@ fun TextInputForm(valueState: TextFieldState) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownChooseUsers(label: String, isEnable: Boolean, options: List<String>, valueState: TextFieldState) {
+private fun DropDownChooseUsers(label: String, isEnable: Boolean, options: List<String>, valueState: TextFieldState) {
     var expanded by remember { mutableStateOf(false) }
     var checkedIndex: Int by remember { mutableIntStateOf(0) }
     ExposedDropdownMenuBox(expanded = (expanded && isEnable), onExpandedChange = { expanded = it }, modifier =
@@ -188,7 +188,7 @@ fun DropDownChooseUsers(label: String, isEnable: Boolean, options: List<String>,
 }
 
 @Composable
-fun ChooseTypeUser(valueState: TextFieldState) {
+private fun ChooseTypeUser(valueState: TextFieldState) {
     val options: List<String> = listOf(stringResource(string.admin_label),
         stringResource(string.collaborator_label),
         stringResource(string.pdm_label))
@@ -197,7 +197,7 @@ fun ChooseTypeUser(valueState: TextFieldState) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChoosePDMUser(valueState: TextFieldState, userType: String?) {
+private fun ChoosePDMUser(valueState: TextFieldState, userType: String?) {
     val options = UserSingleton.getListPdm()
     DropDownChooseUsers(stringResource(string.choose_pdm_label), UserSingleton.isCollaborator(userType), options, valueState)
 }
