@@ -1,9 +1,7 @@
 package com.narely.feedbackjourney
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -27,21 +25,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.createuser.CreateEditUserActivity
-import com.narely.feedbackjourney.createuser.UserData
+import com.narely.feedbackjourney.createuser.UserDataModel
 import com.narely.feedbackjourney.createuser.UserSingleton
-import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun ListUsersScreen(context: Context, viewModel: ListUsersViewModel) {
+fun ListUsersScreen(viewModel: ListUsersViewModel) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState = viewModel.uiState.collectAsState().value
     val openAlertDialog = remember { mutableStateOf(false) }
@@ -76,7 +73,7 @@ fun ListUsersScreen(context: Context, viewModel: ListUsersViewModel) {
                 Row(verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(horizontal = 16.dp)
                         .fillMaxWidth()) {
-                    ActionButtonsUser(user, context) { showDialog ->
+                    ActionButtonsUser(user) { showDialog ->
                         currentUserId.value = user.id
                         openAlertDialog.value = showDialog
                     }
@@ -93,8 +90,6 @@ fun ListUsersScreen(context: Context, viewModel: ListUsersViewModel) {
                     viewModel.updateList()
                     openAlertDialog.value = false
                 },
-                dialogTitle = "Delete User",
-                dialogText = "Are you sure you want to delete this user?",
                 userId = currentUserId.value
             )
         }
@@ -102,7 +97,7 @@ fun ListUsersScreen(context: Context, viewModel: ListUsersViewModel) {
 }
 
 @Composable
-fun ButtonEditDelete(description: String, icon: Int, onClick: () -> Unit) {
+private fun ButtonEditDelete(description: String, icon: Int, onClick: () -> Unit) {
     IconButton(onClick = onClick) {
         Icon(
             painterResource(icon),
@@ -113,7 +108,8 @@ fun ButtonEditDelete(description: String, icon: Int, onClick: () -> Unit) {
 }
 
 @Composable
-fun ActionButtonsUser(user: UserData, context: Context, showAlertDeleteUser: (Boolean) -> Unit ) {
+private fun ActionButtonsUser(user: UserDataModel, showAlertDeleteUser: (Boolean) -> Unit ) {
+    val context = LocalContext.current
     Box(modifier = Modifier.fillMaxWidth()) {
         Text(user.name, modifier = Modifier.align(Alignment.CenterStart))
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
@@ -129,19 +125,17 @@ fun ActionButtonsUser(user: UserData, context: Context, showAlertDeleteUser: (Bo
 }
 
 @Composable
-fun AlertDialogDeleteUser(
+private fun AlertDialogDeleteUser(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
-    dialogTitle: String,
-    dialogText: String,
     userId: String,
 ) {
     AlertDialog(
         title = {
-            Text(text = dialogTitle)
+            Text("Delete User")
         },
         text = {
-            Text(text = dialogText)
+            Text("Are you sure you want to delete this user?")
         },
         onDismissRequest = {
             onDismissRequest()

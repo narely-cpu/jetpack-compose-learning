@@ -31,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.composables.icons.codicons.R
 
@@ -55,7 +54,7 @@ fun CreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
+private fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
     IconButton(onClick = { onFinishedActivity.invoke() }) {
         Icon(
             painterResource(R.drawable.codicons_ic_arrow_left),
@@ -66,7 +65,7 @@ fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
 }
 
 @Composable
-fun SaveButtonCreateEditUser(isFormValid: Boolean, onClick: () -> Unit) {
+private fun SaveButtonCreateEditUser(isFormValid: Boolean, onClick: () -> Unit) {
     Button(onClick = {
         onClick.invoke()
     }, modifier = Modifier
@@ -74,12 +73,12 @@ fun SaveButtonCreateEditUser(isFormValid: Boolean, onClick: () -> Unit) {
         .fillMaxWidth(),
         enabled = isFormValid
     ) {
-        Text(stringResource(com.narely.feedbackjourney.R.string.save_user))
+        Text("Save User")
     }
 }
 
 @Composable
-fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
+private fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
     val currentUser = UserSingleton.readUser(userId)
     var initialName: String = "Name"
     var initialEmail: String = "Email"
@@ -134,7 +133,7 @@ fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
 }
 
 @Composable
-fun TextInputForm(valueState: TextFieldState) {
+private fun TextInputForm(valueState: TextFieldState) {
     OutlinedTextField(
         value = valueState.text.toString(),
         onValueChange = {
@@ -148,7 +147,7 @@ fun TextInputForm(valueState: TextFieldState) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownChooseUsers(label: String, isEnable: Boolean, options: List<String>, valueState: TextFieldState) {
+private fun DropDownChooseUsers(label: String, isEnable: Boolean, options: List<String>, valueState: TextFieldState) {
     var expanded by remember { mutableStateOf(false) }
     var checkedIndex: Int by remember { mutableIntStateOf(0) }
     ExposedDropdownMenuBox(expanded = (expanded && isEnable), onExpandedChange = { expanded = it }, modifier =
@@ -187,14 +186,14 @@ fun DropDownChooseUsers(label: String, isEnable: Boolean, options: List<String>,
 }
 
 @Composable
-fun ChooseTypeUser(valueState: TextFieldState) {
+private fun ChooseTypeUser(valueState: TextFieldState) {
     val options: List<String> = listOf("Admin", "Collaborator", "PDM")
     DropDownChooseUsers("Choose a type", true, options, valueState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChoosePDMUser(valueState: TextFieldState, userType: String?) {
+private fun ChoosePDMUser(valueState: TextFieldState, userType: String?) {
     val options = UserSingleton.getListPdm()
     DropDownChooseUsers("Choose a PDM", UserSingleton.isCollaborator(userType), options, valueState)
 }
