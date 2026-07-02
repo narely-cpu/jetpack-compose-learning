@@ -31,16 +31,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.composables.icons.codicons.R
+import com.narely.feedbackjourney.R.string
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
+    val title = if (userId == null) stringResource(string.create_user) else stringResource(string.edit_user)
     Scaffold(topBar = {
         TopAppBar(
-            title = { Text(text = if (userId == null) "Create User" else "Edit User") },
+            title = { Text(text = title) },
             navigationIcon = {
                 BackFormCreateUser(onFinishedActivity)
             }
@@ -58,7 +61,7 @@ private fun BackFormCreateUser(onFinishedActivity: () -> Unit) {
     IconButton(onClick = { onFinishedActivity.invoke() }) {
         Icon(
             painterResource(R.drawable.codicons_ic_arrow_left),
-            contentDescription = "Back",
+            contentDescription = stringResource(string.back_button),
             modifier = Modifier.size(20.dp)
         )
     }
@@ -73,16 +76,16 @@ private fun SaveButtonCreateEditUser(isFormValid: Boolean, onClick: () -> Unit) 
         .fillMaxWidth(),
         enabled = isFormValid
     ) {
-        Text("Save User")
+        Text(stringResource(string.save_user))
     }
 }
 
 @Composable
 private fun FormCreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
     val currentUser = UserSingleton.readUser(userId)
-    var initialName: String = "Name"
-    var initialEmail: String = "Email"
-    var initialPassword: String = "Password"
+    var initialName: String = stringResource(string.name_label)
+    var initialEmail: String = stringResource(string.email_label)
+    var initialPassword: String = stringResource(string.password_label)
     var initialUserType: String = ""
     var initialPdmEmail: String = ""
     if (currentUser != null) {
@@ -187,13 +190,15 @@ private fun DropDownChooseUsers(label: String, isEnable: Boolean, options: List<
 
 @Composable
 private fun ChooseTypeUser(valueState: TextFieldState) {
-    val options: List<String> = listOf("Admin", "Collaborator", "PDM")
-    DropDownChooseUsers("Choose a type", true, options, valueState)
+    val options: List<String> = listOf(stringResource(string.admin_label),
+        stringResource(string.collaborator_label),
+        stringResource(string.pdm_label))
+    DropDownChooseUsers(stringResource(string.choose_type_label), true, options, valueState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ChoosePDMUser(valueState: TextFieldState, userType: String?) {
     val options = UserSingleton.getListPdm()
-    DropDownChooseUsers("Choose a PDM", UserSingleton.isCollaborator(userType), options, valueState)
+    DropDownChooseUsers(stringResource(string.choose_pdm_label), UserSingleton.isCollaborator(userType), options, valueState)
 }

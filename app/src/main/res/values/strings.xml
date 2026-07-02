@@ -1,4 +1,19 @@
 <resources>
+    <string name="admin_label">Admin</string>
     <string name="app_name">FeedbackJourney</string>
+    <string name="back_button">Back</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="choose_pdm_label">Choose a PDM</string>
+    <string name="choose_type_label">Choose a type</string>
+    <string name="collaborator_label">Collaborator</string>
+    <string name="create_user">Create User</string>
+    <string name="delete_button">Delete</string>
+    <string name="delete_dialog_text">Are you sure you want to delete this user?</string>
+    <string name="delete_dialog_title">Delete User</string>
+    <string name="edit_user">Edit User</string>
+    <string name="email_label">Email</string>
+    <string name="name_label">Name</string>
+    <string name="password_label">Password</string>
+    <string name="pdm_label">PDM</string>
     <string name="save_user">Save User</string>
 </resources>

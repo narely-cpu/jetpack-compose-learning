@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -35,6 +36,7 @@ import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.createuser.CreateEditUserActivity
 import com.narely.feedbackjourney.createuser.UserDataModel
 import com.narely.feedbackjourney.createuser.UserSingleton
+import com.narely.feedbackjourney.R.string
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
@@ -113,12 +115,12 @@ private fun ActionButtonsUser(user: UserDataModel, showAlertDeleteUser: (Boolean
     Box(modifier = Modifier.fillMaxWidth()) {
         Text(user.name, modifier = Modifier.align(Alignment.CenterStart))
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-            ButtonEditDelete("Edit",
+            ButtonEditDelete(stringResource(string.edit_user),
                 R.drawable.codicons_ic_edit) {
                 context.startActivity(Intent(context, CreateEditUserActivity::class.java)
                     .apply { putExtra("CURRENT_USER_ID", user.id) })
             }
-            ButtonEditDelete("Delete",
+            ButtonEditDelete(stringResource(string.delete_dialog_title),
                 R.drawable.codicons_ic_trash) { showAlertDeleteUser(true) }
         }
     }
@@ -132,10 +134,10 @@ private fun AlertDialogDeleteUser(
 ) {
     AlertDialog(
         title = {
-            Text("Delete User")
+            Text(stringResource(string.delete_dialog_title))
         },
         text = {
-            Text("Are you sure you want to delete this user?")
+            Text(stringResource(string.delete_dialog_text))
         },
         onDismissRequest = {
             onDismissRequest()
@@ -147,7 +149,7 @@ private fun AlertDialogDeleteUser(
                     onConfirmation()
                 }
             ) {
-                Text("Delete")
+                Text(stringResource(string.delete_button))
             }
         },
         dismissButton = {
@@ -156,7 +158,7 @@ private fun AlertDialogDeleteUser(
                     onDismissRequest()
                 }
             ) {
-                Text("Cancel")
+                Text(stringResource(string.cancel_button))
             }
         }
     )
