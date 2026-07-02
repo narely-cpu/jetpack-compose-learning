@@ -40,9 +40,10 @@ import com.narely.feedbackjourney.R.string
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEditUserScreen(userId: String?, onFinishedActivity: () -> Unit) {
+    val title = if (userId == null) stringResource(string.create_user) else stringResource(string.edit_user)
     Scaffold(topBar = {
         TopAppBar(
-            title = { Text(text = stringResource(if (userId == null) string.create_user else string.edit_user)) },
+            title = { Text(text = title) },
             navigationIcon = {
                 BackFormCreateUser(onFinishedActivity)
             }
