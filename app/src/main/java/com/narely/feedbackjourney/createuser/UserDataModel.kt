@@ -5,4 +5,4 @@ data class UserDataModel(val id: String,
                          val email: String,
                          val password: String,
                          val userType: UserType,
-                         val pdmId: String?)
+                         val pdmEmail: String?)

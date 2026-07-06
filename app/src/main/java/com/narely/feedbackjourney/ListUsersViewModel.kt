@@ -2,17 +2,17 @@ package com.narely.feedbackjourney
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.narely.feedbackjourney.createuser.UserSingleton
+import com.narely.feedbackjourney.createuser.UserDataModel
+import com.narely.feedbackjourney.createuser.UserSingleton.listUser
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
-class ListUsersViewModel: ViewModel() {
+class ListUsersViewModel(): ViewModel() {
     private val _uiState: MutableStateFlow<ListUsersViewState> = MutableStateFlow(ListUsersViewState())
     val uiState: StateFlow<ListUsersViewState> = _uiState
-
     fun updateUiState(uiState: ListUsersViewState) {
         _uiState.value = uiState
     }
@@ -25,9 +25,20 @@ class ListUsersViewModel: ViewModel() {
 
         updateUiState(
             uiState.value.copy(
-                list = UserSingleton.listUser,
+                list = listUser,
                 isLoading = false
             )
         )
+    }
+
+    fun updateCurrentUser(user: UserDataModel) {
+        updateUiState(
+            uiState.value.copy(currentUser = user)
+        )
+    }
+
+    fun deleteUser(id: String) {
+        val user = listUser.find { it.id == id }
+        listUser.remove(user)
     }
 }
