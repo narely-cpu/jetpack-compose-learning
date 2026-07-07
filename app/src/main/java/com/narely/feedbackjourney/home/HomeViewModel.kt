@@ -1,19 +1,21 @@
-package com.narely.feedbackjourney
+package com.narely.feedbackjourney.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.narely.feedbackjourney.createuser.UserDataModel
-import com.narely.feedbackjourney.createuser.UserSingleton.listUser
+import com.narely.feedbackjourney.core.domain.GetUsersUseCase
+import com.narely.feedbackjourney.core.model.UserDataModel
+import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
-class ListUsersViewModel(val getUsersUseCase: GetUsersUseCase): ViewModel() {
-    private val _uiState: MutableStateFlow<ListUsersViewState> = MutableStateFlow(ListUsersViewState())
-    val uiState: StateFlow<ListUsersViewState> = _uiState
-    fun updateUiState(uiState: ListUsersViewState) {
+class HomeViewModel(val getUsersUseCase: GetUsersUseCase, val removeUserUseCase: RemoveUserUseCase): ViewModel() {
+    private val _uiState: MutableStateFlow<HomeViewState> =
+        MutableStateFlow(HomeViewState())
+    val uiState: StateFlow<HomeViewState> = _uiState
+    fun updateUiState(uiState: HomeViewState) {
         _uiState.value = uiState
     }
     fun updateList() = viewModelScope.launch {
@@ -38,8 +40,6 @@ class ListUsersViewModel(val getUsersUseCase: GetUsersUseCase): ViewModel() {
     }
 
     fun deleteUser(id: String) {
-//        removeUserUseCase.invocke(id)
-//        val user = getUsersUseCase.invoke().find { it.id == id }
-//        listUser.remove(user)
+        removeUserUseCase.invoke(id)
     }
 }

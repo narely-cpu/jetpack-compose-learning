@@ -1,5 +1,4 @@
-package com.narely.feedbackjourney.createuser
-
+package com.narely.feedbackjourney.core.model
 
 object UserSingleton {
     var listUser: MutableList<UserDataModel> = mutableListOf()

@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.createuser
+package com.narely.feedbackjourney.core.model
 
 enum class UserType(val userValue: String) {
     Admin("Admin"),

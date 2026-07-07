@@ -1,10 +1,5 @@
 package com.narely.feedbackjourney
 
-import com.narely.feedbackjourney.createuser.UserDataModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-
 //class ListRepository {
 //    private val _listRepository = MutableStateFlow<List<UserDataModel>>(emptyList())
 //    val listRepository: StateFlow<List<UserDataModel>> = _listRepository
@@ -19,3 +14,4 @@ import kotlinx.coroutines.flow.asStateFlow
 // 3. Criar um reporitory para chamar as 4 funcoes definidas nos usecases
 // 4. Deixar o singleton privado (contendo apenas a lista) para que apenas o repository
 // posso modificar o singleton
+// 5. TESTES SOS

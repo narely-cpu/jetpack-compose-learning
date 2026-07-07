@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.createuser
+package com.narely.feedbackjourney.core.model
 
 data class UserDataModel(val id: String,
                          val name: String,
