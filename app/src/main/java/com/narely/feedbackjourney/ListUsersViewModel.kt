@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
-class ListUsersViewModel(): ViewModel() {
+class ListUsersViewModel(val getUsersUseCase: GetUsersUseCase): ViewModel() {
     private val _uiState: MutableStateFlow<ListUsersViewState> = MutableStateFlow(ListUsersViewState())
     val uiState: StateFlow<ListUsersViewState> = _uiState
     fun updateUiState(uiState: ListUsersViewState) {
@@ -25,7 +25,7 @@ class ListUsersViewModel(): ViewModel() {
 
         updateUiState(
             uiState.value.copy(
-                list = listUser,
+                list = getUsersUseCase.invoke(),
                 isLoading = false
             )
         )
@@ -38,7 +38,8 @@ class ListUsersViewModel(): ViewModel() {
     }
 
     fun deleteUser(id: String) {
-        val user = listUser.find { it.id == id }
-        listUser.remove(user)
+//        removeUserUseCase.invocke(id)
+//        val user = getUsersUseCase.invoke().find { it.id == id }
+//        listUser.remove(user)
     }
 }
