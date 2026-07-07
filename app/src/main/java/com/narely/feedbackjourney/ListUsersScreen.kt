@@ -35,7 +35,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.createuser.CreateEditUserActivity
 import com.narely.feedbackjourney.createuser.UserDataModel
-import com.narely.feedbackjourney.createuser.UserSingleton
 import com.narely.feedbackjourney.R.string
 
 @SuppressLint("MutableCollectionMutableState")
@@ -44,7 +43,6 @@ fun ListUsersScreen(viewModel: ListUsersViewModel) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState = viewModel.uiState.collectAsState().value
     val openAlertDialog = remember { mutableStateOf(false) }
-    val currentUserId = remember { mutableStateOf("") }
 
     DisposableEffect(lifecycleOwner) {
         val lifecycleObserver = LifecycleEventObserver { _, event ->
@@ -76,7 +74,7 @@ fun ListUsersScreen(viewModel: ListUsersViewModel) {
                     modifier = Modifier.padding(horizontal = 16.dp)
                         .fillMaxWidth()) {
                     ActionButtonsUser(user) { showDialog ->
-                        currentUserId.value = user.id
+                        viewModel.updateCurrentUser(user)
                         openAlertDialog.value = showDialog
                     }
                 }
@@ -89,10 +87,10 @@ fun ListUsersScreen(viewModel: ListUsersViewModel) {
             AlertDialogDeleteUser(
                 onDismissRequest = { openAlertDialog.value = false },
                 onConfirmation = {
+                    viewModel.deleteUser(uiState.currentUser?.id ?: "")
                     viewModel.updateList()
                     openAlertDialog.value = false
-                },
-                userId = currentUserId.value
+                }
             )
         }
     }
@@ -129,8 +127,7 @@ private fun ActionButtonsUser(user: UserDataModel, showAlertDeleteUser: (Boolean
 @Composable
 private fun AlertDialogDeleteUser(
     onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
-    userId: String,
+    onConfirmation: () -> Unit
 ) {
     AlertDialog(
         title = {
@@ -145,7 +142,6 @@ private fun AlertDialogDeleteUser(
         confirmButton = {
             TextButton (
                 onClick = {
-                    UserSingleton.deleteUser(userId)
                     onConfirmation()
                 }
             ) {
