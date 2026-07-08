@@ -1,17 +1,14 @@
 package com.narely.feedbackjourney.core.data
 
 import com.narely.feedbackjourney.core.model.UserDataModel
-import com.narely.feedbackjourney.core.model.UserSingleton
 import com.narely.feedbackjourney.core.model.UserType
 import com.narely.feedbackjourney.core.model.UserType.valueOf
-import com.narely.feedbackjourney.createuser.CreateEditUserViewModel
 import com.narely.feedbackjourney.createuser.CreateEditUserViewState
-import kotlinx.coroutines.flow.StateFlow
 import java.util.UUID
 
 class UsersRepository() {
 
-    val listUser = com.narely.feedbackjourney.core.data.UserSingleton.listUser
+    val listUser = UserSingleton.listUser
 
     fun getUsers(): List<UserDataModel> {
         return listUser
@@ -22,18 +19,7 @@ class UsersRepository() {
         return user
     }
 
-    fun createUser(value: CreateEditUserViewState) {
-        val id = UUID.randomUUID().toString()
-        val userType = valueOf(value = value.userType)
-
-        val userModel = UserDataModel(
-            id,
-            value.name,
-            value.email,
-            value.password,
-            userType,
-            value.pdmEmail
-        )
+    fun createUser(userModel: UserDataModel) {
 
         listUser.add(userModel)
     }
@@ -43,16 +29,15 @@ class UsersRepository() {
         listUser.remove(user)
     }
 
-    fun updateUser(value: CreateEditUserViewState) {
-        val user = listUser.find { it.id == value.id }
+    fun updateUser(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String) {
+        val user = listUser.find { it.id == id }
         if (user != null) {
-            val newUserType = valueOf(value.userType)
             val newUser = listUser[listUser.indexOf(user)]
-                .copy(name = value.name,
-                    email = value.email,
-                    password = value.password,
-                    userType = newUserType,
-                    pdmEmail = value.pdmEmail
+                .copy(name = name,
+                    email = email,
+                    password = password,
+                    userType = userType,
+                    pdmEmail = pdmEmail
                 )
             listUser[listUser.indexOf(user)] = newUser
         }
@@ -66,4 +51,17 @@ class UsersRepository() {
         }
         return listUserEmail
     }
+}
+
+private object UserSingleton {
+    val listUser: MutableList<UserDataModel> = mutableListOf(
+        UserDataModel(
+            "sdd",
+            "narely",
+            "narely@ciandt.com",
+            "senha",
+            UserType.PDM,
+            null
+        )
+    )
 }

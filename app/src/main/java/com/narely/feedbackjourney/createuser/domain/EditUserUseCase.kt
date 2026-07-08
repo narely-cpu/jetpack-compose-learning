@@ -1,12 +1,20 @@
 package com.narely.feedbackjourney.createuser.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepository
+import com.narely.feedbackjourney.core.model.UserType
 import com.narely.feedbackjourney.createuser.CreateEditUserViewState
 import kotlinx.coroutines.flow.StateFlow
 
 class EditUserUseCase(val usersRepository: UsersRepository) {
 
-    fun invoke(value: CreateEditUserViewState) {
-        usersRepository.updateUser(value)
+    fun invoke(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String) {
+
+        usersRepository.updateUser(
+            id = id,
+            name = name,
+            email = email,
+            password = password,
+            userType = userType,
+            pdmEmail = pdmEmail)
     }
 }

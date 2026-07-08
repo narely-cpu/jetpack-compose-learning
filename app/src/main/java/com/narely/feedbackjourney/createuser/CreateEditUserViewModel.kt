@@ -1,10 +1,8 @@
 package com.narely.feedbackjourney.createuser
 
 import androidx.lifecycle.ViewModel
-import com.narely.feedbackjourney.core.domain.GetUsersUseCase
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.core.model.UserSingleton.listUser
 import com.narely.feedbackjourney.core.model.UserType.valueOf
 import com.narely.feedbackjourney.createuser.domain.CreateUserUseCase
 import com.narely.feedbackjourney.createuser.domain.EditUserUseCase
@@ -22,12 +20,6 @@ class CreateEditUserViewModel(val createUserUseCase: CreateUserUseCase,
     val uiState: StateFlow<CreateEditUserViewState> = _uiState
     fun updateUiState(uiState: CreateEditUserViewState) {
         _uiState.value = uiState
-    }
-
-    fun updateUiId(newId: String) {
-        updateUiState(
-            uiState.value.copy(id = newId)
-        )
     }
     fun updateUiName(newName: String) {
         updateUiState(
@@ -75,11 +67,26 @@ class CreateEditUserViewModel(val createUserUseCase: CreateUserUseCase,
     }
 
     fun createUser() {
-        createUserUseCase.invoke(uiState.value)
+        createUserUseCase.invoke(
+            name = uiState.value.name,
+            email = uiState.value.email,
+            password = uiState.value.password,
+            userType = valueOf(uiState.value.userType),
+            pdmEmail = uiState.value.pdmEmail
+        )
     }
 
     fun editUser() {
-        editUserUseCase.invoke(uiState.value)
+        uiState.value.id?.let {
+            editUserUseCase.invoke(
+                id = it,
+                name = uiState.value.name,
+                email = uiState.value.email,
+                password = uiState.value.password,
+                userType = valueOf(uiState.value.userType),
+                pdmEmail = uiState.value.pdmEmail
+            )
+        }
     }
 
     fun getListPdm(): List<String> {
