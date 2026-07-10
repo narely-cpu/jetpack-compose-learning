@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney
+package com.narely.feedbackjourney.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -34,12 +34,12 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.createuser.CreateEditUserActivity
-import com.narely.feedbackjourney.createuser.UserDataModel
+import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.R.string
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun ListUsersScreen(viewModel: ListUsersViewModel) {
+fun HomeComponent(viewModel: HomeViewModel) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiState = viewModel.uiState.collectAsState().value
     val openAlertDialog = remember { mutableStateOf(false) }
@@ -52,7 +52,7 @@ fun ListUsersScreen(viewModel: ListUsersViewModel) {
                 }
                 else -> Unit
             }
-        }
+         }
         lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)

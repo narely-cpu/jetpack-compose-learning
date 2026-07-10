@@ -1,23 +1,25 @@
 package com.narely.feedbackjourney.createuser
 
 import androidx.lifecycle.ViewModel
-import com.narely.feedbackjourney.createuser.UserSingleton.listUser
-import com.narely.feedbackjourney.createuser.UserType.valueOf
+import com.narely.feedbackjourney.core.model.UserDataModel
+import com.narely.feedbackjourney.core.model.UserType
+import com.narely.feedbackjourney.core.model.UserType.valueOf
+import com.narely.feedbackjourney.createuser.domain.CreateUserUseCase
+import com.narely.feedbackjourney.createuser.domain.EditUserUseCase
+import com.narely.feedbackjourney.createuser.domain.GetListPdmUseCase
+import com.narely.feedbackjourney.createuser.domain.GetUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.UUID
 
-class CreateEditUserViewModel: ViewModel() {
+class CreateEditUserViewModel(val createUserUseCase: CreateUserUseCase,
+                              val editUserUseCase: EditUserUseCase,
+                              val getUserUseCase: GetUserUseCase,
+                              val getListPdmUseCase: GetListPdmUseCase): ViewModel() {
     private val _uiState: MutableStateFlow<CreateEditUserViewState> = MutableStateFlow(CreateEditUserViewState())
     val uiState: StateFlow<CreateEditUserViewState> = _uiState
     fun updateUiState(uiState: CreateEditUserViewState) {
         _uiState.value = uiState
-    }
-
-    fun updateUiId(newId: String) {
-        updateUiState(
-            uiState.value.copy(id = newId)
-        )
     }
     fun updateUiName(newName: String) {
         updateUiState(
@@ -58,48 +60,37 @@ class CreateEditUserViewModel: ViewModel() {
                 )
             )
         }
-
     }
 
     fun readUser(id: String?): UserDataModel? {
-        val user = listUser.find { it.id == id }
-        return user
+        return getUserUseCase.invoke(id)
     }
 
     fun createUser() {
-        val id = UUID.randomUUID().toString()
-        updateUiId(newId = id)
-        val userType = valueOf(value = uiState.value.userType)
-        listUser.add(UserDataModel(id,
-            uiState.value.name,
-            uiState.value.email,
-            uiState.value.password,
-            userType,
-            uiState.value.pdmEmail)
+        createUserUseCase.invoke(
+            name = uiState.value.name,
+            email = uiState.value.email,
+            password = uiState.value.password,
+            userType = valueOf(uiState.value.userType),
+            pdmEmail = uiState.value.pdmEmail
         )
     }
 
     fun editUser() {
-        val user = listUser.find { it.id == uiState.value.id }
-        val newUserType = valueOf(uiState.value.userType)
-        val newUser = listUser[listUser.indexOf(user)]
-            .copy(name = uiState.value.name,
+        uiState.value.id?.let {
+            editUserUseCase.invoke(
+                id = it,
+                name = uiState.value.name,
                 email = uiState.value.email,
                 password = uiState.value.password,
-                userType = newUserType,
+                userType = valueOf(uiState.value.userType),
                 pdmEmail = uiState.value.pdmEmail
             )
-
-        listUser[listUser.indexOf(user)] = newUser
+        }
     }
 
     fun getListPdm(): List<String> {
-        val user = listUser.filter { it.userType == UserType.PDM }
-        val listUserEmail: MutableList<String> = mutableListOf()
-        user.forEach {
-            listUserEmail.add(it.email)
-        }
-        return listUserEmail
+        return getListPdmUseCase.invoke()
     }
 
     fun isFormValid(): Boolean {
