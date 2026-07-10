@@ -99,7 +99,7 @@ class CreateEditUserViewModel(val createUserUseCase: CreateUserUseCase,
                 uiState.value.password.isEmpty() ||
                 uiState.value.userType.isEmpty())
         val showPdmList = if (isCollaborator()) {
-            isFormValidLabel && uiState.value.pdmEmail.isNotEmpty()
+            isFormValidLabel && uiState.value.pdmEmail.isNullOrEmpty()
         } else {
             isFormValidLabel
         }

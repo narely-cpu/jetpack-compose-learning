@@ -9,7 +9,7 @@ import kotlin.uuid.Uuid
 
 class CreateUserUseCase(val usersRepository: UsersRepository) {
 
-    fun invoke(name: String, email: String, password: String, userType: UserType, pdmEmail: String) {
+    fun invoke(name: String, email: String, password: String, userType: UserType, pdmEmail: String?) {
         val id = UUID.randomUUID().toString()
         val userModel = UserDataModel(
             id = id,

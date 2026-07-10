@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 class EditUserUseCase(val usersRepository: UsersRepository) {
 
-    fun invoke(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String) {
+    fun invoke(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String?) {
 
         usersRepository.updateUser(
             id = id,

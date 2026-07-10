@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.core.domain
+package com.narely.feedbackjourney.createuser.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepository
 import com.narely.feedbackjourney.core.model.UserDataModel
@@ -11,13 +11,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 
-class GetUsersUseCaseTest {
-
+class GetUserUseCaseTest {
     @MockK
     private lateinit var usersRepository: UsersRepository
 
     @InjectMockKs
-    private lateinit var getUsersUseCase: GetUsersUseCase
+    private lateinit var getUserUseCase: GetUserUseCase
 
     @Before
     fun setup() {
@@ -25,19 +24,7 @@ class GetUsersUseCaseTest {
     }
 
     @Test
-    fun `GIVEN list is empty WHEN invoke() is called THEN validate result is empty`() {
-        // GIVEN
-        every { usersRepository.getUsers() } returns mutableListOf()
-
-        // WHEN
-        val result = getUsersUseCase.invoke()
-
-        // THEN
-        Assertions.assertEquals(0, result.size)
-    }
-
-    @Test
-    fun `GIVEN list is not empty WHEN invoke() is called THEN validate result is not empty`() {
+    fun `GIVEN userId not null WHEN invoke() is called THEN validate result is user`() {
         // GIVEN
         val item = UserDataModel(
             id = "23324984",
@@ -48,12 +35,24 @@ class GetUsersUseCaseTest {
             pdmEmail = null,
         )
 
-        every { usersRepository.getUsers() } returns mutableListOf(item)
+        every { usersRepository.getUser("23324984") } returns item
 
         // WHEN
-        val result = getUsersUseCase.invoke()
+        val result = getUserUseCase.invoke("23324984")
 
         // THEN
-        Assertions.assertEquals(1, result.size)
+        Assertions.assertEquals(item, result)
+    }
+
+    @Test
+    fun `GIVEN userId is null WHEN invoke() is called THEN validate result is not empty`() {
+        // GIVEN
+        every { usersRepository.getUser(null) } returns null
+
+        // WHEN
+        val result = getUserUseCase.invoke(null)
+
+        // THEN
+        Assertions.assertNull(result)
     }
 }
