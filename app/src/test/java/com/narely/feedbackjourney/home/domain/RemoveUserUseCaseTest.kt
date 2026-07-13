@@ -8,13 +8,12 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.justRun
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.*
 
 class RemoveUserUseCaseTest {
-
     @MockK
     private lateinit var usersRepository: UsersRepository
 
@@ -27,16 +26,12 @@ class RemoveUserUseCaseTest {
     }
 
     @Test
-    fun `GIVEN userId exists WHEN invoke() is called THEN validate result list size is 0`() {
+    fun `GIVEN userId WHEN invoke() is called THEN validate result call function`() {
         // GIVEN
-        // preciso criar um user com o id "23324984"
-        every { usersRepository.removeUser("23324984") }
-
+        justRun { usersRepository.removeUser("23324984") }
         // WHEN
         removeUserUseCase.invoke("23324984")
-        val result = usersRepository.getUsers()
-
         // THEN
-        Assertions.assertEquals(0, result.size)
+        verify { usersRepository.removeUser("23324984") }
     }
 }

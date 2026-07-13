@@ -7,13 +7,17 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.justRun
+import io.mockk.mockkStatic
+import io.mockk.verify
 import org.junit.Before
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import org.junit.Test
+import java.util.UUID
 
 class CreateUserUseCaseTest {
 
-    @MockK
+    @RelaxedMockK
     private lateinit var usersRepository: UsersRepository
 
     @InjectMockKs
@@ -22,13 +26,14 @@ class CreateUserUseCaseTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
+        mockkStatic(UUID::class)
     }
 
     @Test
-    fun `GIVEN added user WHEN invoke() is called THEN validate result list size is 1`() {
+    fun `GIVEN added user WHEN invoke() is called THEN validate call function`() {
         // GIVEN
         val userModel = UserDataModel(
-            id = "1234567890",
+            id = "23324984",
             name = "savi",
             email = "savi@ciandt.com",
             password = "1236347",
@@ -36,7 +41,8 @@ class CreateUserUseCaseTest {
             pdmEmail = null,
         )
 
-        every { usersRepository.createUser(userModel) }
+        every { UUID.randomUUID().toString() } returns "23324984"
+        justRun { usersRepository.createUser(userModel) }
 
         // WHEN
         createUserUseCase.invoke(
@@ -47,9 +53,7 @@ class CreateUserUseCaseTest {
             pdmEmail = null,
         )
 
-        val result = usersRepository.getUsers()
         // THEN
-
-        Assertions.assertNotNull(result)
+        verify { usersRepository.createUser(userModel) }
     }
 }
