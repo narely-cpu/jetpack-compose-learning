@@ -12,10 +12,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.UUID
 
-class CreateEditUserViewModel(val createUserUseCase: CreateUserUseCase,
-                              val editUserUseCase: EditUserUseCase,
-                              val getUserUseCase: GetUserUseCase,
-                              val getListPdmUseCase: GetListPdmUseCase): ViewModel() {
+class CreateEditUserViewModel(
+    val createUserUseCase: CreateUserUseCase,
+    val editUserUseCase: EditUserUseCase,
+    val getUserUseCase: GetUserUseCase,
+    val getListPdmUseCase: GetListPdmUseCase
+): ViewModel() {
     private val _uiState: MutableStateFlow<CreateEditUserViewState> = MutableStateFlow(CreateEditUserViewState())
     val uiState: StateFlow<CreateEditUserViewState> = _uiState
     fun updateUiState(uiState: CreateEditUserViewState) {
