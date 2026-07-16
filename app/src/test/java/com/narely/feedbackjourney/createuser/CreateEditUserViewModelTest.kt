@@ -10,6 +10,8 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.justRun
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
@@ -93,6 +95,7 @@ class CreateEditUserViewModelTest {
         // THEN
         Assertions.assertEquals(newPassword, currentUiState.password)
     }
+
     @Test
     fun `GIVEN userType changed WHEN updateUiUserType() is called THEN validate userType was changed`() {
         // GIVEN
@@ -172,5 +175,258 @@ class CreateEditUserViewModelTest {
 
         // THEN
         Assertions.assertEquals(newCurrentUser, currentUiState)
+    }
+
+    @Test
+    fun `GIVEN new values states for user WHEN createUser() is called THEN validate call invoke()`() {
+        // GIVEN
+        val currentUiState = createEditUserViewModel.uiState.value
+        justRun { createUserUseCase.invoke(
+            name = currentUiState.name,
+            email = currentUiState.email,
+            password = currentUiState.password,
+            userType = currentUiState.userType,
+            pdmEmail = currentUiState.pdmEmail
+        ) }
+
+        // WHEN
+        createEditUserViewModel.createUser()
+
+        // THEN
+        verify { createUserUseCase.invoke(name = currentUiState.name,
+            email = currentUiState.email,
+            password = currentUiState.password,
+            userType = currentUiState.userType,
+            pdmEmail = currentUiState.pdmEmail
+        ) }
+    }
+
+    @Test
+    fun `GIVEN update values states for user WHEN editUser() is called THEN validate call invoke()`() {
+        // GIVEN
+        val currentUiState = createEditUserViewModel.uiState.value
+        val newId = "111232232"
+
+        justRun { editUserUseCase.invoke(
+            id = newId,
+            name = currentUiState.name,
+            email = currentUiState.email,
+            password = currentUiState.password,
+            userType = currentUiState.userType,
+            pdmEmail = currentUiState.pdmEmail
+        ) }
+
+        // WHEN
+        currentUiState.id = newId
+        createEditUserViewModel.editUser()
+
+        // THEN
+        verify { editUserUseCase.invoke(
+            id = newId,
+            name = currentUiState.name,
+            email = currentUiState.email,
+            password = currentUiState.password,
+            userType = currentUiState.userType,
+            pdmEmail = currentUiState.pdmEmail
+        ) }
+    }
+
+    @Test
+    fun `GIVEN update values states without id WHEN editUser() is called THEN validate not call invoke()`() {
+        // GIVEN
+        val currentUiState = createEditUserViewModel.uiState.value
+        val newId = "111232232"
+        justRun { editUserUseCase.invoke(
+            id = newId,
+            name = currentUiState.name,
+            email = currentUiState.email,
+            password = currentUiState.password,
+            userType = currentUiState.userType,
+            pdmEmail = currentUiState.pdmEmail
+        ) }
+
+        // WHEN
+        createEditUserViewModel.editUser()
+
+        // THEN
+        verify(exactly = 0) { editUserUseCase.invoke(
+            id = newId,
+            name = currentUiState.name,
+            email = currentUiState.email,
+            password = currentUiState.password,
+            userType = currentUiState.userType,
+            pdmEmail = currentUiState.pdmEmail
+        ) }
+    }
+
+    @Test
+    fun `GIVEN list of pdm users WHEN getListPdm() is called THEN validate return list`() {
+        // GIVEN
+        val userFirst = UserDataModel(id = "111232232",
+            name = "New name",
+            email = "New email First",
+            password = "New password",
+            userType = UserType.PDM,
+            pdmEmail = null)
+        val userSecond = UserDataModel(id = "111232232",
+            name = "New name",
+            email = "New email Second",
+            password = "New password",
+            userType = UserType.PDM,
+            pdmEmail = null)
+
+        every { getListPdmUseCase.invoke()} returns listOf(userFirst.email, userSecond.email)
+
+        // WHEN
+        val result = createEditUserViewModel.getListPdm()
+
+        // THEN
+        Assertions.assertEquals(listOf(userFirst.email, userSecond.email), result)
+    }
+
+    @Test
+    fun `GIVEN not exists pdm users WHEN getListPdm() is called THEN validate return empty list`() {
+        // GIVEN
+        every { getListPdmUseCase.invoke()} returns listOf()
+
+        // WHEN
+        val result = createEditUserViewModel.getListPdm()
+
+        // THEN
+        Assertions.assertEquals(listOf<String>(), result)
+    }
+
+    @Test
+    fun `GIVEN all fields are filled WHEN areMandatoryFieldsFilled() is called THEN validate return true`() {
+        // GIVEN
+        createEditUserViewModel.updateUiUserType(UserType.Collaborator.userValue)
+
+        // WHEN
+        val result = createEditUserViewModel.areMandatoryFieldsFilled()
+
+        // THEN
+        Assertions.assertEquals(true, result)
+    }
+
+    @Test
+    fun `GIVEN some fields are filled WHEN areMandatoryFieldsFilled() is called THEN validate return false`() {
+        // GIVEN
+        createEditUserViewModel.updateUiName("")
+
+        // WHEN
+        val result = createEditUserViewModel.areMandatoryFieldsFilled()
+
+        // THEN
+        Assertions.assertEquals(false, result)
+    }
+
+    @Test
+    fun `GIVEN user is collaborator and pdmEmail exists WHEN needPDMAssignedOrIsEmptyPdmEmailField() is called THEN validate return false`() {
+        // GIVEN
+        createEditUserViewModel.updateUiUserType(UserType.Collaborator.userValue)
+        createEditUserViewModel.updateUiPdmEmail("emailpdm@ciandt.com")
+
+        // WHEN
+        val result = createEditUserViewModel.needPDMAssignedOrIsEmptyPdmEmailField()
+
+        // THEN
+        Assertions.assertEquals(false, result)
+    }
+
+    @Test
+    fun `GIVEN user is collaborator and pdmEmail does not exist WHEN needPDMAssignedOrIsEmptyPdmEmailField() is called THEN validate return true`() {
+        // GIVEN
+        createEditUserViewModel.updateUiUserType(UserType.Collaborator.userValue)
+
+        // WHEN
+        val result = createEditUserViewModel.needPDMAssignedOrIsEmptyPdmEmailField()
+
+        // THEN
+        Assertions.assertEquals(true, result)
+    }
+
+    @Test
+    fun `GIVEN user is PDM and pdmEmail does not exist WHEN needPDMAssignedOrIsEmptyPdmEmailField() is called THEN validate return false`() {
+        // GIVEN
+        createEditUserViewModel.updateUiUserType(UserType.PDM.userValue)
+
+        // WHEN
+        val result = createEditUserViewModel.needPDMAssignedOrIsEmptyPdmEmailField()
+
+        // THEN
+        Assertions.assertEquals(false, result)
+    }
+
+    @Test
+    fun `GIVEN mandatory fields is filled and user is PDM WHEN isButtonEnable() is called THEN validate return true`() {
+        // GIVEN
+        createEditUserViewModel.updateUiUserType(UserType.PDM.userValue)
+
+        // WHEN
+        val result = createEditUserViewModel.isButtonEnable()
+
+        // THEN
+        Assertions.assertEquals(true, result)
+    }
+
+    @Test
+    fun `GIVEN mandatory fields is incomplete and user is Admin WHEN isButtonEnable() is called THEN validate return false`() {
+        // GIVEN
+        createEditUserViewModel.updateUiName("")
+        createEditUserViewModel.updateUiUserType(UserType.Admin.userValue)
+
+        // WHEN
+        val result = createEditUserViewModel.isButtonEnable()
+
+        // THEN
+        Assertions.assertEquals(false, result)
+    }
+
+    @Test
+    fun `GIVEN mandatory fields is filled, user is Collaborator and pdmEmail is empty WHEN isButtonEnable() is called THEN validate return false`() {
+        // GIVEN
+        createEditUserViewModel.updateUiUserType(UserType.Collaborator.userValue)
+
+        // WHEN
+        val result = createEditUserViewModel.isButtonEnable()
+
+        // THEN
+        Assertions.assertEquals(false, result)
+    }
+
+    @Test
+    fun `GIVEN mandatory fields is filled, user is Collaborator and pdmEmail is filled WHEN isButtonEnable() is called THEN validate return true`() {
+        // GIVEN
+        createEditUserViewModel.updateUiUserType(UserType.Collaborator.userValue)
+        createEditUserViewModel.updateUiPdmEmail("pdmteste@ciandt.com")
+        // WHEN
+        val result = createEditUserViewModel.isButtonEnable()
+
+        // THEN
+        Assertions.assertEquals(true, result)
+    }
+
+    @Test
+    fun `GIVEN usertype is collaborator WHEN isCollaborator() is called THEN validate return true`() {
+        // GIVEN
+        createEditUserViewModel.updateUiUserType(UserType.Collaborator.userValue)
+
+        // WHEN
+        val result = createEditUserViewModel.isCollaborator()
+
+        // THEN
+        Assertions.assertEquals(true, result)
+    }
+
+    @Test
+    fun `GIVEN usertype isn't collaborator WHEN isCollaborator() is called THEN validate return false`() {
+        // GIVEN
+        createEditUserViewModel.updateUiUserType(UserType.PDM.userValue)
+
+        // WHEN
+        val result = createEditUserViewModel.isCollaborator()
+
+        // THEN
+        Assertions.assertEquals(false, result)
     }
 }

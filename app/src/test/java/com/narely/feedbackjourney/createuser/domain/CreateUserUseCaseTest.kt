@@ -49,7 +49,7 @@ class CreateUserUseCaseTest {
             name = "savi",
             email = "savi@ciandt.com",
             password = "1236347",
-            userType = UserType.PDM,
+            userType = "PDM",
             pdmEmail = null,
         )
 

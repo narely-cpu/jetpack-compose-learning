@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -68,7 +67,7 @@ fun CreateEditUserScreen(userId: String?, viewModel: CreateEditUserViewModel, on
                 { viewModel.editUser() },
                 viewModel.getListPdm(),
                 viewModel.isCollaborator(),
-                viewModel.isFormValid(),
+                viewModel.isButtonEnable(),
                 onFinishedActivity)
         }
     }
