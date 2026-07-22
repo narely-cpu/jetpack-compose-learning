@@ -3,14 +3,14 @@ package com.narely.feedbackjourney.createuser.domain
 import com.narely.feedbackjourney.core.data.UsersRepository
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.createuser.CreateEditUserViewState
 import java.util.UUID
-import kotlin.uuid.Uuid
+import javax.inject.Inject
 
-class CreateUserUseCase(val usersRepository: UsersRepository) {
+class CreateUserUseCase @Inject constructor(val usersRepository: UsersRepository) {
 
-    fun invoke(name: String, email: String, password: String, userType: UserType, pdmEmail: String) {
+    fun invoke(name: String, email: String, password: String, userType: String, pdmEmail: String?) {
         val id = UUID.randomUUID().toString()
+        val userType = enumValueOf<UserType>(userType)
         val userModel = UserDataModel(
             id = id,
             name = name,

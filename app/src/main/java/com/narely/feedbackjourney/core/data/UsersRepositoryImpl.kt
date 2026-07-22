@@ -1,35 +1,42 @@
 package com.narely.feedbackjourney.core.data
 
+import androidx.annotation.VisibleForTesting
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.core.model.UserType.valueOf
-import com.narely.feedbackjourney.createuser.CreateEditUserViewState
-import java.util.UUID
+import javax.inject.Inject
 
-class UsersRepository() {
+interface UsersRepository {
+    fun getUsers(): MutableList<UserDataModel>
+    fun getUser(userId: String?): UserDataModel?
+    fun createUser(userModel: UserDataModel)
+    fun removeUser(userId: String)
+    fun updateUser(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String?)
+    fun getListPdm(): List<String>
+}
 
-    val listUser = UserSingleton.listUser
+class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null): UsersRepository {
 
-    fun getUsers(): List<UserDataModel> {
+    val listUser = items?.toMutableList() ?: UserSingleton.listUser
+
+    override fun getUsers(): MutableList<UserDataModel> {
         return listUser
     }
 
-    fun getUser(userId: String?): UserDataModel? {
+    override fun getUser(userId: String?): UserDataModel? {
         val user = listUser.find { it.id == userId }
         return user
     }
 
-    fun createUser(userModel: UserDataModel) {
-
+    override fun createUser(userModel: UserDataModel) {
         listUser.add(userModel)
     }
 
-    fun removeUser(userId: String) {
+    override fun removeUser(userId: String) {
         val user = listUser.find { it.id == userId }
         listUser.remove(user)
     }
 
-    fun updateUser(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String) {
+    override fun updateUser(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String?) {
         val user = listUser.find { it.id == id }
         if (user != null) {
             val newUser = listUser[listUser.indexOf(user)]
@@ -43,7 +50,7 @@ class UsersRepository() {
         }
     }
 
-    fun getListPdm(): List<String> {
+    override fun getListPdm(): List<String> {
         val user = listUser.filter { it.userType == UserType.PDM }
         val listUserEmail: MutableList<String> = mutableListOf()
         user.forEach {
@@ -53,15 +60,7 @@ class UsersRepository() {
     }
 }
 
+@VisibleForTesting
 private object UserSingleton {
-    val listUser: MutableList<UserDataModel> = mutableListOf(
-        UserDataModel(
-            "sdd",
-            "narely",
-            "narely@ciandt.com",
-            "senha",
-            UserType.PDM,
-            null
-        )
-    )
+    val listUser: MutableList<UserDataModel> = mutableListOf()
 }

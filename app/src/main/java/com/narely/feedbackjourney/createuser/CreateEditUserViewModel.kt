@@ -8,14 +8,18 @@ import com.narely.feedbackjourney.createuser.domain.CreateUserUseCase
 import com.narely.feedbackjourney.createuser.domain.EditUserUseCase
 import com.narely.feedbackjourney.createuser.domain.GetListPdmUseCase
 import com.narely.feedbackjourney.createuser.domain.GetUserUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.util.UUID
+import javax.inject.Inject
 
-class CreateEditUserViewModel(val createUserUseCase: CreateUserUseCase,
-                              val editUserUseCase: EditUserUseCase,
-                              val getUserUseCase: GetUserUseCase,
-                              val getListPdmUseCase: GetListPdmUseCase): ViewModel() {
+@HiltViewModel
+class CreateEditUserViewModel @Inject constructor(
+    val createUserUseCase: CreateUserUseCase,
+    val editUserUseCase: EditUserUseCase,
+    val getUserUseCase: GetUserUseCase,
+    val getListPdmUseCase: GetListPdmUseCase
+): ViewModel() {
     private val _uiState: MutableStateFlow<CreateEditUserViewState> = MutableStateFlow(CreateEditUserViewState())
     val uiState: StateFlow<CreateEditUserViewState> = _uiState
     fun updateUiState(uiState: CreateEditUserViewState) {
@@ -71,7 +75,7 @@ class CreateEditUserViewModel(val createUserUseCase: CreateUserUseCase,
             name = uiState.value.name,
             email = uiState.value.email,
             password = uiState.value.password,
-            userType = valueOf(uiState.value.userType),
+            userType = uiState.value.userType,
             pdmEmail = uiState.value.pdmEmail
         )
     }
@@ -83,7 +87,7 @@ class CreateEditUserViewModel(val createUserUseCase: CreateUserUseCase,
                 name = uiState.value.name,
                 email = uiState.value.email,
                 password = uiState.value.password,
-                userType = valueOf(uiState.value.userType),
+                userType = uiState.value.userType,
                 pdmEmail = uiState.value.pdmEmail
             )
         }
@@ -93,17 +97,24 @@ class CreateEditUserViewModel(val createUserUseCase: CreateUserUseCase,
         return getListPdmUseCase.invoke()
     }
 
-    fun isFormValid(): Boolean {
-        val isFormValidLabel = !(uiState.value.name.isEmpty() ||
-                uiState.value.email.isEmpty() ||
-                uiState.value.password.isEmpty() ||
-                uiState.value.userType.isEmpty())
-        val showPdmList = if (isCollaborator()) {
-            isFormValidLabel && uiState.value.pdmEmail.isNotEmpty()
-        } else {
-            isFormValidLabel
+    fun areMandatoryFieldsFilled(): Boolean {
+        val areMandatoryFieldsFilled = uiState.value.name.isNotEmpty() &&
+                uiState.value.email.isNotEmpty() &&
+                uiState.value.password.isNotEmpty() &&
+                uiState.value.userType.isNotEmpty()
+        return areMandatoryFieldsFilled
+    }
+
+    fun needPDMAssignedOrIsEmptyPdmEmailField(): Boolean {
+        return when (uiState.value.userType) {
+            UserType.Collaborator.userValue -> uiState.value.pdmEmail.isNullOrEmpty()
+            UserType.PDM.userValue -> false
+            else -> false
         }
-        return showPdmList
+    }
+
+    fun isButtonEnable(): Boolean {
+        return areMandatoryFieldsFilled() && (!needPDMAssignedOrIsEmptyPdmEmailField())
     }
 
     fun isCollaborator(): Boolean {

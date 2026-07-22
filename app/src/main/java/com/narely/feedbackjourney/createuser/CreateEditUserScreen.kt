@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -68,7 +67,7 @@ fun CreateEditUserScreen(userId: String?, viewModel: CreateEditUserViewModel, on
                 { viewModel.editUser() },
                 viewModel.getListPdm(),
                 viewModel.isCollaborator(),
-                viewModel.isFormValid(),
+                viewModel.isButtonEnable(),
                 onFinishedActivity)
         }
     }
@@ -106,7 +105,7 @@ private fun FormCreateEditUserLayout(userId: String?,
                                      userEmail: String,
                                      userPassword: String,
                                      userType: String,
-                                     userPdmEmail: String,
+                                     userPdmEmail: String?,
                                      onUserNameChange: (String) -> Unit,
                                      onUserEmailChange: (String) -> Unit,
                                      onUserPasswordChange: (String) -> Unit,
@@ -152,7 +151,7 @@ private fun TextInputForm(valueState: String, updateValueState: (String) -> Unit
 private fun DropDownChooseUsers(label: String,
                                 isEnable: Boolean,
                                 options: List<String>,
-                                valueState: String,
+                                valueState: String?,
                                 updateValueState: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(expanded = (expanded && isEnable), onExpandedChange = { expanded = it }, modifier =
@@ -163,7 +162,7 @@ private fun DropDownChooseUsers(label: String,
             modifier = Modifier
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                 .fillMaxWidth(),
-            value = valueState,
+            value = valueState ?: "",
             readOnly = true,
             onValueChange = updateValueState,
             label = { Text(label) },
@@ -205,7 +204,7 @@ private fun ChooseTypeUser(valueState: String, updateValueState: (String) -> Uni
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ChoosePDMUser(valueState: String,
+private fun ChoosePDMUser(valueState: String?,
                           isCollaborator: Boolean,
                           updateValueState: (String) -> Unit,
                           getListPdm: List<String>) {
