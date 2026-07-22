@@ -1,6 +1,6 @@
 package com.narely.feedbackjourney.createuser.domain
 
-import com.narely.feedbackjourney.core.data.UsersRepository
+import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
 import com.narely.feedbackjourney.core.model.UserType
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.InjectMockKs
@@ -13,7 +13,7 @@ import org.junit.Test
 class EditUserUseCaseTest {
 
     @MockK
-    private lateinit var usersRepository: UsersRepository
+    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
 
     @InjectMockKs
     private lateinit var editUserUseCase: EditUserUseCase
@@ -26,7 +26,7 @@ class EditUserUseCaseTest {
     @Test
     fun `GIVEN edit userId WHEN invoke() is called THEN validate call edit function`() {
         //GIVEN
-        justRun { usersRepository.updateUser(
+        justRun { usersRepositoryImpl.updateUser(
             id = "1234567890",
             name = "saviolli",
             email = "savi@ciandt.com",
@@ -46,7 +46,7 @@ class EditUserUseCaseTest {
         )
 
         //THEN
-        verify { usersRepository.updateUser(id = "1234567890",
+        verify { usersRepositoryImpl.updateUser(id = "1234567890",
             name = "saviolli",
             email = "savi@ciandt.com",
             password = "1236347",

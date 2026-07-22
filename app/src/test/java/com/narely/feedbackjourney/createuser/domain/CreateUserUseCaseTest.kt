@@ -1,12 +1,11 @@
 package com.narely.feedbackjourney.createuser.domain
 
-import com.narely.feedbackjourney.core.data.UsersRepository
+import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
-import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.justRun
 import io.mockk.mockkStatic
@@ -18,7 +17,7 @@ import java.util.UUID
 class CreateUserUseCaseTest {
 
     @RelaxedMockK
-    private lateinit var usersRepository: UsersRepository
+    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
 
     @InjectMockKs
     private lateinit var createUserUseCase: CreateUserUseCase
@@ -42,7 +41,7 @@ class CreateUserUseCaseTest {
         )
 
         every { UUID.randomUUID().toString() } returns "23324984"
-        justRun { usersRepository.createUser(userModel) }
+        justRun { usersRepositoryImpl.createUser(userModel) }
 
         // WHEN
         createUserUseCase.invoke(
@@ -54,6 +53,6 @@ class CreateUserUseCaseTest {
         )
 
         // THEN
-        verify { usersRepository.createUser(userModel) }
+        verify { usersRepositoryImpl.createUser(userModel) }
     }
 }
