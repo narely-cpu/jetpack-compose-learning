@@ -2,6 +2,7 @@ package com.narely.feedbackjourney.home.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.justRun
