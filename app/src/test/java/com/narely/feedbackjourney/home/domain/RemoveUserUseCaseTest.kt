@@ -1,11 +1,7 @@
 package com.narely.feedbackjourney.home.domain
 
-import com.narely.feedbackjourney.core.data.UsersRepository
-import com.narely.feedbackjourney.core.model.UserDataModel
-import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.createuser.domain.CreateUserUseCase
+import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
 import io.mockk.MockKAnnotations
-import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.justRun
@@ -15,7 +11,7 @@ import org.junit.Test
 
 class RemoveUserUseCaseTest {
     @MockK
-    private lateinit var usersRepository: UsersRepository
+    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
 
     @InjectMockKs
     private lateinit var removeUserUseCase: RemoveUserUseCase
@@ -30,12 +26,12 @@ class RemoveUserUseCaseTest {
         // GIVEN
         val userId = "23324984"
 
-        justRun { usersRepository.removeUser(userId) }
+        justRun { usersRepositoryImpl.removeUser(userId) }
 
         // WHEN
         removeUserUseCase.invoke(userId)
 
         // THEN
-        verify { usersRepository.removeUser(userId) }
+        verify { usersRepositoryImpl.removeUser(userId) }
     }
 }
