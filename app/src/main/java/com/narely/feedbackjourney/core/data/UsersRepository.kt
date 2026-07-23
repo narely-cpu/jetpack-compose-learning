@@ -1,16 +1,14 @@
 package com.narely.feedbackjourney.core.data
 
+import androidx.annotation.VisibleForTesting
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.core.model.UserType.valueOf
-import com.narely.feedbackjourney.createuser.CreateEditUserViewState
-import java.util.UUID
 
-class UsersRepository() {
+class UsersRepository(items: List<UserDataModel>? = null) {
 
-    val listUser = UserSingleton.listUser
+    val listUser = items?.toMutableList() ?: UserSingleton.listUser
 
-    fun getUsers(): List<UserDataModel> {
+    fun getUsers(): MutableList<UserDataModel> {
         return listUser
     }
 
@@ -20,7 +18,6 @@ class UsersRepository() {
     }
 
     fun createUser(userModel: UserDataModel) {
-
         listUser.add(userModel)
     }
 
@@ -29,7 +26,7 @@ class UsersRepository() {
         listUser.remove(user)
     }
 
-    fun updateUser(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String) {
+    fun updateUser(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String?) {
         val user = listUser.find { it.id == id }
         if (user != null) {
             val newUser = listUser[listUser.indexOf(user)]
@@ -53,15 +50,7 @@ class UsersRepository() {
     }
 }
 
+@VisibleForTesting
 private object UserSingleton {
-    val listUser: MutableList<UserDataModel> = mutableListOf(
-        UserDataModel(
-            "sdd",
-            "narely",
-            "narely@ciandt.com",
-            "senha",
-            UserType.PDM,
-            null
-        )
-    )
+    val listUser: MutableList<UserDataModel> = mutableListOf()
 }
