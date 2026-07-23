@@ -267,13 +267,16 @@ class CreateEditUserViewModelTest {
             email = "New email First",
             password = "New password",
             userType = UserType.PDM,
-            pdmEmail = null)
+            pdmEmail = null
+        )
+
         val userSecond = UserDataModel(id = "111232232",
             name = "New name",
             email = "New email Second",
             password = "New password",
             userType = UserType.PDM,
-            pdmEmail = null)
+            pdmEmail = null
+        )
 
         every { getListPdmUseCase.invoke()} returns listOf(userFirst.email, userSecond.email)
 
@@ -399,6 +402,7 @@ class CreateEditUserViewModelTest {
         // GIVEN
         createEditUserViewModel.updateUiUserType(UserType.Collaborator.userValue)
         createEditUserViewModel.updateUiPdmEmail("pdmteste@ciandt.com")
+
         // WHEN
         val result = createEditUserViewModel.isButtonEnable()
 

@@ -63,6 +63,7 @@ class HomeViewModelTest {
 
         // WHEN
         homeViewModel.updateUiState(newState)
+
         val currentUiState = homeViewModel.uiState.value
 
         // THEN
@@ -98,11 +99,14 @@ class HomeViewModelTest {
 
         // WHEN
         homeViewModel.updateList()
+
         advanceUntilIdle()
+
         val currentUiStateAfter = homeViewModel.uiState.value
 
         // THEN
         verify { getUsersUseCase.invoke() }
+
         Assertions.assertEquals(listUsers, currentUiStateAfter.list)
     }
 
@@ -120,6 +124,7 @@ class HomeViewModelTest {
 
         // WHEN
         homeViewModel.updateCurrentUser(newCurrentUser)
+
         val currentUiState = homeViewModel.uiState.value
 
         // THEN
@@ -130,6 +135,7 @@ class HomeViewModelTest {
     fun `GIVEN user was deleted WHEN deleteUser() is called THEN validate state change`() {
         // GIVEN
         val currentUserId = "111232232"
+
         justRun { removeUserUseCase.invoke(currentUserId) }
 
         // WHEN

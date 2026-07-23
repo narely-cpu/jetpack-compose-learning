@@ -29,6 +29,7 @@ class RemoveUserUseCaseTest {
     fun `GIVEN userId WHEN invoke() is called THEN validate result call function`() {
         // GIVEN
         val userId = "23324984"
+
         justRun { usersRepository.removeUser(userId) }
 
         // WHEN

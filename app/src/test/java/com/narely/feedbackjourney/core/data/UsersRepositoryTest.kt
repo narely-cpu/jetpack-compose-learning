@@ -159,7 +159,6 @@ class UsersRepositoryTest {
             userType = updatedUser.userType,
             pdmEmail = updatedUser.pdmEmail
         )
-
         val result = usersRepository.getUser(userModel.id)
 
         // THEN
