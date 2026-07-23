@@ -24,7 +24,7 @@ class GetListPdmUseCaseTest {
     @Test
     fun `GIVEN list is empty WHEN invoke() is called THEN validate result is empty`() {
         // GIVEN
-        every { usersRepository.getListPdm() } returns mutableListOf()
+        every { usersRepository.getListPdm() } returns emptyList()
 
         // WHEN
         val result = getListPdmUseCase.invoke()
@@ -45,5 +45,6 @@ class GetListPdmUseCaseTest {
 
         // THEN
         Assertions.assertEquals(1, result.size)
+        Assertions.assertEquals(listOf(email), result)
     }
 }

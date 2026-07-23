@@ -24,10 +24,12 @@ class GetUserUseCaseTest {
     }
 
     @Test
-    fun `GIVEN userId not null WHEN invoke() is called THEN validate result is user`() {
+    fun `GIVEN userId not null WHEN invoke() is called THEN validate correct user is returned`() {
         // GIVEN
+        val userId = "23324984"
+
         val item = UserDataModel(
-            id = "23324984",
+            id = userId,
             name = "savi",
             email = "savi@ciandt.com",
             password = "1236347",
@@ -35,17 +37,17 @@ class GetUserUseCaseTest {
             pdmEmail = null,
         )
 
-        every { usersRepository.getUser("23324984") } returns item
+        every { usersRepository.getUser(userId) } returns item
 
         // WHEN
-        val result = getUserUseCase.invoke("23324984")
+        val result = getUserUseCase.invoke(userId)
 
         // THEN
         Assertions.assertEquals(item, result)
     }
 
     @Test
-    fun `GIVEN userId is null WHEN invoke() is called THEN validate result is not empty`() {
+    fun `GIVEN userId is null WHEN invoke() is called THEN validate result is null`() {
         // GIVEN
         every { usersRepository.getUser(null) } returns null
 
