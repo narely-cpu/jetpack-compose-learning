@@ -25,7 +25,8 @@ class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null
 
     override suspend fun getUsers(): List<UserResponse> {
         val getUsersRequest = apiService.getUsers()
-        return getUsersRequest.content
+        val listUsers = getUsersRequest.content.filter { it.active }
+        return listUsers
     }
 
     override suspend fun getUser(id: Int): UserResponse? {
@@ -37,7 +38,7 @@ class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null
     }
 
     override suspend fun removeUser(id: Int) {
-        apiService.deleteUser(id)
+        apiService.removeUser(id)
     }
 
     override fun updateUser(id: Int, name: String, email: String, password: String, userType: UserType, pdmEmail: String?) {
