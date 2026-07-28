@@ -37,7 +37,7 @@ import com.narely.feedbackjourney.R.string
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateEditUserScreen(userId: String?, viewModel: CreateEditUserViewModel, onFinishedActivity: () -> Unit) {
+fun CreateEditUserScreen(userId: Int?, viewModel: CreateEditUserViewModel, onFinishedActivity: () -> Unit) {
     val formsUiState by viewModel.uiState.collectAsState()
     LaunchedEffect(Unit) {
         if (userId != null) viewModel.updateUiCurrentUser(userId)
@@ -71,7 +71,6 @@ fun CreateEditUserScreen(userId: String?, viewModel: CreateEditUserViewModel, on
                 onFinishedActivity)
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,7 +99,7 @@ private fun SaveButtonCreateEditUser(isFormValid: Boolean, onClick: () -> Unit) 
 }
 
 @Composable
-private fun FormCreateEditUserLayout(userId: String?,
+private fun FormCreateEditUserLayout(userId: Int?,
                                      userName: String,
                                      userEmail: String,
                                      userPassword: String,

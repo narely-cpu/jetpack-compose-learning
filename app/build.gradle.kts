@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.retrofit)
     implementation(libs.gson)
+    implementation(libs.converter.gson)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

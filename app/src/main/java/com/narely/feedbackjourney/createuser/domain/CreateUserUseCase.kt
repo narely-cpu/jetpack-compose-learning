@@ -5,11 +5,12 @@ import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.random.Random
 
 class CreateUserUseCase @Inject constructor(val usersRepository: UsersRepository) {
 
     fun invoke(name: String, email: String, password: String, userType: String, pdmEmail: String?) {
-        val id = UUID.randomUUID().toString()
+        val id = Random.nextInt()
         val userType = enumValueOf<UserType>(userType)
         val userModel = UserDataModel(
             id = id,
