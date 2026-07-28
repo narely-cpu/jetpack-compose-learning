@@ -89,7 +89,7 @@ fun HomeComponent(viewModel: HomeViewModel) {
             AlertDialogDeleteUser(
                 onDismissRequest = { openAlertDialog.value = false },
                 onConfirmation = {
-//                    viewModel.deleteUser( uiState.currentUser?.id ?: 0)
+                    viewModel.deleteUser( uiState.currentUser?.id ?: 0)
                     viewModel.updateList()
                     openAlertDialog.value = false
                 }

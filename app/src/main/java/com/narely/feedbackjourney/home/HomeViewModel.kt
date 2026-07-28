@@ -33,17 +33,12 @@ class HomeViewModel @Inject constructor(
 
         delay(1000.milliseconds)
 
-        try {
-            updateUiState(
-                uiState.value.copy(
-                    list = getUsersUseCase.invoke(),
-                    isLoading = false
-                )
+        updateUiState(
+            uiState.value.copy(
+                list = getUsersUseCase.invoke(),
+                isLoading = false
             )
-        } catch (e: Exception) {
-            Log.e("Error GetUsers View Model", e.message.orEmpty(), e)
-        }
-
+        )
     }
 
     fun updateCurrentUser(user: UserResponse) {
@@ -53,10 +48,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun deleteUser(id: Int) = viewModelScope.launch {
-        try {
-            removeUserUseCase.invoke(id)
-        } catch (e: Exception) {
-            Log.e("Error DeleteUser View Model", e.message.orEmpty(), e)
-        }
+       removeUserUseCase.invoke(id)
     }
 }

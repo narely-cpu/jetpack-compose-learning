@@ -2,7 +2,7 @@ package com.narely.feedbackjourney.core.model
 
 import com.google.gson.annotations.SerializedName
 
-data class UsersResponse(
+data class UsersListResponse(
     @SerializedName("content") val content: List<UserResponse>,
     @SerializedName("pageable") val pageable: Any,
     @SerializedName("last") val last: Boolean,
