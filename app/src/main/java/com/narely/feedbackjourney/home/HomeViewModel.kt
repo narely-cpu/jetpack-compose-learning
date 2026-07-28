@@ -1,9 +1,11 @@
 package com.narely.feedbackjourney.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.narely.feedbackjourney.core.domain.GetUsersUseCase
 import com.narely.feedbackjourney.core.model.UserDataModel
+import com.narely.feedbackjourney.core.model.UserResponse
 import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -31,21 +33,30 @@ class HomeViewModel @Inject constructor(
 
         delay(1000.milliseconds)
 
-        updateUiState(
-            uiState.value.copy(
-                list = getUsersUseCase.invoke(),
-                isLoading = false
+        try {
+            updateUiState(
+                uiState.value.copy(
+                    list = getUsersUseCase.invoke(),
+                    isLoading = false
+                )
             )
-        )
+        } catch (e: Exception) {
+            Log.e("Error GetUsers View Model", e.message.orEmpty(), e)
+        }
+
     }
 
-    fun updateCurrentUser(user: UserDataModel) {
+    fun updateCurrentUser(user: UserResponse) {
         updateUiState(
             uiState.value.copy(currentUser = user)
         )
     }
 
-    fun deleteUser(id: String) {
-        removeUserUseCase.invoke(id)
+    fun deleteUser(id: Int) = viewModelScope.launch {
+        try {
+            removeUserUseCase.invoke(id)
+        } catch (e: Exception) {
+            Log.e("Error DeleteUser View Model", e.message.orEmpty(), e)
+        }
     }
 }

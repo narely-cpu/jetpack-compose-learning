@@ -18,7 +18,7 @@ class CreateEditUserActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FeedbackJourneyTheme {
-                val userId = intent.getStringExtra("CURRENT_USER_ID")
+                val userId = intent.getIntExtra("CURRENT_USER_ID", 0)
                 CreateEditUserScreen(userId, createEditViewModel)  {
                     finish()
                 }

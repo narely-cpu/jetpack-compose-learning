@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class EditUserUseCase @Inject constructor(val usersRepository: UsersRepository) {
 
-    fun invoke(id: String, name: String, email: String, password: String, userType: String, pdmEmail: String?) {
+    fun invoke(id: Int, name: String, email: String, password: String, userType: String, pdmEmail: String?) {
         val userTypeUpdate = enumValueOf<UserType>(userType)
         usersRepository.updateUser(
             id = id,

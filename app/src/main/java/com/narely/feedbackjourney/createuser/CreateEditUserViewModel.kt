@@ -2,6 +2,7 @@ package com.narely.feedbackjourney.createuser
 
 import androidx.lifecycle.ViewModel
 import com.narely.feedbackjourney.core.model.UserDataModel
+import com.narely.feedbackjourney.core.model.UserResponse
 import com.narely.feedbackjourney.core.model.UserType
 import com.narely.feedbackjourney.core.model.UserType.valueOf
 import com.narely.feedbackjourney.createuser.domain.CreateUserUseCase
@@ -52,22 +53,21 @@ class CreateEditUserViewModel @Inject constructor(
         )
     }
 
-    fun updateUiCurrentUser(newCurrentUserId: String?) {
+    suspend fun updateUiCurrentUser(newCurrentUserId: Int) {
         val newCurrentUser = readUser(newCurrentUserId)
         if (newCurrentUser != null) {
             updateUiState(
                 uiState.value.copy(id = newCurrentUser.id,
                     name = newCurrentUser.name,
                     email = newCurrentUser.email,
-                    password = newCurrentUser.password,
-                    userType = newCurrentUser.userType.userValue,
+                    userType = newCurrentUser.type,
                     pdmEmail = newCurrentUser.pdmEmail ?: "",
                 )
             )
         }
     }
 
-    fun readUser(id: String?): UserDataModel? {
+    suspend fun readUser(id: Int): UserResponse? {
         return getUserUseCase.invoke(id)
     }
 
@@ -108,7 +108,7 @@ class CreateEditUserViewModel @Inject constructor(
 
     fun needPDMAssignedOrIsEmptyPdmEmailField(): Boolean {
         return when (uiState.value.userType) {
-            UserType.Collaborator.userValue -> uiState.value.pdmEmail.isNullOrEmpty()
+            UserType.COLLABORATOR.userValue -> uiState.value.pdmEmail.isNullOrEmpty()
             UserType.PDM.userValue -> false
             else -> false
         }
@@ -122,7 +122,7 @@ class CreateEditUserViewModel @Inject constructor(
         return if (uiState.value.userType.isEmpty()) {
             false
         } else {
-            valueOf(uiState.value.userType) == UserType.Collaborator
+            valueOf(uiState.value.userType) == UserType.COLLABORATOR
         }
     }
 }

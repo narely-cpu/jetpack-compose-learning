@@ -1,9 +1,9 @@
 package com.narely.feedbackjourney.home
 
-import com.narely.feedbackjourney.core.model.UserDataModel
+import com.narely.feedbackjourney.core.model.UserResponse
 
 data class HomeViewState(
-    val list: MutableList<UserDataModel> = mutableListOf(),
+    val list: List<UserResponse> = emptyList(),
     val isLoading: Boolean = false,
-    val currentUser: UserDataModel? = null
+    val currentUser: UserResponse? = null
 )

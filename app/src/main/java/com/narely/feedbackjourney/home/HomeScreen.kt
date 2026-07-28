@@ -14,6 +14,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.LocalContext
 import com.narely.feedbackjourney.createuser.CreateEditUserActivity
 import com.narely.feedbackjourney.R.string
+import com.narely.feedbackjourney.home.login.LoginScreen
+import com.narely.feedbackjourney.home.login.LoginViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,6 +33,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
     }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             HomeComponent(viewModel)
+//            LoginScreen(viewModel)
         }
     }
 }
