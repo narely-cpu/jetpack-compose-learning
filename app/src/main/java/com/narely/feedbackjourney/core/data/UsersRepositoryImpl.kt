@@ -2,7 +2,6 @@ package com.narely.feedbackjourney.core.data
 
 import com.narely.feedbackjourney.core.model.CreateUserRequest
 import com.narely.feedbackjourney.core.model.UpdateUserRequest
-import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserResponse
 import com.narely.feedbackjourney.core.services.ApiService
 import com.narely.feedbackjourney.home.login.LoginRequest
@@ -19,7 +18,7 @@ interface UsersRepository {
     suspend fun login(request: LoginRequest): LoginResponse
 }
 
-class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null, private val apiService: ApiService): UsersRepository {
+class UsersRepositoryImpl @Inject constructor(private val apiService: ApiService): UsersRepository {
 
     override suspend fun getUsers(): List<UserResponse> {
         val getUsersResponse = apiService.getUsers()
@@ -41,7 +40,7 @@ class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null
     }
 
     override suspend fun updateUser(id: Int, request: UpdateUserRequest) {
-        apiService.updateUser(id)
+        apiService.updateUser(id, request)
     }
 
     override suspend fun getListPdm(): List<UserResponse> {

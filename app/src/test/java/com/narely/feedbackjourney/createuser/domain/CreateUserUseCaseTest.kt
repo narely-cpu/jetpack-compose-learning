@@ -1,15 +1,15 @@
 package com.narely.feedbackjourney.createuser.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
-import com.narely.feedbackjourney.core.model.UserDataModel
+import com.narely.feedbackjourney.core.model.CreateUserRequest
 import com.narely.feedbackjourney.core.model.UserType
 import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.justRun
 import io.mockk.mockkStatic
-import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import java.util.UUID
@@ -29,31 +29,29 @@ class CreateUserUseCaseTest {
     }
 
     @Test
-    fun `GIVEN user is to be create WHEN invoke() is called THEN validate createUser() is called`() {
-        // GIVEN
-        val userId = "23324984"
-        val userModel = UserDataModel(
-            id = userId,
-            name = "savi",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null,
-        )
+    fun `GIVEN a created user WHEN invoke() is called THEN validate that the repository's create function is called`() =
+        runTest {
+            // GIVEN
+            val request = CreateUserRequest(
+                name = "savi",
+                email = "savi@ciandt.com",
+                type = UserType.PDM.userValue,
+                pdmId = null,
+            )
 
-        every { UUID.randomUUID().toString() } returns userId
-        justRun { usersRepositoryImpl.createUser(userModel) }
+            coJustRun { usersRepositoryImpl.createUser(request = request) }
 
-        // WHEN
-        createUserUseCase.invoke(
-            name = "savi",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = "PDM",
-            pdmEmail = null,
-        )
+            // WHEN
+            createUserUseCase.invoke(
+                name = "savi",
+                email = "savi@ciandt.com",
+                userType = "PDM",
+                pdmEmail = null,
+                finishedActivityCreateUser = {},
+                errorMessage = {}
+            )
 
-        // THEN
-        verify { usersRepositoryImpl.createUser(userModel) }
-    }
+            // THEN
+            coVerify { usersRepositoryImpl.createUser(request = request) }
+        }
 }

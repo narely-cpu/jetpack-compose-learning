@@ -53,7 +53,7 @@ class CreateEditUserViewModel @Inject constructor(
             uiState.value.copy(pdmEmail = newPdmEmail)
         )
     }
-    fun updateUiListPdm(newListPdm: List<String>) {
+    fun updateUiListPdm(newListPdm: List<String>?) {
         updateUiState(
             uiState.value.copy(listPdm = newListPdm)
         )
@@ -67,6 +67,7 @@ class CreateEditUserViewModel @Inject constructor(
                     id = newCurrentUser.id,
                     name = newCurrentUser.name,
                     email = newCurrentUser.email,
+                    password = newCurrentUser.password,
                     userType = newCurrentUser.type,
                     pdmEmail = newCurrentUser.pdmEmail,
                 )

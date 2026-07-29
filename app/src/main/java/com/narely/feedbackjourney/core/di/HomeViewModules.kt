@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object HomeViewModules {
     @Provides
     fun providesUserRepository(apiService: ApiService): UsersRepository {
-        return UsersRepositoryImpl(null, apiService)
+        return UsersRepositoryImpl(apiService)
     }
 
     @Provides
