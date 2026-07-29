@@ -14,7 +14,8 @@ class CreateUserUseCase @Inject constructor(val usersRepository: UsersRepository
                        userType: String,
                        pdmEmail: String?,
                        finishedActivityCreateUser: () -> Unit,
-                       errorMessage: (String?) -> Unit) {
+                       errorMessage: (String?) -> Unit
+    ) {
         val pdmList = usersRepository.getListPdm()
         val pdmId = pdmList.find { it.email == pdmEmail}?.id
 
@@ -25,6 +26,7 @@ class CreateUserUseCase @Inject constructor(val usersRepository: UsersRepository
                 type = userType,
                 pdmId = pdmId
             )
+
             usersRepository.createUser(request)
             finishedActivityCreateUser()
         } catch (e: HttpException) {

@@ -20,20 +20,26 @@ import com.narely.feedbackjourney.home.login.LoginViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: HomeViewModel) {
+fun HomeScreen(viewModel: LoginViewModel) {
     val context = LocalContext.current
+
     Scaffold(floatingActionButton = {
         ExtendedFloatingActionButton(
             text = { Text(stringResource(string.create_user)) },
             icon = { },
             onClick = {
-                context.startActivity(Intent(context, CreateEditUserActivity::class.java))
+                context.startActivity(
+                    Intent(
+                        context,
+                        CreateEditUserActivity::class.java
+                    )
+                )
             }
         )
     }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            HomeComponent(viewModel)
-//            LoginScreen(viewModel)
+//            HomeComponent(viewModel)
+            LoginScreen(viewModel)
         }
     }
 }

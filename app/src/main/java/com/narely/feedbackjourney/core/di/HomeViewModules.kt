@@ -1,10 +1,8 @@
 package com.narely.feedbackjourney.core.di
 
-import com.google.gson.GsonBuilder
 import com.narely.feedbackjourney.core.data.UsersRepository
 import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
 import com.narely.feedbackjourney.core.services.ApiService
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

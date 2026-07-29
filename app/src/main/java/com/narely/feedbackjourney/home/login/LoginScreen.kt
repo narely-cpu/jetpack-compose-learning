@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,7 +28,12 @@ fun LoginScreen(viewModel: LoginViewModel) {
                 onUserPasswordChange = { viewModel.updateUiPassword(it) },
                 onLogin = { viewModel.login() }
             )
-
+            formsUiState.errorMessage?.let {
+                Text("Error: $it", color = MaterialTheme.colorScheme.error)
+            }
+            formsUiState.token?.let {
+                Text("Token: $it", color = MaterialTheme.colorScheme.error)
+            }
         }
     }
 }

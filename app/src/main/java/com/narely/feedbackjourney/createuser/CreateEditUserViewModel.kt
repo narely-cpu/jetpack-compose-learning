@@ -63,7 +63,8 @@ class CreateEditUserViewModel @Inject constructor(
         val newCurrentUser = readUser(newCurrentUserId)
         if (newCurrentUser != null) {
             updateUiState(
-                uiState.value.copy(id = newCurrentUser.id,
+                uiState.value.copy(
+                    id = newCurrentUser.id,
                     name = newCurrentUser.name,
                     email = newCurrentUser.email,
                     userType = newCurrentUser.type,
@@ -90,7 +91,7 @@ class CreateEditUserViewModel @Inject constructor(
             userType = uiState.value.userType,
             pdmEmail = uiState.value.pdmEmail,
             finishedActivityCreateUser = finishedActivityCreateUser,
-            errorMessage = { updateUiErrorMessage(it) }
+            errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
         )
     }
 
@@ -112,10 +113,12 @@ class CreateEditUserViewModel @Inject constructor(
     }
 
     fun areMandatoryFieldsFilled(): Boolean {
-        val areMandatoryFieldsFilled = uiState.value.name.isNotEmpty() &&
+        val areMandatoryFieldsFilled =
+                uiState.value.name.isNotEmpty() &&
                 uiState.value.email.isNotEmpty() &&
                 uiState.value.password.isNotEmpty() &&
                 uiState.value.userType.isNotEmpty()
+
         return areMandatoryFieldsFilled
     }
 

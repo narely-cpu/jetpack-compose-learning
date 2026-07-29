@@ -27,6 +27,7 @@ class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null
     override suspend fun getUsers(): List<UserResponse> {
         val getUsersResponse = apiService.getUsers()
         val listUsers = getUsersResponse.content.filter { it.active }
+
         return listUsers
     }
 
@@ -42,8 +43,15 @@ class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null
         apiService.removeUser(id)
     }
 
-    override fun updateUser(id: Int, name: String, email: String, password: String, userType: UserType, pdmEmail: String?) {
+    override fun updateUser(id: Int,
+                            name: String,
+                            email: String,
+                            password: String,
+                            userType: UserType,
+                            pdmEmail: String?
+    ){
         val user = listUser.find { it.id == id }
+
         if (user != null) {
             val newUser = listUser[listUser.indexOf(user)]
                 .copy(name = name,
@@ -59,6 +67,7 @@ class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null
     override suspend fun getListPdm(): List<UserResponse> {
         val getListPdmResponse = apiService.getListPdm()
         val listPdm = getListPdmResponse.content
+
         return listPdm
     }
 
