@@ -1,12 +1,15 @@
 package com.narely.feedbackjourney.createuser.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
+import com.narely.feedbackjourney.core.model.UpdateUserRequest
 import com.narely.feedbackjourney.core.model.UserType
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.justRun
-import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
@@ -24,34 +27,32 @@ class EditUserUseCaseTest {
     }
 
     @Test
-    fun `GIVEN edit userId WHEN invoke() is called THEN validate call edit function`() {
-        //GIVEN
-        justRun { usersRepositoryImpl.updateUser(
-            id = "1234567890",
-            name = "saviolli",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null
-        )}
+    fun `GIVEN modified user information WHEN invoke() is called THEN validate that the repository's update function is called`() =
+        runTest {
+            //GIVEN
+            val userId = 1
+            val request = UpdateUserRequest(
+                name = "saviolli",
+                email = "savi@ciandt.com",
+                type = UserType.PDM.userValue,
+                pdmId = null
+            )
 
-        //WHEN
-        editUserUseCase.invoke(
-            id = "1234567890",
-            name = "saviolli",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = "PDM",
-            pdmEmail = null
-        )
+            coEvery { usersRepositoryImpl.getListPdm() } returns emptyList()
+            coJustRun { usersRepositoryImpl.updateUser(id = userId, request = request) }
 
-        //THEN
-        verify { usersRepositoryImpl.updateUser(id = "1234567890",
-            name = "saviolli",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null
-        )}
-    }
+            //WHEN
+            editUserUseCase.invoke(
+                id = userId,
+                name = request.name,
+                email = request.email,
+                userType = request.type,
+                pdmEmail = null,
+                finishedActivityCreateUser = {},
+                errorMessage = {}
+            )
+
+            //THEN
+            coVerify { usersRepositoryImpl.updateUser(id = userId, request = request) }
+        }
 }

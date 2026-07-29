@@ -7,6 +7,6 @@ data class UserResponse(
     @SerializedName("name") var name: String,
     @SerializedName("email") var email: String,
     @SerializedName("type") var type: String,
-    @SerializedName("pdmId") var pdmId: Int,
+    @SerializedName("pdmId") var pdmId: Int?,
     @SerializedName("active") var active: Boolean
 )

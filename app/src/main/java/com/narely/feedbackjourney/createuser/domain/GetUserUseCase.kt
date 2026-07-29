@@ -30,13 +30,18 @@ class GetUserUseCase @Inject constructor(val usersRepository: UsersRepository) {
 
                 return user
             }
-        } catch (e: HttpException) {
-            val errorResponse = e.response()?.errorBody()?.string()
-            errorResponse?.let {
-                val error = Gson().fromJson(it, ErrorResponse::class.java)
-                Log.e("error get user:", error.error)
+        } catch (e: Exception) {
+            if (e is HttpException) {
+                val errorResponse = e.response()?.errorBody()?.string()
+                errorResponse?.let {
+                    val error = Gson().fromJson(it, ErrorResponse::class.java)
+                    Log.e("error get user:", error.error)
+                }
             }
+
+            e.message?.let { Log.e("error get user:", it) }
         }
+
         return null
     }
 }

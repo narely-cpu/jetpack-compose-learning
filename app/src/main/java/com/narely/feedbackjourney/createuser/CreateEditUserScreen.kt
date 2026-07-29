@@ -59,7 +59,8 @@ fun CreateEditUserScreen(
         )
     }) { innerPadding ->
         Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
-            FormCreateEditUserLayout(userId = formsUiState.id,
+            FormCreateEditUserLayout(
+                userId = formsUiState.id,
                 userName = formsUiState.name,
                 userEmail = formsUiState.email,
                 userPassword = formsUiState.password,
@@ -115,7 +116,7 @@ private fun FormCreateEditUserLayout(
     userPassword: String,
     userType: String,
     userPdmEmail: String?,
-    listPdm: List<String>,
+    listPdm: List<String>?,
     onUserNameChange: (String) -> Unit,
     onUserEmailChange: (String) -> Unit,
     onUserPasswordChange: (String) -> Unit,
@@ -164,7 +165,7 @@ private fun TextInputForm(valueState: String, updateValueState: (String) -> Unit
 private fun DropDownChooseUsers(
     label: String,
     isCollaborator: Boolean,
-    options: List<String>,
+    options: List<String>?,
     valueState: String?,
     updateValueState: (String) -> Unit
 ) {
@@ -195,7 +196,7 @@ private fun DropDownChooseUsers(
             containerColor = MenuDefaults.containerColor,
             shape = MenuDefaults.shape
         ) {
-            options.forEach { option ->
+            options?.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
                     onClick = {
@@ -233,11 +234,12 @@ private fun ChoosePDMUser(
     valueState: String?,
     isCollaborator: Boolean,
     updateValueState: (String) -> Unit,
-    listPdm: List<String>) {
+    listPdm: List<String>?) {
     DropDownChooseUsers(
         label = stringResource(string.choose_pdm_label),
         isCollaborator = isCollaborator,
         options = listPdm,
         valueState = valueState,
-        updateValueState = updateValueState)
+        updateValueState = updateValueState
+    )
 }

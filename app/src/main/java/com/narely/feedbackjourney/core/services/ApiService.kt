@@ -1,6 +1,7 @@
 package com.narely.feedbackjourney.core.services
 
 import com.narely.feedbackjourney.core.model.CreateUserRequest
+import com.narely.feedbackjourney.core.model.UpdateUserRequest
 import com.narely.feedbackjourney.core.model.UserResponse
 import com.narely.feedbackjourney.core.model.UsersListResponse
 import com.narely.feedbackjourney.home.login.LoginRequest
@@ -14,32 +15,34 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
+private const val TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NTUyNjkyMSwiZXhwIjoxNzg1NTQxMzIxLCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.wVCsB_l3duX_R3qG67GIBFK9Dy5eszwmQAEXtyEx5Yk"
 
 interface ApiService {
+
     @GET("users")
-    @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NTQzMzc4OSwiZXhwIjoxNzg1NDQ4MTg5LCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.OE9WqfmJ27u1Szg2aR4MMl5gyXQEGtLvvJe8V3ybo1g")
+    @Headers("Authorization: Bearer $TOKEN")
     suspend fun getUsers(): UsersListResponse
 
     @GET("users/{id}")
-    @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NTQzMzc4OSwiZXhwIjoxNzg1NDQ4MTg5LCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.OE9WqfmJ27u1Szg2aR4MMl5gyXQEGtLvvJe8V3ybo1g")
+    @Headers("Authorization: Bearer $TOKEN")
     suspend fun getUser(@Path("id") id: Int): UserResponse?
 
     @GET("users?type=PDM&size=100")
-    @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NTQzMzc4OSwiZXhwIjoxNzg1NDQ4MTg5LCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.OE9WqfmJ27u1Szg2aR4MMl5gyXQEGtLvvJe8V3ybo1g")
+    @Headers("Authorization: Bearer $TOKEN")
     suspend fun getListPdm(): UsersListResponse
 
     @POST("users/auth/login")
     suspend fun login(@Body request: LoginRequest): LoginResponse
 
     @POST("users")
-    @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NTQzMzc4OSwiZXhwIjoxNzg1NDQ4MTg5LCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.OE9WqfmJ27u1Szg2aR4MMl5gyXQEGtLvvJe8V3ybo1g")
+    @Headers("Authorization: Bearer $TOKEN")
     suspend fun createUser(@Body request: CreateUserRequest): UserResponse
 
     @DELETE("users/{id}")
-    @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NTQzMzc4OSwiZXhwIjoxNzg1NDQ4MTg5LCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.OE9WqfmJ27u1Szg2aR4MMl5gyXQEGtLvvJe8V3ybo1g")
+    @Headers("Authorization: Bearer $TOKEN")
     suspend fun removeUser(@Path("id") id: Int): Response<Unit>
 
     @PUT("users/{id}")
-    @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NTQzMzc4OSwiZXhwIjoxNzg1NDQ4MTg5LCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.OE9WqfmJ27u1Szg2aR4MMl5gyXQEGtLvvJe8V3ybo1g")
-    suspend fun updateUser(@Path("id") id: Int): Response<Unit>
+    @Headers("Authorization: Bearer $TOKEN")
+    suspend fun updateUser(@Path("id") id: Int, @Body request: UpdateUserRequest): Response<Unit>
 }
