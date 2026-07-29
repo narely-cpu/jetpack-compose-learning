@@ -97,7 +97,11 @@ fun HomeComponent(viewModel: HomeViewModel) {
 }
 
 @Composable
-private fun EditAndDeleteButtonComponent(description: String, icon: Int, onClick: () -> Unit) {
+private fun EditAndDeleteButtonComponent(
+    description: String,
+    icon: Int,
+    onClick: () -> Unit
+) {
     IconButton(onClick = onClick) {
         Icon(
             painterResource(icon),
@@ -109,7 +113,10 @@ private fun EditAndDeleteButtonComponent(description: String, icon: Int, onClick
 }
 
 @Composable
-private fun UserItem(user: UserResponse, showAlertDeleteUser: (Boolean) -> Unit ) {
+private fun UserItem(
+    user: UserResponse,
+    showAlertDeleteUser: (Boolean) -> Unit
+) {
     val context = LocalContext.current
     Box(modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.align(Alignment.CenterStart)) {
@@ -121,7 +128,11 @@ private fun UserItem(user: UserResponse, showAlertDeleteUser: (Boolean) -> Unit 
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
             EditAndDeleteButtonComponent(stringResource(string.edit_user),
                 R.drawable.codicons_ic_edit) {
-                context.startActivity(Intent(context, CreateEditUserActivity::class.java)
+                context.startActivity(
+                    Intent(
+                        context,
+                        CreateEditUserActivity::class.java
+                    )
                     .apply { putExtra("CURRENT_USER_ID", user.id) })
             }
             EditAndDeleteButtonComponent(stringResource(string.delete_dialog_title),

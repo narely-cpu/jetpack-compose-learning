@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.invoke
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase): ViewModel() {
@@ -29,21 +30,24 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase): ViewMo
         )
     }
 
-    fun login() {
-        val request = LoginRequest(email = uiState.value.email,
-                            password = uiState.value.password
-                        )
-        viewModelScope.launch {
-            try {
-                val response = loginUseCase.invoke(request = request)
-                updateUiState(
-                    uiState.value.copy(token = response.token)
-                )
-            } catch (e: Exception) {
-                updateUiState(
-                    uiState.value.copy(errorMessage = e.message)
-                )
-            }
-        }
+    fun updateUiToken(newToken: String?) {
+        updateUiState(
+            uiState.value.copy(token = newToken)
+        )
+    }
+
+    fun updateUiErrorMessage(newErrorMessage: String?) {
+        updateUiState(
+            uiState.value.copy(errorMessage = newErrorMessage)
+        )
+    }
+
+    fun login() = viewModelScope.launch {
+        loginUseCase.invoke(
+            email = uiState.value.email,
+            password = uiState.value.password,
+            tokenResponse = { updateUiToken(it) },
+            errorMessage = { updateUiErrorMessage(it) }
+        )
     }
 }
