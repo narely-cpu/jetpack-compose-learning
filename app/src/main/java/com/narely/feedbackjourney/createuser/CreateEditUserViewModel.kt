@@ -73,6 +73,12 @@ class CreateEditUserViewModel @Inject constructor(
         }
     }
 
+    fun updateUiErrorMessage(newErrorMessage: String?) {
+        updateUiState(
+            uiState.value.copy(errorMessage = newErrorMessage)
+        )
+    }
+
     suspend fun readUser(id: Int): UserResponse? {
         return getUserUseCase.invoke(id)
     }
@@ -81,10 +87,10 @@ class CreateEditUserViewModel @Inject constructor(
         createUserUseCase.invoke(
             name = uiState.value.name,
             email = uiState.value.email,
-            password = uiState.value.password,
             userType = uiState.value.userType,
             pdmEmail = uiState.value.pdmEmail,
-            finishedActivityCreateUser = finishedActivityCreateUser
+            finishedActivityCreateUser = finishedActivityCreateUser,
+            errorMessage = { updateUiErrorMessage(it) }
         )
     }
 
