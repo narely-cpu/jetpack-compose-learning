@@ -8,4 +8,5 @@ data class CreateEditUserViewState(val id: Int? = null,
                                    val pdmEmail: String? = null,
                                    val isLoading: Boolean = false,
                                    val listPdm: List<String> = emptyList(),
+                                   val errorMessage: String? = "",
 )

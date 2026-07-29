@@ -71,9 +71,11 @@ fun CreateEditUserScreen(userId: Int, viewModel: CreateEditUserViewModel, onFini
                 { viewModel.editUser() },
                 viewModel.isCollaborator(),
                 viewModel.isButtonEnable())
+            formsUiState.errorMessage?.let {
+                Text("Error: $it", color = MaterialTheme.colorScheme.error)
+            }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
