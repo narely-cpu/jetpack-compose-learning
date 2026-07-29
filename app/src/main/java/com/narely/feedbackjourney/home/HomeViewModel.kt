@@ -1,10 +1,8 @@
 package com.narely.feedbackjourney.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.narely.feedbackjourney.core.domain.GetUsersUseCase
-import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserResponse
 import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,7 +45,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun deleteUser(id: Int) = viewModelScope.launch {
+    fun removeUser(id: Int) = viewModelScope.launch {
        removeUserUseCase.invoke(id)
     }
 }

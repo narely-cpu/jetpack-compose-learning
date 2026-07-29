@@ -28,14 +28,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.createuser.CreateEditUserActivity
-import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.core.model.UserResponse
 
@@ -89,7 +87,7 @@ fun HomeComponent(viewModel: HomeViewModel) {
             AlertDialogDeleteUser(
                 onDismissRequest = { openAlertDialog.value = false },
                 onConfirmation = {
-                    viewModel.deleteUser( uiState.currentUser?.id ?: 0)
+                    viewModel.removeUser( uiState.currentUser?.id ?: 0)
                     viewModel.updateList()
                     openAlertDialog.value = false
                 }

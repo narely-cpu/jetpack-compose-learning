@@ -5,7 +5,12 @@ import javax.inject.Inject
 
 class GetListPdmUseCase @Inject constructor(val usersRepository: UsersRepository) {
 
-    fun invoke(): List<String> {
-        return usersRepository.getListPdm()
+    suspend fun invoke(): List<String> {
+        val getListPdm = usersRepository.getListPdm()
+        val listPdmEmail: MutableList<String> = mutableListOf()
+
+        getListPdm.forEach { listPdmEmail.add(it.email) }
+
+        return listPdmEmail
     }
 }
