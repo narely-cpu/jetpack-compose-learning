@@ -1,25 +1,29 @@
 package com.narely.feedbackjourney.createuser.domain
 
+import android.util.Log
 import com.narely.feedbackjourney.core.data.UsersRepository
-import com.narely.feedbackjourney.core.model.UserDataModel
-import com.narely.feedbackjourney.core.model.UserType
-import java.util.UUID
+import com.narely.feedbackjourney.core.model.CreateUserRequest
 import javax.inject.Inject
-import kotlin.random.Random
 
 class CreateUserUseCase @Inject constructor(val usersRepository: UsersRepository) {
 
-    fun invoke(name: String, email: String, password: String, userType: String, pdmEmail: String?) {
-        val id = Random.nextInt()
-        val userType = enumValueOf<UserType>(userType)
-        val userModel = UserDataModel(
-            id = id,
-            name = name,
-            email = email,
-            password = password,
-            userType = userType,
-            pdmEmail = pdmEmail
-        )
-        usersRepository.createUser(userModel)
+    suspend fun invoke(name: String, email: String, password: String, userType: String, pdmEmail: String?, finishedActivityCreateUser: () -> Unit) {
+        val pdmList = usersRepository.getListPdm()
+        val pdmId = pdmList.find { it.email == pdmEmail}?.id
+
+        try {
+            val request = CreateUserRequest(
+                name = name,
+                email = email,
+                password = password,
+                type = userType,
+                pdmId = pdmId
+            )
+            usersRepository.createUser(request)
+        } catch (e: Exception) {
+            e.message?.let { Log.e("Error create user: ", it) }
+        } finally {
+            finishedActivityCreateUser()
+        }
     }
 }

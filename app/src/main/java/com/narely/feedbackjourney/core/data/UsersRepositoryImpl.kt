@@ -1,5 +1,6 @@
 package com.narely.feedbackjourney.core.data
 
+import com.narely.feedbackjourney.core.model.CreateUserRequest
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserResponse
 import com.narely.feedbackjourney.core.model.UserType
@@ -11,10 +12,10 @@ import javax.inject.Inject
 interface UsersRepository {
     suspend fun getUsers(): List<UserResponse>
     suspend fun getUser(id: Int): UserResponse?
-    fun createUser(userModel: UserDataModel)
+    suspend fun createUser(request: CreateUserRequest)
     suspend fun removeUser(id: Int)
     fun updateUser(id: Int, name: String, email: String, password: String, userType: UserType, pdmEmail: String?)
-    fun getListPdm(): List<String>
+    suspend fun getListPdm(): List<UserResponse>
 
     suspend fun login(request: LoginRequest): LoginResponse
 }
@@ -24,8 +25,8 @@ class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null
     val listUser = items?.toMutableList() ?: mutableListOf()
 
     override suspend fun getUsers(): List<UserResponse> {
-        val getUsersRequest = apiService.getUsers()
-        val listUsers = getUsersRequest.content.filter { it.active }
+        val getUsersResponse = apiService.getUsers()
+        val listUsers = getUsersResponse.content.filter { it.active }
         return listUsers
     }
 
@@ -33,8 +34,8 @@ class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null
         return apiService.getUser(id)
     }
 
-    override fun createUser(userModel: UserDataModel) {
-        listUser.add(userModel)
+    override suspend fun createUser(request: CreateUserRequest) {
+        apiService.createUser(request)
     }
 
     override suspend fun removeUser(id: Int) {
@@ -55,13 +56,10 @@ class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null
         }
     }
 
-    override fun getListPdm(): List<String> {
-        val user = listUser.filter { it.userType == UserType.PDM }
-        val listUserEmail: MutableList<String> = mutableListOf()
-        user.forEach {
-            listUserEmail.add(it.email)
-        }
-        return listUserEmail
+    override suspend fun getListPdm(): List<UserResponse> {
+        val getListPdmResponse = apiService.getListPdm()
+        val listPdm = getListPdmResponse.content
+        return listPdm
     }
 
     override suspend fun login(request: LoginRequest): LoginResponse {

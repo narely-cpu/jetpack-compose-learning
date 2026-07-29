@@ -1,7 +1,7 @@
 package com.narely.feedbackjourney.createuser
 
 import androidx.lifecycle.ViewModel
-import com.narely.feedbackjourney.core.model.UserDataModel
+import androidx.lifecycle.viewModelScope
 import com.narely.feedbackjourney.core.model.UserResponse
 import com.narely.feedbackjourney.core.model.UserType
 import com.narely.feedbackjourney.core.model.UserType.valueOf
@@ -12,6 +12,7 @@ import com.narely.feedbackjourney.createuser.domain.GetUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,8 +53,13 @@ class CreateEditUserViewModel @Inject constructor(
             uiState.value.copy(pdmEmail = newPdmEmail)
         )
     }
+    fun updateUiListPdm(newListPdm: List<String>) {
+        updateUiState(
+            uiState.value.copy(listPdm = newListPdm)
+        )
+    }
 
-    suspend fun updateUiCurrentUser(newCurrentUserId: Int) {
+    fun updateUiCurrentUser(newCurrentUserId: Int) = viewModelScope.launch {
         val newCurrentUser = readUser(newCurrentUserId)
         if (newCurrentUser != null) {
             updateUiState(
@@ -61,7 +67,7 @@ class CreateEditUserViewModel @Inject constructor(
                     name = newCurrentUser.name,
                     email = newCurrentUser.email,
                     userType = newCurrentUser.type,
-                    pdmEmail = newCurrentUser.pdmEmail ?: "",
+                    pdmEmail = newCurrentUser.pdmId ?: "",
                 )
             )
         }
@@ -71,13 +77,14 @@ class CreateEditUserViewModel @Inject constructor(
         return getUserUseCase.invoke(id)
     }
 
-    fun createUser() {
+    fun createUser(finishedActivityCreateUser: () -> Unit) = viewModelScope.launch {
         createUserUseCase.invoke(
             name = uiState.value.name,
             email = uiState.value.email,
             password = uiState.value.password,
             userType = uiState.value.userType,
-            pdmEmail = uiState.value.pdmEmail
+            pdmEmail = uiState.value.pdmEmail,
+            finishedActivityCreateUser = finishedActivityCreateUser
         )
     }
 
@@ -94,8 +101,8 @@ class CreateEditUserViewModel @Inject constructor(
         }
     }
 
-    fun getListPdm(): List<String> {
-        return getListPdmUseCase.invoke()
+    fun getListPdm() = viewModelScope.launch {
+        updateUiListPdm(getListPdmUseCase.invoke())
     }
 
     fun areMandatoryFieldsFilled(): Boolean {
