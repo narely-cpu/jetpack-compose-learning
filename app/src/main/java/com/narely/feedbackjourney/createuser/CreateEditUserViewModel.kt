@@ -22,6 +22,7 @@ class CreateEditUserViewModel @Inject constructor(
 ): ViewModel() {
     private val _uiState: MutableStateFlow<CreateEditUserViewState> = MutableStateFlow(CreateEditUserViewState())
     val uiState: StateFlow<CreateEditUserViewState> = _uiState
+
     fun updateUiState(uiState: CreateEditUserViewState) {
         _uiState.value = uiState
     }

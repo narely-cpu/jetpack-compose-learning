@@ -68,7 +68,6 @@ class UsersRepositoryImplTest {
     @Test
     fun `GIVEN userId not exist WHEN getUser() is called THEN validate result`() {
         // GIVEN
-
         val incorrectId = "1234"
 
         usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))

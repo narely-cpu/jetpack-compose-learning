@@ -15,5 +15,4 @@ object HomeViewModules {
     fun providesUserRepository(): UsersRepository {
         return UsersRepositoryImpl(null)
     }
-
 }

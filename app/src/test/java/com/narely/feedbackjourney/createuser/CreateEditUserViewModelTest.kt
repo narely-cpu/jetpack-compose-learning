@@ -159,14 +159,17 @@ class CreateEditUserViewModelTest {
             email = "New email",
             password = "New password",
             userType = UserType.PDM,
-            pdmEmail = null)
+            pdmEmail = null
+        )
         val newCurrentUser = CreateEditUserViewState(
             id = userModel.id,
             name = userModel.name,
             email = userModel.email,
             password = userModel.password,
             userType = userModel.userType.userValue,
-            pdmEmail = userModel.pdmEmail ?: "")
+            pdmEmail = userModel.pdmEmail ?: ""
+        )
+
         every { getUserUseCase.invoke(userModel.id)} returns userModel
 
         // WHEN

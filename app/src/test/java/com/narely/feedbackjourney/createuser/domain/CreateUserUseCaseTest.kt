@@ -32,7 +32,6 @@ class CreateUserUseCaseTest {
     fun `GIVEN user is to be create WHEN invoke() is called THEN validate createUser() is called`() {
         // GIVEN
         val userId = "23324984"
-        
         val userModel = UserDataModel(
             id = userId,
             name = "savi",
