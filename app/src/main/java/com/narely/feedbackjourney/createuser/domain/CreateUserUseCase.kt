@@ -9,12 +9,13 @@ import javax.inject.Inject
 
 class CreateUserUseCase @Inject constructor(val usersRepository: UsersRepository) {
 
-    suspend fun invoke(name: String,
-                       email: String,
-                       userType: String,
-                       pdmEmail: String?,
-                       finishedActivityCreateUser: () -> Unit,
-                       errorMessage: (String?) -> Unit
+    suspend fun invoke(
+        name: String,
+        email: String,
+        userType: String,
+        pdmEmail: String?,
+        finishedActivityCreateUser: () -> Unit,
+        errorMessage: (String?) -> Unit
     ) {
         val pdmList = usersRepository.getListPdm()
         val pdmId = pdmList.find { it.email == pdmEmail}?.id

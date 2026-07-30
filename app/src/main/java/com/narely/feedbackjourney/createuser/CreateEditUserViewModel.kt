@@ -2,7 +2,7 @@ package com.narely.feedbackjourney.createuser
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.narely.feedbackjourney.core.model.UserResponse
+import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
 import com.narely.feedbackjourney.core.model.UserType.valueOf
 import com.narely.feedbackjourney.createuser.domain.CreateUserUseCase
@@ -68,7 +68,7 @@ class CreateEditUserViewModel @Inject constructor(
                     name = newCurrentUser.name,
                     email = newCurrentUser.email,
                     userType = newCurrentUser.type,
-                    pdmEmail = newCurrentUser.pdmId ?: "",
+                    pdmEmail = newCurrentUser.pdmEmail,
                 )
             )
         }
@@ -80,7 +80,7 @@ class CreateEditUserViewModel @Inject constructor(
         )
     }
 
-    suspend fun readUser(id: Int): UserResponse? {
+    suspend fun readUser(id: Int): UserDataModel? {
         return getUserUseCase.invoke(id)
     }
 
@@ -95,15 +95,16 @@ class CreateEditUserViewModel @Inject constructor(
         )
     }
 
-    fun editUser() {
+    fun editUser(finishedActivityCreateUser: () -> Unit) = viewModelScope.launch {
         uiState.value.id?.let {
             editUserUseCase.invoke(
                 id = it,
                 name = uiState.value.name,
                 email = uiState.value.email,
-                password = uiState.value.password,
                 userType = uiState.value.userType,
-                pdmEmail = uiState.value.pdmEmail
+                pdmEmail = uiState.value.pdmEmail,
+                finishedActivityCreateUser = finishedActivityCreateUser,
+                errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
             )
         }
     }
