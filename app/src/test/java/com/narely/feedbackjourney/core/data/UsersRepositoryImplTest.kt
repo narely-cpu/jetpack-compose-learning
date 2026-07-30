@@ -2,19 +2,18 @@ package com.narely.feedbackjourney.core.data
 
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
-import io.mockk.every
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 
-class UsersRepositoryTest {
-    lateinit var usersRepository: UsersRepository
+class UsersRepositoryImplTest {
+    lateinit var usersRepositoryImpl: UsersRepositoryImpl
     lateinit var userModel: UserDataModel
 
     @Before
     fun setup() {
-        usersRepository = UsersRepository()
+        usersRepositoryImpl = UsersRepositoryImpl()
         userModel = UserDataModel(
             id = "23324984",
             name = "savi",
@@ -27,7 +26,7 @@ class UsersRepositoryTest {
 
     @After
     fun tearDown() {
-        usersRepository.listUser.clear()
+        usersRepositoryImpl.listUser.clear()
     }
 
     @Test
@@ -36,7 +35,7 @@ class UsersRepositoryTest {
         val listUsers = emptyList<UserDataModel>()
 
         // WHEN
-        val result = usersRepository.getUsers()
+        val result = usersRepositoryImpl.getUsers()
 
         // THEN
         Assertions.assertEquals(listUsers, result)
@@ -45,10 +44,10 @@ class UsersRepositoryTest {
     @Test
     fun `GIVEN list not null WHEN getUsers() is called THEN validate result`() {
         // GIVEN
-        usersRepository = UsersRepository(items = listOf(userModel))
+        usersRepositoryImpl = UsersRepositoryImpl(items = listOf(userModel))
 
         // WHEN
-        val result = usersRepository.getUsers()
+        val result = usersRepositoryImpl.getUsers()
 
         // THEN
         Assertions.assertEquals(1, result.size)
@@ -60,7 +59,7 @@ class UsersRepositoryTest {
         val userId = null
 
         // WHEN
-        val result = usersRepository.getUser(userId)
+        val result = usersRepositoryImpl.getUser(userId)
 
         // THEN
         Assertions.assertNull(result)
@@ -71,10 +70,10 @@ class UsersRepositoryTest {
         // GIVEN
         val incorrectId = "1234"
 
-        usersRepository = UsersRepository(listOf(userModel))
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))
 
         // WHEN
-        val result = usersRepository.getUser(incorrectId)
+        val result = usersRepositoryImpl.getUser(incorrectId)
 
         // THEN
         Assertions.assertNull(result)
@@ -85,10 +84,10 @@ class UsersRepositoryTest {
         // GIVEN
         val userId = userModel.id
 
-        usersRepository = UsersRepository(listOf(userModel))
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))
 
         // WHEN
-        val result = usersRepository.getUser(userId)
+        val result = usersRepositoryImpl.getUser(userId)
 
         // THEN
         Assertions.assertEquals(userModel, result)
@@ -99,8 +98,8 @@ class UsersRepositoryTest {
         // GIVEN
 
         // WHEN
-        usersRepository.createUser(userModel)
-        val result = usersRepository.getUsers()
+        usersRepositoryImpl.createUser(userModel)
+        val result = usersRepositoryImpl.getUsers()
 
         // THEN
         Assertions.assertEquals(1, result.size)
@@ -111,11 +110,11 @@ class UsersRepositoryTest {
         // GIVEN
         val userId = userModel.id
 
-        usersRepository = UsersRepository(listOf(userModel))
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))
 
         // WHEN
-        usersRepository.removeUser(userId)
-        val result = usersRepository.getUsers()
+        usersRepositoryImpl.removeUser(userId)
+        val result = usersRepositoryImpl.getUsers()
 
         // THEN
         Assertions.assertEquals(0, result.size)
@@ -126,11 +125,11 @@ class UsersRepositoryTest {
         // GIVEN
         val incorrectId = "1234"
 
-        usersRepository = UsersRepository(listOf(userModel))
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))
 
         // WHEN
-        usersRepository.removeUser(incorrectId)
-        val result = usersRepository.getUsers()
+        usersRepositoryImpl.removeUser(incorrectId)
+        val result = usersRepositoryImpl.getUsers()
 
         // THEN
         Assertions.assertEquals(1, result.size)
@@ -139,7 +138,7 @@ class UsersRepositoryTest {
     @Test
     fun `GIVEN edit user WHEN updateUser() is called THEN validate result user updated`() {
         // GIVEN
-        usersRepository = UsersRepository(listOf(userModel))
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))
 
         val updatedUser = UserDataModel(
             id = userModel.id,
@@ -151,7 +150,7 @@ class UsersRepositoryTest {
         )
 
         // WHEN
-        usersRepository.updateUser(
+        usersRepositoryImpl.updateUser(
             id = updatedUser.id,
             name = updatedUser.name,
             email = updatedUser.email,
@@ -159,7 +158,7 @@ class UsersRepositoryTest {
             userType = updatedUser.userType,
             pdmEmail = updatedUser.pdmEmail
         )
-        val result = usersRepository.getUser(userModel.id)
+        val result = usersRepositoryImpl.getUser(userModel.id)
 
         // THEN
         Assertions.assertEquals(updatedUser, result)
@@ -177,10 +176,10 @@ class UsersRepositoryTest {
             pdmEmail = null
         )
 
-        usersRepository = UsersRepository(listOf(userModel, secondUserModel))
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel, secondUserModel))
 
         // WHEN
-        val result = usersRepository.getListPdm()
+        val result = usersRepositoryImpl.getListPdm()
 
         // THEN
         Assertions.assertEquals(1, result.size)
@@ -197,7 +196,6 @@ class UsersRepositoryTest {
             userType = UserType.Collaborator,
             pdmEmail = null
         )
-
         val adminUser = UserDataModel(
             id = "123456789",
             name = "lucas",
@@ -207,10 +205,10 @@ class UsersRepositoryTest {
             pdmEmail = null
         )
 
-        usersRepository = UsersRepository(listOf(collaboratorUser, adminUser))
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(collaboratorUser, adminUser))
 
         // WHEN
-        val result = usersRepository.getListPdm()
+        val result = usersRepositoryImpl.getListPdm()
 
         // THEN
         Assertions.assertEquals(0, result.size)

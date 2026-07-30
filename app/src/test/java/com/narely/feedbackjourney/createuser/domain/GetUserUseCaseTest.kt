@@ -1,6 +1,6 @@
 package com.narely.feedbackjourney.createuser.domain
 
-import com.narely.feedbackjourney.core.data.UsersRepository
+import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
 import io.mockk.MockKAnnotations
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Assertions
 
 class GetUserUseCaseTest {
     @MockK
-    private lateinit var usersRepository: UsersRepository
+    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
 
     @InjectMockKs
     private lateinit var getUserUseCase: GetUserUseCase
@@ -27,7 +27,6 @@ class GetUserUseCaseTest {
     fun `GIVEN userId not null WHEN invoke() is called THEN validate correct user is returned`() {
         // GIVEN
         val userId = "23324984"
-
         val item = UserDataModel(
             id = userId,
             name = "savi",
@@ -37,7 +36,7 @@ class GetUserUseCaseTest {
             pdmEmail = null,
         )
 
-        every { usersRepository.getUser(userId) } returns item
+        every { usersRepositoryImpl.getUser(userId) } returns item
 
         // WHEN
         val result = getUserUseCase.invoke(userId)
@@ -49,7 +48,7 @@ class GetUserUseCaseTest {
     @Test
     fun `GIVEN userId is null WHEN invoke() is called THEN validate result is null`() {
         // GIVEN
-        every { usersRepository.getUser(null) } returns null
+        every { usersRepositoryImpl.getUser(null) } returns null
 
         // WHEN
         val result = getUserUseCase.invoke(null)

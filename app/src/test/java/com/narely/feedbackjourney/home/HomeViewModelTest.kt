@@ -3,7 +3,6 @@ package com.narely.feedbackjourney.home
 import com.narely.feedbackjourney.core.domain.GetUsersUseCase
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.createuser.CreateEditUserViewState
 import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -13,13 +12,9 @@ import io.mockk.justRun
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -63,7 +58,6 @@ class HomeViewModelTest {
 
         // WHEN
         homeViewModel.updateUiState(newState)
-
         val currentUiState = homeViewModel.uiState.value
 
         // THEN
@@ -81,7 +75,6 @@ class HomeViewModelTest {
             userType = UserType.PDM,
             pdmEmail = null
         )
-
         val userSecond = UserDataModel(id = "111232232",
             name = "New name",
             email = "New email Second",
@@ -89,7 +82,6 @@ class HomeViewModelTest {
             userType = UserType.PDM,
             pdmEmail = null
         )
-
         val listUsers = mutableListOf<UserDataModel>()
 
         listUsers.add(userFirst)
@@ -99,14 +91,12 @@ class HomeViewModelTest {
 
         // WHEN
         homeViewModel.updateList()
-
         advanceUntilIdle()
 
         val currentUiStateAfter = homeViewModel.uiState.value
 
         // THEN
         verify { getUsersUseCase.invoke() }
-
         Assertions.assertEquals(listUsers, currentUiStateAfter.list)
     }
 
@@ -124,7 +114,6 @@ class HomeViewModelTest {
 
         // WHEN
         homeViewModel.updateCurrentUser(newCurrentUser)
-
         val currentUiState = homeViewModel.uiState.value
 
         // THEN

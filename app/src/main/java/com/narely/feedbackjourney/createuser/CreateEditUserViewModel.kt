@@ -8,10 +8,13 @@ import com.narely.feedbackjourney.createuser.domain.CreateUserUseCase
 import com.narely.feedbackjourney.createuser.domain.EditUserUseCase
 import com.narely.feedbackjourney.createuser.domain.GetListPdmUseCase
 import com.narely.feedbackjourney.createuser.domain.GetUserUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class CreateEditUserViewModel(
+@HiltViewModel
+class CreateEditUserViewModel @Inject constructor(
     val createUserUseCase: CreateUserUseCase,
     val editUserUseCase: EditUserUseCase,
     val getUserUseCase: GetUserUseCase,
@@ -19,6 +22,7 @@ class CreateEditUserViewModel(
 ): ViewModel() {
     private val _uiState: MutableStateFlow<CreateEditUserViewState> = MutableStateFlow(CreateEditUserViewState())
     val uiState: StateFlow<CreateEditUserViewState> = _uiState
+
     fun updateUiState(uiState: CreateEditUserViewState) {
         _uiState.value = uiState
     }

@@ -1,6 +1,6 @@
 package com.narely.feedbackjourney.core.domain
 
-import com.narely.feedbackjourney.core.data.UsersRepository
+import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
 import io.mockk.MockKAnnotations
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Assertions
 class GetUsersUseCaseTest {
 
     @MockK
-    private lateinit var usersRepository: UsersRepository
+    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
 
     @InjectMockKs
     private lateinit var getUsersUseCase: GetUsersUseCase
@@ -27,7 +27,7 @@ class GetUsersUseCaseTest {
     @Test
     fun `GIVEN list is empty WHEN invoke() is called THEN validate result is empty`() {
         // GIVEN
-        every { usersRepository.getUsers() } returns mutableListOf()
+        every { usersRepositoryImpl.getUsers() } returns mutableListOf()
 
         // WHEN
         val result = getUsersUseCase.invoke()
@@ -47,12 +47,11 @@ class GetUsersUseCaseTest {
             userType = UserType.PDM,
             pdmEmail = null,
         )
-
         val listUsers = mutableListOf<UserDataModel>()
 
         listUsers.add(item)
 
-        every { usersRepository.getUsers() } returns listUsers
+        every { usersRepositoryImpl.getUsers() } returns listUsers
 
         // WHEN
         val result = getUsersUseCase.invoke()

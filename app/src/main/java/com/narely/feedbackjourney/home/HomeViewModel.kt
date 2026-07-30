@@ -5,13 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.narely.feedbackjourney.core.domain.GetUsersUseCase
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class HomeViewModel(val getUsersUseCase: GetUsersUseCase, val removeUserUseCase: RemoveUserUseCase): ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    val getUsersUseCase: GetUsersUseCase,
+    val removeUserUseCase: RemoveUserUseCase,
+): ViewModel() {
     private val _uiState: MutableStateFlow<HomeViewState> =
         MutableStateFlow(HomeViewState())
     val uiState: StateFlow<HomeViewState> = _uiState
