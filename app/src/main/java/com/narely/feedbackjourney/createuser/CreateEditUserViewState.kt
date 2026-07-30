@@ -5,4 +5,4 @@ data class CreateEditUserViewState(var id: String? = null,
                                    val email: String = "Email",
                                    val password: String = "Password",
                                    val userType: String = "",
-                                   val pdmEmail: String = "")
+                                   val pdmEmail: String? = null)
