@@ -53,7 +53,5 @@ class EditUserUseCaseTest {
             userType = UserType.PDM,
             pdmEmail = null
         )}
-
     }
-
 }

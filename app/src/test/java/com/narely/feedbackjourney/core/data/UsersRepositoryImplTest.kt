@@ -2,28 +2,19 @@ package com.narely.feedbackjourney.core.data
 
 import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserType
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 
 class UsersRepositoryImplTest {
     lateinit var usersRepositoryImpl: UsersRepositoryImpl
+    lateinit var userModel: UserDataModel
 
-    @Test
-    fun `GIVEN list is empty WHEN getUsers() is called THEN validate result`() {
-        // GIVEN
+    @Before
+    fun setup() {
         usersRepositoryImpl = UsersRepositoryImpl()
-
-        // WHEN
-        val result = usersRepositoryImpl.getUsers()
-
-        // THEN
-        Assertions.assertEquals(0, result.size)
-    }
-
-    @Test
-    fun `GIVEN list not null WHEN getUsers() is called THEN validate result`() {
-        // GIVEN
-        val item = UserDataModel(
+        userModel = UserDataModel(
             id = "23324984",
             name = "savi",
             email = "savi@ciandt.com",
@@ -31,7 +22,29 @@ class UsersRepositoryImplTest {
             userType = UserType.PDM,
             pdmEmail = null,
         )
-        usersRepositoryImpl = UsersRepositoryImpl(items = listOf(item))
+    }
+
+    @After
+    fun tearDown() {
+        usersRepositoryImpl.listUser.clear()
+    }
+
+    @Test
+    fun `GIVEN list is empty WHEN getUsers() is called THEN validate result is an empty list`() {
+        // GIVEN
+        val listUsers = emptyList<UserDataModel>()
+
+        // WHEN
+        val result = usersRepositoryImpl.getUsers()
+
+        // THEN
+        Assertions.assertEquals(listUsers, result)
+    }
+
+    @Test
+    fun `GIVEN list not null WHEN getUsers() is called THEN validate result`() {
+        // GIVEN
+        usersRepositoryImpl = UsersRepositoryImpl(items = listOf(userModel))
 
         // WHEN
         val result = usersRepositoryImpl.getUsers()
@@ -43,10 +56,10 @@ class UsersRepositoryImplTest {
     @Test
     fun `GIVEN userId is null WHEN getUser() is called THEN validate result`() {
         // GIVEN
-        usersRepositoryImpl = UsersRepositoryImpl()
+        val userId = null
 
         // WHEN
-        val result = usersRepositoryImpl.getUser(null)
+        val result = usersRepositoryImpl.getUser(userId)
 
         // THEN
         Assertions.assertNull(result)
@@ -55,18 +68,13 @@ class UsersRepositoryImplTest {
     @Test
     fun `GIVEN userId not exist WHEN getUser() is called THEN validate result`() {
         // GIVEN
-        val item = UserDataModel(
-            id = "23324984",
-            name = "savi",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null,
-        )
-        usersRepositoryImpl = UsersRepositoryImpl(listOf(item))
+
+        val incorrectId = "1234"
+
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))
 
         // WHEN
-        val result = usersRepositoryImpl.getUser("1234")
+        val result = usersRepositoryImpl.getUser(incorrectId)
 
         // THEN
         Assertions.assertNull(result)
@@ -75,35 +83,20 @@ class UsersRepositoryImplTest {
     @Test
     fun `GIVEN userId exists WHEN getUser() is called THEN validate result`() {
         // GIVEN
-        val item = UserDataModel(
-            id = "23324984",
-            name = "savi",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null,
-        )
-        usersRepositoryImpl = UsersRepositoryImpl(listOf(item))
+        val userId = userModel.id
+
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))
 
         // WHEN
-        val result = usersRepositoryImpl.getUser("23324984")
+        val result = usersRepositoryImpl.getUser(userId)
 
         // THEN
-        Assertions.assertEquals(item, result)
+        Assertions.assertEquals(userModel, result)
     }
 
     @Test
     fun `GIVEN added user to list WHEN createUser() is called THEN validate result size of list is 1`() {
         // GIVEN
-        val userModel = UserDataModel(
-            id = "23324984",
-            name = "savi",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null,
-        )
-        usersRepositoryImpl = UsersRepositoryImpl()
 
         // WHEN
         usersRepositoryImpl.createUser(userModel)
@@ -116,18 +109,12 @@ class UsersRepositoryImplTest {
     @Test
     fun `GIVEN remove user to list WHEN removeUser() is called THEN validate result size of list is 0`() {
         // GIVEN
-        val item = UserDataModel(
-            id = "23324984",
-            name = "savi",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null,
-        )
-        usersRepositoryImpl = UsersRepositoryImpl(listOf(item))
+        val userId = userModel.id
+
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))
 
         // WHEN
-        usersRepositoryImpl.removeUser("23324984")
+        usersRepositoryImpl.removeUser(userId)
         val result = usersRepositoryImpl.getUsers()
 
         // THEN
@@ -137,18 +124,12 @@ class UsersRepositoryImplTest {
     @Test
     fun `GIVEN remove user not exists to list WHEN removeUser() is called THEN validate result size of list is 1`() {
         // GIVEN
-        val item = UserDataModel(
-            id = "23324984",
-            name = "savi",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null,
-        )
-        usersRepositoryImpl = UsersRepositoryImpl(listOf(item))
+        val incorrectId = "1234"
+
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))
 
         // WHEN
-        usersRepositoryImpl.removeUser("123")
+        usersRepositoryImpl.removeUser(incorrectId)
         val result = usersRepositoryImpl.getUsers()
 
         // THEN
@@ -158,24 +139,15 @@ class UsersRepositoryImplTest {
     @Test
     fun `GIVEN edit user WHEN updateUser() is called THEN validate result user updated`() {
         // GIVEN
-        val item = UserDataModel(
-            id = "23324984",
-            name = "savi",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null
-        )
-
-        usersRepositoryImpl = UsersRepositoryImpl(listOf(item))
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel))
 
         val updatedUser = UserDataModel(
-            id = "23324984",
+            id = userModel.id,
             name = "savioli",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null
+            email = userModel.email,
+            password =  userModel.password,
+            userType =  userModel.userType,
+            pdmEmail = userModel.pdmEmail
         )
 
         // WHEN
@@ -187,7 +159,7 @@ class UsersRepositoryImplTest {
             userType = updatedUser.userType,
             pdmEmail = updatedUser.pdmEmail
         )
-        val result = usersRepositoryImpl.getUser("23324984")
+        val result = usersRepositoryImpl.getUser(userModel.id)
 
         // THEN
         Assertions.assertEquals(updatedUser, result)
@@ -196,16 +168,7 @@ class UsersRepositoryImplTest {
     @Test
     fun `GIVEN pdm list WHEN getListPdm() is called THEN validate result size is 1`() {
         // GIVEN
-        val firstItem = UserDataModel(
-            id = "23324984",
-            name = "savi",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null
-        )
-
-        val secondItem = UserDataModel(
+        val secondUserModel = UserDataModel(
             id = "123456789",
             name = "lucas",
             email = "lucas@ciandt.com",
@@ -214,7 +177,7 @@ class UsersRepositoryImplTest {
             pdmEmail = null
         )
 
-        usersRepositoryImpl = UsersRepositoryImpl(listOf(firstItem, secondItem))
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(userModel, secondUserModel))
 
         // WHEN
         val result = usersRepositoryImpl.getListPdm()
@@ -226,7 +189,7 @@ class UsersRepositoryImplTest {
     @Test
     fun `GIVEN user pdm not exist list WHEN getListPdm() is called THEN validate result size is 0`() {
         // GIVEN
-        val firstItem = UserDataModel(
+        val collaboratorUser = UserDataModel(
             id = "23324984",
             name = "savi",
             email = "savi@ciandt.com",
@@ -234,8 +197,7 @@ class UsersRepositoryImplTest {
             userType = UserType.Collaborator,
             pdmEmail = null
         )
-
-        val secondItem = UserDataModel(
+        val adminUser = UserDataModel(
             id = "123456789",
             name = "lucas",
             email = "lucas@ciandt.com",
@@ -244,7 +206,7 @@ class UsersRepositoryImplTest {
             pdmEmail = null
         )
 
-        usersRepositoryImpl = UsersRepositoryImpl(listOf(firstItem, secondItem))
+        usersRepositoryImpl = UsersRepositoryImpl(listOf(collaboratorUser, adminUser))
 
         // WHEN
         val result = usersRepositoryImpl.getListPdm()

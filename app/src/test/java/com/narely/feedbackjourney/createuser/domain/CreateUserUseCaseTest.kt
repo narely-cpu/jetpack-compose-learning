@@ -29,10 +29,12 @@ class CreateUserUseCaseTest {
     }
 
     @Test
-    fun `GIVEN added user WHEN invoke() is called THEN validate call function`() {
+    fun `GIVEN user is to be create WHEN invoke() is called THEN validate createUser() is called`() {
         // GIVEN
+        val userId = "23324984"
+        
         val userModel = UserDataModel(
-            id = "23324984",
+            id = userId,
             name = "savi",
             email = "savi@ciandt.com",
             password = "1236347",
@@ -40,7 +42,7 @@ class CreateUserUseCaseTest {
             pdmEmail = null,
         )
 
-        every { UUID.randomUUID().toString() } returns "23324984"
+        every { UUID.randomUUID().toString() } returns userId
         justRun { usersRepositoryImpl.createUser(userModel) }
 
         // WHEN

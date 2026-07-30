@@ -78,24 +78,32 @@ class HomeViewModelTest {
             email = "New email First",
             password = "New password",
             userType = UserType.PDM,
-            pdmEmail = null)
+            pdmEmail = null
+        )
+
         val userSecond = UserDataModel(id = "111232232",
             name = "New name",
             email = "New email Second",
             password = "New password",
             userType = UserType.PDM,
-            pdmEmail = null)
+            pdmEmail = null
+        )
 
-        every { getUsersUseCase.invoke() } returns mutableListOf(userFirst, userSecond)
+        val listUsers = mutableListOf<UserDataModel>()
+
+        listUsers.add(userFirst)
+        listUsers.add(userSecond)
+
+        every { getUsersUseCase.invoke() } returns listUsers
 
         // WHEN
         homeViewModel.updateList()
         advanceUntilIdle()
-        val currentUiStateAfter =  homeViewModel.uiState.value
+        val currentUiStateAfter = homeViewModel.uiState.value
 
         // THEN
         verify { getUsersUseCase.invoke() }
-        Assertions.assertEquals(mutableListOf(userFirst, userSecond), currentUiStateAfter.list)
+        Assertions.assertEquals(listUsers, currentUiStateAfter.list)
     }
 
     @Test

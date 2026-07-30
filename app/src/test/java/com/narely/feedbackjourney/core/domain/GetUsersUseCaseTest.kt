@@ -47,8 +47,11 @@ class GetUsersUseCaseTest {
             userType = UserType.PDM,
             pdmEmail = null,
         )
+        val listUsers = mutableListOf<UserDataModel>()
 
-        every { usersRepositoryImpl.getUsers() } returns mutableListOf(item)
+        listUsers.add(item)
+
+        every { usersRepositoryImpl.getUsers() } returns listUsers
 
         // WHEN
         val result = getUsersUseCase.invoke()
