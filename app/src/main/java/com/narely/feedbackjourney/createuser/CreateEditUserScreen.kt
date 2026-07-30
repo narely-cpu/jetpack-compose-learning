@@ -72,7 +72,7 @@ fun CreateEditUserScreen(
                 onUserTypeChange = { viewModel.updateUiUserType(it) },
                 onUserPdmEmailChange = { viewModel.updateUiPdmEmail(it) },
                 onCreateUser = { viewModel.createUser(onFinishedActivity) },
-                onEditUser = { viewModel.editUser() },
+                onEditUser = { viewModel.editUser(onFinishedActivity) },
                 isCollaborator = viewModel.isCollaborator(),
                 isFormValid = viewModel.isButtonEnable())
             formsUiState.errorMessage?.let {
@@ -214,9 +214,12 @@ private fun ChooseTypeUser(
     valueState: String,
     updateValueState: (String) -> Unit
 ) {
-    val options: List<String> = listOf(stringResource(string.admin_label),
+    val options: List<String> = listOf(
+        stringResource(string.admin_label),
         stringResource(string.collaborator_label),
-        stringResource(string.pdm_label))
+        stringResource(string.pdm_label)
+    )
+
     DropDownChooseUsers(stringResource(string.choose_type_label),
         isCollaborator = true,
         options,
