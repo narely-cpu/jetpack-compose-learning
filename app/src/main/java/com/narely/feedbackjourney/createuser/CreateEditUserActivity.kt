@@ -19,6 +19,7 @@ class CreateEditUserActivity : ComponentActivity() {
         setContent {
             FeedbackJourneyTheme {
                 val userId = intent.getIntExtra("CURRENT_USER_ID", 0)
+
                 CreateEditUserScreen(userId, createEditViewModel)  {
                     finish()
                 }

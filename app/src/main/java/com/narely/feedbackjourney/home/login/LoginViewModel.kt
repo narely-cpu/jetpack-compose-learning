@@ -46,8 +46,8 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase): ViewMo
         loginUseCase.invoke(
             email = uiState.value.email,
             password = uiState.value.password,
-            tokenResponse = { updateUiToken(it) },
-            errorMessage = { updateUiErrorMessage(it) }
+            tokenResponse = { updateUiToken(newToken = it) },
+            errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
         )
     }
 }

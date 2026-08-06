@@ -28,9 +28,11 @@ fun LoginScreen(viewModel: LoginViewModel) {
                 onUserPasswordChange = { viewModel.updateUiPassword(it) },
                 onLogin = { viewModel.login() }
             )
+
             formsUiState.errorMessage?.let {
                 Text("Error: $it", color = MaterialTheme.colorScheme.error)
             }
+
             formsUiState.token?.let {
                 Text("Token: $it", color = MaterialTheme.colorScheme.error)
             }
@@ -51,15 +53,16 @@ private fun SaveButtonCreateEditUser(onClick: () -> Unit) {
 }
 
 @Composable
-private fun FormLoginLayout(userEmail: String,
-                            userPassword: String,
-                            onUserEmailChange: (String) -> Unit,
-                            onUserPasswordChange: (String) -> Unit,
-                            onLogin: () -> Unit) {
-
+private fun FormLoginLayout(
+    userEmail: String,
+    userPassword: String,
+    onUserEmailChange: (String) -> Unit,
+    onUserPasswordChange: (String) -> Unit,
+    onLogin: () -> Unit
+) {
     Column() {
-        TextInputForm(userEmail, onUserEmailChange)
-        TextInputForm(userPassword, onUserPasswordChange)
+        TextInputForm(valueState = userEmail, updateValueState = onUserEmailChange)
+        TextInputForm(valueState = userPassword, updateValueState = onUserPasswordChange)
         SaveButtonCreateEditUser {
             onLogin.invoke()
         }
@@ -67,7 +70,10 @@ private fun FormLoginLayout(userEmail: String,
 }
 
 @Composable
-private fun TextInputForm(valueState: String, updateValueState: (String) -> Unit) {
+private fun TextInputForm(
+    valueState: String,
+    updateValueState: (String) -> Unit
+) {
     OutlinedTextField(
         value = valueState,
         onValueChange = updateValueState,

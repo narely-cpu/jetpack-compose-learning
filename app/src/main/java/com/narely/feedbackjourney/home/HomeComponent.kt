@@ -52,8 +52,10 @@ fun HomeComponent(viewModel: HomeViewModel) {
                 }
                 else -> Unit
             }
-         }
+        }
+
         lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
         }
@@ -126,8 +128,9 @@ private fun UserItem(
             )
         }
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-            EditAndDeleteButtonComponent(stringResource(string.edit_user),
-                R.drawable.codicons_ic_edit) {
+            EditAndDeleteButtonComponent(
+                description = stringResource(string.edit_user),
+                icon = R.drawable.codicons_ic_edit) {
                 context.startActivity(
                     Intent(
                         context,
@@ -135,8 +138,11 @@ private fun UserItem(
                     )
                     .apply { putExtra("CURRENT_USER_ID", user.id) })
             }
-            EditAndDeleteButtonComponent(stringResource(string.delete_dialog_title),
-                R.drawable.codicons_ic_trash) { showAlertDeleteUser(true) }
+            EditAndDeleteButtonComponent(
+                description = stringResource(string.delete_dialog_title),
+                icon = R.drawable.codicons_ic_trash) {
+                showAlertDeleteUser(true)
+            }
         }
     }
 }

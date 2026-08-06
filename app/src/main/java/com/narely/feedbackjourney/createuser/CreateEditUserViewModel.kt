@@ -28,31 +28,37 @@ class CreateEditUserViewModel @Inject constructor(
     fun updateUiState(uiState: CreateEditUserViewState) {
         _uiState.value = uiState
     }
+
     fun updateUiName(newName: String) {
         updateUiState(
             uiState.value.copy(name = newName)
         )
     }
+
     fun updateUiEmail(newEmail: String) {
         updateUiState(
             uiState.value.copy(email = newEmail)
         )
     }
+
     fun updateUiPassword(newPassword: String) {
         updateUiState(
             uiState.value.copy(password = newPassword)
         )
     }
+
     fun updateUiUserType(newUserType: String) {
         updateUiState(
             uiState.value.copy(userType = newUserType)
         )
     }
+
     fun updateUiPdmEmail(newPdmEmail: String) {
         updateUiState(
             uiState.value.copy(pdmEmail = newPdmEmail)
         )
     }
+
     fun updateUiListPdm(newListPdm: List<String>?) {
         updateUiState(
             uiState.value.copy(listPdm = newListPdm)
@@ -97,7 +103,7 @@ class CreateEditUserViewModel @Inject constructor(
     }
 
     fun editUser(finishedActivityCreateUser: () -> Unit) = viewModelScope.launch {
-        uiState.value.id?.let {
+        uiState.value.id?.let { it ->
             editUserUseCase.invoke(
                 id = it,
                 name = uiState.value.name,

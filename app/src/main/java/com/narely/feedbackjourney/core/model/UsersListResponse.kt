@@ -3,7 +3,6 @@ package com.narely.feedbackjourney.core.model
 import com.google.gson.annotations.SerializedName
 
 data class UsersListResponse(
-    // TODO: add default values
     @SerializedName("content") val content: List<UserResponse> = emptyList(),
     @SerializedName("pageable") val pageable: Any? = null,
     @SerializedName("last") val last: Boolean? = null,
