@@ -1,35 +1,25 @@
-package com.narely.feedbackjourney.createuser.domain
+package com.narely.feedbackjourney.home.login
 
 import com.google.gson.Gson
 import com.narely.feedbackjourney.core.data.UsersRepository
-import com.narely.feedbackjourney.core.model.CreateUserRequest
 import com.narely.feedbackjourney.core.model.ErrorResponse
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class CreateUserUseCase @Inject constructor(val usersRepository: UsersRepository) {
+class LoginUseCase @Inject constructor(val usersRepository: UsersRepository) {
 
     suspend fun invoke(
-        name: String,
         email: String,
-        userType: String,
-        pdmEmail: String?,
-        finishedActivityCreateUser: () -> Unit,
+        password: String,
+        tokenResponse: (String?) -> Unit,
         errorMessage: (String?) -> Unit
-    ) {
-        val pdmList = usersRepository.getListPdm()
-        val pdmId = pdmList.find { it.email == pdmEmail}?.id
+    ): LoginResponse {
+        val request = LoginRequest(email = email, password = password)
 
         try {
-            val request = CreateUserRequest(
-                name = name,
-                email = email,
-                type = userType,
-                pdmId = pdmId
-            )
+            val loginResponse = usersRepository.login(request)
 
-            usersRepository.createUser(request)
-            finishedActivityCreateUser()
+            tokenResponse(loginResponse.token)
         } catch (e: Exception) {
             if (e is HttpException) {
                 val errorResponse = e.response()?.errorBody()?.string()
@@ -42,5 +32,7 @@ class CreateUserUseCase @Inject constructor(val usersRepository: UsersRepository
                 errorMessage(e.message)
             }
         }
+
+        return usersRepository.login(request)
     }
 }

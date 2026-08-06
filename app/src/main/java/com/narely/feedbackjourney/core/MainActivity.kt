@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import com.narely.feedbackjourney.home.HomeScreen
 import com.narely.feedbackjourney.home.HomeViewModel
+import com.narely.feedbackjourney.home.login.LoginViewModel
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     val homeViewModel: HomeViewModel by viewModels()
+    val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +24,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FeedbackJourneyTheme {
                 HomeScreen(homeViewModel)
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     overrideActivityTransition(
                         OVERRIDE_TRANSITION_OPEN,

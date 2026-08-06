@@ -34,8 +34,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.createuser.CreateEditUserActivity
-import com.narely.feedbackjourney.core.model.UserDataModel
 import com.narely.feedbackjourney.R.string
+import com.narely.feedbackjourney.core.model.UserResponse
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
@@ -52,8 +52,10 @@ fun HomeComponent(viewModel: HomeViewModel) {
                 }
                 else -> Unit
             }
-         }
+        }
+
         lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
         }
@@ -73,7 +75,7 @@ fun HomeComponent(viewModel: HomeViewModel) {
                 Row(verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(horizontal = 16.dp)
                         .fillMaxWidth()) {
-                    ActionButtonsUser(user) { showDialog ->
+                    UserItem(user) { showDialog ->
                         viewModel.updateCurrentUser(user)
                         openAlertDialog.value = showDialog
                     }
@@ -87,7 +89,7 @@ fun HomeComponent(viewModel: HomeViewModel) {
             AlertDialogDeleteUser(
                 onDismissRequest = { openAlertDialog.value = false },
                 onConfirmation = {
-                    viewModel.deleteUser(uiState.currentUser?.id ?: "")
+                    viewModel.removeUser( uiState.currentUser?.id ?: 0)
                     viewModel.updateList()
                     openAlertDialog.value = false
                 }
@@ -97,29 +99,50 @@ fun HomeComponent(viewModel: HomeViewModel) {
 }
 
 @Composable
-private fun ButtonEditDelete(description: String, icon: Int, onClick: () -> Unit) {
+private fun EditAndDeleteButtonComponent(
+    description: String,
+    icon: Int,
+    onClick: () -> Unit
+) {
     IconButton(onClick = onClick) {
         Icon(
             painterResource(icon),
             contentDescription = description,
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(12.dp),
+            tint = Color.Blue
         )
     }
 }
 
 @Composable
-private fun ActionButtonsUser(user: UserDataModel, showAlertDeleteUser: (Boolean) -> Unit ) {
+private fun UserItem(
+    user: UserResponse,
+    showAlertDeleteUser: (Boolean) -> Unit
+) {
     val context = LocalContext.current
     Box(modifier = Modifier.fillMaxWidth()) {
-        Text(user.name, modifier = Modifier.align(Alignment.CenterStart))
+        Row(modifier = Modifier.align(Alignment.CenterStart)) {
+            Text(
+                user.name,
+                color = Color.Blue
+            )
+        }
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-            ButtonEditDelete(stringResource(string.edit_user),
-                R.drawable.codicons_ic_edit) {
-                context.startActivity(Intent(context, CreateEditUserActivity::class.java)
+            EditAndDeleteButtonComponent(
+                description = stringResource(string.edit_user),
+                icon = R.drawable.codicons_ic_edit) {
+                context.startActivity(
+                    Intent(
+                        context,
+                        CreateEditUserActivity::class.java
+                    )
                     .apply { putExtra("CURRENT_USER_ID", user.id) })
             }
-            ButtonEditDelete(stringResource(string.delete_dialog_title),
-                R.drawable.codicons_ic_trash) { showAlertDeleteUser(true) }
+            EditAndDeleteButtonComponent(
+                description = stringResource(string.delete_dialog_title),
+                icon = R.drawable.codicons_ic_trash) {
+                showAlertDeleteUser(true)
+            }
         }
     }
 }

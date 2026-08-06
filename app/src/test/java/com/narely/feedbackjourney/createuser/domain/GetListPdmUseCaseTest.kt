@@ -1,10 +1,14 @@
 package com.narely.feedbackjourney.createuser.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
+import com.narely.feedbackjourney.core.model.UserResponse
+import com.narely.feedbackjourney.core.model.UserType
 import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
@@ -22,29 +26,51 @@ class GetListPdmUseCaseTest {
     }
 
     @Test
-    fun `GIVEN list is empty WHEN invoke() is called THEN validate result is empty`() {
-        // GIVEN
-        every { usersRepositoryImpl.getListPdm() } returns emptyList()
+    fun `GIVEN an any PDM list WHEN invoke() is called THEN validate that the repository's getListPdm function is called`() =
+        runTest {
+            // GIVEN
+            coEvery { usersRepositoryImpl.getListPdm() } returns emptyList()
 
-        // WHEN
-        val result = getListPdmUseCase.invoke()
+            // WHEN
+            getListPdmUseCase.invoke()
 
-        // THEN
-        Assertions.assertEquals(0, result.size)
-    }
+            // THEN
+            coVerify { usersRepositoryImpl.getListPdm() }
+        }
 
     @Test
-    fun `GIVEN list is not empty WHEN invoke() is called THEN validate result is not empty`() {
-        // GIVEN
-        val email = "savi@ciandt.com"
+    fun `GIVEN an empty PDM list WHEN invoke() is called THEN validate result is empty`() =
+        runTest {
+            // GIVEN
+            coEvery { usersRepositoryImpl.getListPdm() } returns emptyList()
 
-        every { usersRepositoryImpl.getListPdm() } returns listOf(email)
+            // WHEN
+            val result = getListPdmUseCase.invoke()
 
-        // WHEN
-        val result = getListPdmUseCase.invoke()
+            // THEN
+            Assertions.assertEquals(0, result?.size)
+        }
 
-        // THEN
-        Assertions.assertEquals(1, result.size)
-        Assertions.assertEquals(listOf(email), result)
-    }
+    @Test
+    fun `GIVEN a non-empty list of PDMs WHEN invoke() is called THEN validate result is non-empty`() =
+        runTest {
+            // GIVEN
+            val userResponse = UserResponse(
+                id = 1,
+                name = "savi",
+                email = "savi@ciandt.com",
+                type = UserType.PDM.userValue,
+                pdmId = null,
+                active = true
+            )
+
+            coEvery { usersRepositoryImpl.getListPdm() } returns listOf(userResponse)
+
+            // WHEN
+            val result = getListPdmUseCase.invoke()
+
+            // THEN
+            Assertions.assertEquals(1, result?.size)
+            Assertions.assertEquals(listOf(userResponse.email), result)
+        }
 }

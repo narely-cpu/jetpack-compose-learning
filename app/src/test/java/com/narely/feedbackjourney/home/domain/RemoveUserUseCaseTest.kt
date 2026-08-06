@@ -1,21 +1,18 @@
 package com.narely.feedbackjourney.home.domain
 
-import com.narely.feedbackjourney.core.data.UsersRepository
-import com.narely.feedbackjourney.core.model.UserDataModel
-import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.createuser.domain.CreateUserUseCase
+import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
 import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.justRun
-import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
 class RemoveUserUseCaseTest {
     @MockK
-    private lateinit var usersRepository: UsersRepository
+    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
 
     @InjectMockKs
     private lateinit var removeUserUseCase: RemoveUserUseCase
@@ -26,16 +23,17 @@ class RemoveUserUseCaseTest {
     }
 
     @Test
-    fun `GIVEN userId WHEN invoke() is called THEN validate result call function`() {
-        // GIVEN
-        val userId = "23324984"
+    fun `GIVEN the userId of the user to be removed WHEN invoke() is called THEN validate that the repository's remove function is called`() =
+        runTest {
+            // GIVEN
+            val userId = 1
 
-        justRun { usersRepository.removeUser(userId) }
+            coJustRun { usersRepositoryImpl.removeUser(userId) }
 
-        // WHEN
-        removeUserUseCase.invoke(userId)
+            // WHEN
+            removeUserUseCase.invoke(userId)
 
-        // THEN
-        verify { usersRepository.removeUser(userId) }
-    }
+            // THEN
+            coVerify { usersRepositoryImpl.removeUser(userId) }
+        }
 }

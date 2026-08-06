@@ -3,7 +3,7 @@ package com.narely.feedbackjourney.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.narely.feedbackjourney.core.domain.GetUsersUseCase
-import com.narely.feedbackjourney.core.model.UserDataModel
+import com.narely.feedbackjourney.core.model.UserResponse
 import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -21,9 +21,11 @@ class HomeViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<HomeViewState> =
         MutableStateFlow(HomeViewState())
     val uiState: StateFlow<HomeViewState> = _uiState
+
     fun updateUiState(uiState: HomeViewState) {
         _uiState.value = uiState
     }
+
     fun updateList() = viewModelScope.launch {
         updateUiState(
             uiState.value.copy(isLoading = true)
@@ -39,13 +41,13 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun updateCurrentUser(user: UserDataModel) {
+    fun updateCurrentUser(user: UserResponse) {
         updateUiState(
             uiState.value.copy(currentUser = user)
         )
     }
 
-    fun deleteUser(id: String) {
-        removeUserUseCase.invoke(id)
+    fun removeUser(id: Int) = viewModelScope.launch {
+       removeUserUseCase.invoke(id)
     }
 }

@@ -1,66 +1,56 @@
 package com.narely.feedbackjourney.core.data
 
-import androidx.annotation.VisibleForTesting
-import com.narely.feedbackjourney.core.model.UserDataModel
-import com.narely.feedbackjourney.core.model.UserType
+import com.narely.feedbackjourney.core.model.CreateUserRequest
+import com.narely.feedbackjourney.core.model.UpdateUserRequest
+import com.narely.feedbackjourney.core.model.UserResponse
+import com.narely.feedbackjourney.core.services.ApiService
+import com.narely.feedbackjourney.home.login.LoginRequest
+import com.narely.feedbackjourney.home.login.LoginResponse
 import javax.inject.Inject
 
 interface UsersRepository {
-    fun getUsers(): MutableList<UserDataModel>
-    fun getUser(userId: String?): UserDataModel?
-    fun createUser(userModel: UserDataModel)
-    fun removeUser(userId: String)
-    fun updateUser(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String?)
-    fun getListPdm(): List<String>
+    suspend fun getUsers(): List<UserResponse>
+    suspend fun getUser(id: Int): UserResponse?
+    suspend fun createUser(request: CreateUserRequest)
+    suspend fun removeUser(id: Int)
+    suspend fun updateUser(id: Int, request: UpdateUserRequest)
+    suspend fun getListPdm(): List<UserResponse>
+    suspend fun login(request: LoginRequest): LoginResponse
 }
 
-class UsersRepositoryImpl @Inject constructor(items: List<UserDataModel>? = null): UsersRepository {
+class UsersRepositoryImpl @Inject constructor(private val apiService: ApiService): UsersRepository {
 
-    val listUser = items?.toMutableList() ?: UserSingleton.listUser
+    override suspend fun getUsers(): List<UserResponse> {
+        val getUsersResponse = apiService.getUsers()
+        val listUsers = getUsersResponse.content.filter { it.active }
 
-    override fun getUsers(): MutableList<UserDataModel> {
-        return listUser
+        return listUsers
     }
 
-    override fun getUser(userId: String?): UserDataModel? {
-        val user = listUser.find { it.id == userId }
-        return user
+    override suspend fun getUser(id: Int): UserResponse? {
+        return apiService.getUser(id)
     }
 
-    override fun createUser(userModel: UserDataModel) {
-        listUser.add(userModel)
+    override suspend fun createUser(request: CreateUserRequest) {
+        apiService.createUser(request)
     }
 
-    override fun removeUser(userId: String) {
-        val user = listUser.find { it.id == userId }
-        listUser.remove(user)
+    override suspend fun removeUser(id: Int) {
+        apiService.removeUser(id)
     }
 
-    override fun updateUser(id: String, name: String, email: String, password: String, userType: UserType, pdmEmail: String?) {
-        val user = listUser.find { it.id == id }
-        if (user != null) {
-            val newUser = listUser[listUser.indexOf(user)]
-                .copy(name = name,
-                    email = email,
-                    password = password,
-                    userType = userType,
-                    pdmEmail = pdmEmail
-                )
-            listUser[listUser.indexOf(user)] = newUser
-        }
+    override suspend fun updateUser(id: Int, request: UpdateUserRequest) {
+        apiService.updateUser(id, request)
     }
 
-    override fun getListPdm(): List<String> {
-        val user = listUser.filter { it.userType == UserType.PDM }
-        val listUserEmail: MutableList<String> = mutableListOf()
-        user.forEach {
-            listUserEmail.add(it.email)
-        }
-        return listUserEmail
-    }
-}
+    override suspend fun getListPdm(): List<UserResponse> {
+        val getListPdmResponse = apiService.getListPdm()
+        val listPdm = getListPdmResponse.content
 
-@VisibleForTesting
-private object UserSingleton {
-    val listUser: MutableList<UserDataModel> = mutableListOf()
+        return listPdm
+    }
+
+    override suspend fun login(request: LoginRequest): LoginResponse {
+        return apiService.login(request)
+    }
 }
