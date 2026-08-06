@@ -20,13 +20,14 @@ class GetListPdmUseCase @Inject constructor(val usersRepository: UsersRepository
         } catch (e: Exception) {
             if (e is HttpException) {
                 val errorResponse = e.response()?.errorBody()?.string()
+
                 errorResponse?.let {
                     val error = Gson().fromJson(it, ErrorResponse::class.java)
                     Log.e("error http get list pdm:", error.error)
                 }
+            } else {
+                e.message?.let { Log.e("error get list pdm:", it) }
             }
-
-            e.message?.let { Log.e("error get list pdm:", it) }
         }
 
         return null

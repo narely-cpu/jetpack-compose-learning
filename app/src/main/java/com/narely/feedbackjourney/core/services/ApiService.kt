@@ -15,7 +15,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-private const val TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NTUyNjkyMSwiZXhwIjoxNzg1NTQxMzIxLCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.wVCsB_l3duX_R3qG67GIBFK9Dy5eszwmQAEXtyEx5Yk"
+private const val TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NjAzNjcxMCwiZXhwIjoxNzg2MDUxMTEwLCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.b0WzLpGyRHhZ41QYe2BFBKlrcjWT4yYNBALMShILvgQ"
 
 interface ApiService {
 
@@ -44,5 +44,5 @@ interface ApiService {
 
     @PUT("users/{id}")
     @Headers("Authorization: Bearer $TOKEN")
-    suspend fun updateUser(@Path("id") id: Int, @Body request: UpdateUserRequest): Response<Unit>
+    suspend fun updateUser(@Path("id") id: Int, @Body request: UpdateUserRequest): UserResponse
 }

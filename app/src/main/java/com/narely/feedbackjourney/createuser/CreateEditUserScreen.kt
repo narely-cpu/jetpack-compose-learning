@@ -76,6 +76,7 @@ fun CreateEditUserScreen(
                 onEditUser = { viewModel.editUser(onFinishedActivity) },
                 isCollaborator = viewModel.isCollaborator(),
                 isFormValid = viewModel.isButtonEnable())
+
             formsUiState.errorMessage?.let {
                 Text("Error: $it", color = MaterialTheme.colorScheme.error)
             }
