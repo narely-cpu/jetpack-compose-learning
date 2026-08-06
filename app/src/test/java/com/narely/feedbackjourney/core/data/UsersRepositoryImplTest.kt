@@ -247,7 +247,7 @@ class UsersRepositoryImplTest {
             )
             coEvery { apiService.updateUser(userModel.id, request) } coAnswers {
                 userResponse = updatedUser
-                Response.success(Unit)
+                userResponse
             }
 
             // WHEN
