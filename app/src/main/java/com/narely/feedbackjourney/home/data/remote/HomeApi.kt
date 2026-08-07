@@ -1,6 +1,6 @@
 package com.narely.feedbackjourney.home.data.remote
 
-import com.narely.feedbackjourney.core.model.UsersListResponse
+import com.narely.feedbackjourney.core.data.remote.model.UsersListResponse
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET

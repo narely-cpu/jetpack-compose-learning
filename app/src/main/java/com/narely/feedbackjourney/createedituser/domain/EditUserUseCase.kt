@@ -1,7 +1,7 @@
 package com.narely.feedbackjourney.createedituser.domain
 
 import com.google.gson.Gson
-import com.narely.feedbackjourney.core.model.ErrorResponse
+import com.narely.feedbackjourney.core.data.remote.model.ErrorResponse
 import com.narely.feedbackjourney.createedituser.data.CreateEditUserRepository
 import com.narely.feedbackjourney.createedituser.data.remote.model.UpdateUserRequest
 import retrofit2.HttpException

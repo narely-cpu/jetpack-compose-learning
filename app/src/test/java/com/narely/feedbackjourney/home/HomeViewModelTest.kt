@@ -1,7 +1,7 @@
 package com.narely.feedbackjourney.home
 
 import com.narely.feedbackjourney.home.domain.GetUsersUseCase
-import com.narely.feedbackjourney.core.model.UserResponse
+import com.narely.feedbackjourney.core.data.remote.model.UserResponse
 import com.narely.feedbackjourney.createedituser.ui.UserTypeEnum
 import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
 import com.narely.feedbackjourney.home.ui.HomeViewModel

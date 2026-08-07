@@ -1,5 +1,6 @@
-package com.narely.feedbackjourney.core
+package com.narely.feedbackjourney
 
+import android.R
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -28,8 +29,8 @@ class MainActivity : ComponentActivity() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     overrideActivityTransition(
                         OVERRIDE_TRANSITION_OPEN,
-                        android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right
+                        R.anim.slide_in_left,
+                        R.anim.slide_out_right
                     )
                 }
             }
