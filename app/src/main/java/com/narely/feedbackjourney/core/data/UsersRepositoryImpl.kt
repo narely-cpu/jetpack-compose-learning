@@ -7,22 +7,13 @@ import com.narely.feedbackjourney.core.services.ApiService
 import javax.inject.Inject
 
 interface UsersRepository {
-    suspend fun getUsers(): List<UserResponse>
     suspend fun getUser(id: Int): UserResponse?
     suspend fun createUser(request: CreateUserRequest)
-    suspend fun removeUser(id: Int)
     suspend fun updateUser(id: Int, request: UpdateUserRequest)
     suspend fun getListPdm(): List<UserResponse>
 }
 
 class UsersRepositoryImpl @Inject constructor(private val apiService: ApiService): UsersRepository {
-
-    override suspend fun getUsers(): List<UserResponse> {
-        val getUsersResponse = apiService.getUsers()
-        val listUsers = getUsersResponse.content.filter { it.active }
-
-        return listUsers
-    }
 
     override suspend fun getUser(id: Int): UserResponse? {
         return apiService.getUser(id)
@@ -30,10 +21,6 @@ class UsersRepositoryImpl @Inject constructor(private val apiService: ApiService
 
     override suspend fun createUser(request: CreateUserRequest) {
         apiService.createUser(request)
-    }
-
-    override suspend fun removeUser(id: Int) {
-        apiService.removeUser(id)
     }
 
     override suspend fun updateUser(id: Int, request: UpdateUserRequest) {

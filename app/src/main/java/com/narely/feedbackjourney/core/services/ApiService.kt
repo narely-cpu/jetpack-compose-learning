@@ -15,13 +15,9 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-private const val TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NjAzNjcxMCwiZXhwIjoxNzg2MDUxMTEwLCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.b0WzLpGyRHhZ41QYe2BFBKlrcjWT4yYNBALMShILvgQ"
+private const val TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1c2VyLWFwaSIsImlhdCI6MTc4NjEzNDc0OCwiZXhwIjoxNzg2MTQ5MTQ4LCJzdWIiOiJhZG1pbkBjaWFuZHQuY29tIiwidXNlciI6IntcImlkXCI6MSxcIm5hbWVcIjpcIkFkbWluXCIsXCJlbWFpbFwiOlwiYWRtaW5AY2lhbmR0LmNvbVwiLFwidHlwZVwiOlwiQURNSU5cIixcInBkbVwiOm51bGwsXCJwYXNzd29yZFwiOm51bGx9In0.JXvTTpf78HubFsOBcV6qxvPLjuPNLcsJlPrq6QFmlMQ"
 
 interface ApiService {
-
-    @GET("users")
-    @Headers("Authorization: Bearer $TOKEN")
-    suspend fun getUsers(): UsersListResponse
 
     @GET("users/{id}")
     @Headers("Authorization: Bearer $TOKEN")
@@ -34,10 +30,6 @@ interface ApiService {
     @POST("users")
     @Headers("Authorization: Bearer $TOKEN")
     suspend fun createUser(@Body request: CreateUserRequest): UserResponse
-
-    @DELETE("users/{id}")
-    @Headers("Authorization: Bearer $TOKEN")
-    suspend fun removeUser(@Path("id") id: Int): Response<Unit>
 
     @PUT("users/{id}")
     @Headers("Authorization: Bearer $TOKEN")
