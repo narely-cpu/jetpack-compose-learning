@@ -1,7 +1,7 @@
 package com.narely.feedbackjourney.createedituser.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
-import com.narely.feedbackjourney.core.model.UserResponse
+import com.narely.feedbackjourney.core.data.remote.model.UserResponse
 import com.narely.feedbackjourney.createedituser.ui.UserTypeEnum
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

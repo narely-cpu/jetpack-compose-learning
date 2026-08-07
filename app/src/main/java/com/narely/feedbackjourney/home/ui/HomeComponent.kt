@@ -35,7 +35,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.createedituser.CreateEditUserActivity
 import com.narely.feedbackjourney.R.string
-import com.narely.feedbackjourney.core.model.UserResponse
+import com.narely.feedbackjourney.core.data.remote.model.UserResponse
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable

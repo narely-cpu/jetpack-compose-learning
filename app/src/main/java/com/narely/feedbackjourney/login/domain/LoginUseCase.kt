@@ -1,7 +1,7 @@
 package com.narely.feedbackjourney.login.domain
 
 import com.google.gson.Gson
-import com.narely.feedbackjourney.core.model.ErrorResponse
+import com.narely.feedbackjourney.core.data.remote.model.ErrorResponse
 import com.narely.feedbackjourney.login.data.LoginRepository
 import com.narely.feedbackjourney.login.data.remote.model.LoginRequest
 import com.narely.feedbackjourney.login.data.remote.model.LoginResponse

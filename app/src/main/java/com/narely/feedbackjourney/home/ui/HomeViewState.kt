@@ -1,6 +1,6 @@
 package com.narely.feedbackjourney.home.ui
 
-import com.narely.feedbackjourney.core.model.UserResponse
+import com.narely.feedbackjourney.core.data.remote.model.UserResponse
 
 data class HomeViewState(
     val list: List<UserResponse> = emptyList<UserResponse>(),
