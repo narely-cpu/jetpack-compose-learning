@@ -3,26 +3,29 @@ package com.narely.feedbackjourney.home.domain
 import android.util.Log
 import com.google.gson.Gson
 import com.narely.feedbackjourney.core.data.remote.model.ErrorResponse
+import com.narely.feedbackjourney.core.data.remote.model.UserResponse
 import com.narely.feedbackjourney.home.data.HomeRepository
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class RemoveUserUseCase @Inject constructor(val homeRepository: HomeRepository) {
+class GetUsersUseCase @Inject constructor(val homeRepository: HomeRepository) {
 
-    suspend fun invoke(id: Int) {
+    suspend fun invoke(): List<UserResponse> {
         try {
-            homeRepository.removeUser(id)
+            return homeRepository.getUsers()
         } catch (e: Exception) {
             if (e is HttpException) {
                 val errorResponse = e.response()?.errorBody()?.string()
 
                 errorResponse?.let {
                     val error = Gson().fromJson(it, ErrorResponse::class.java)
-                    Log.e("error http remove user:", error.error)
+                    Log.e("error get users:", error.error)
                 }
             } else {
-                e.message?.let { Log.e("error remove user:", it) }
+                e.message?.let { Log.e("error get users:", it) }
             }
         }
+
+        return emptyList()
     }
 }

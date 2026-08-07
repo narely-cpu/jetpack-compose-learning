@@ -1,15 +1,17 @@
 package com.narely.feedbackjourney.home
 
-import com.narely.feedbackjourney.core.domain.GetUsersUseCase
-import com.narely.feedbackjourney.core.model.UserDataModel
-import com.narely.feedbackjourney.core.model.UserType
+import com.narely.feedbackjourney.home.domain.GetUsersUseCase
+import com.narely.feedbackjourney.core.data.remote.model.UserResponse
+import com.narely.feedbackjourney.createedituser.ui.UserTypeEnum
 import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
+import com.narely.feedbackjourney.home.ui.HomeViewModel
+import com.narely.feedbackjourney.home.ui.HomeViewState
 import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.justRun
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -25,6 +27,7 @@ import org.junit.jupiter.api.Assertions
 class HomeViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
+
     @MockK
     private lateinit var getUsersUseCase: GetUsersUseCase
 
@@ -58,6 +61,7 @@ class HomeViewModelTest {
 
         // WHEN
         homeViewModel.updateUiState(newState)
+
         val currentUiState = homeViewModel.uiState.value
 
         // THEN
@@ -66,71 +70,77 @@ class HomeViewModelTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `GIVEN list updated WHEN updateList() is called THEN validate update list`() = runTest() {
-        // GIVEN
-        val userFirst = UserDataModel(id = "111232232",
-            name = "New name",
-            email = "New email First",
-            password = "New password",
-            userType = UserType.PDM,
-            pdmEmail = null
-        )
-        val userSecond = UserDataModel(id = "111232232",
-            name = "New name",
-            email = "New email Second",
-            password = "New password",
-            userType = UserType.PDM,
-            pdmEmail = null
-        )
-        val listUsers = mutableListOf<UserDataModel>()
+    fun `GIVEN the updated list of users WHEN updateList() is called THEN validate update list`() =
+        runTest() {
+            // GIVEN
+            val currentUiStateBefore = homeViewModel.uiState.value
+            val userFirst  = UserResponse(
+                id = 1,
+                name = "New name",
+                email = "New email First",
+                type = UserTypeEnum.PDM.userValue,
+                pdmId = null,
+                active = true
+            )
+            val userSecond = UserResponse(
+                id = 2,
+                name = "New name",
+                email = "New email Second",
+                type = UserTypeEnum.PDM.userValue,
+                pdmId = null,
+                active = true
+            )
+            val listUsers = listOf(userFirst, userSecond)
 
-        listUsers.add(userFirst)
-        listUsers.add(userSecond)
+            coEvery { getUsersUseCase.invoke() } returns listUsers
 
-        every { getUsersUseCase.invoke() } returns listUsers
+            // WHEN
+            homeViewModel.updateList()
+            advanceUntilIdle()
 
-        // WHEN
-        homeViewModel.updateList()
-        advanceUntilIdle()
+            val currentUiStateAfter = homeViewModel.uiState.value
 
-        val currentUiStateAfter = homeViewModel.uiState.value
-
-        // THEN
-        verify { getUsersUseCase.invoke() }
-        Assertions.assertEquals(listUsers, currentUiStateAfter.list)
-    }
+            // THEN
+            Assertions.assertEquals(emptyList<UserResponse>(), currentUiStateBefore.list)
+            Assertions.assertEquals(listUsers, currentUiStateAfter.list)
+            coVerify { getUsersUseCase.invoke() }
+        }
 
     @Test
-    fun `GIVEN current user was changed WHEN updateCurrentUser() is called THEN validate user was changed`() {
+    fun `GIVEN current user is updated WHEN updateCurrentUser() is called THEN validate the returned user`() {
         // GIVEN
-        val newCurrentUser = UserDataModel(
-            id = "111232232",
+        val userResponse = UserResponse(
+            id = 1,
             name = "New name",
             email = "New email",
-            password = "New password",
-            userType = UserType.PDM,
-            pdmEmail = null
+            type = UserTypeEnum.PDM.userValue,
+            pdmId = null,
+            active = true
         )
 
         // WHEN
-        homeViewModel.updateCurrentUser(newCurrentUser)
+        homeViewModel.updateCurrentUser(userResponse)
+
         val currentUiState = homeViewModel.uiState.value
 
         // THEN
-        Assertions.assertEquals(newCurrentUser, currentUiState.currentUser)
+        Assertions.assertEquals(userResponse, currentUiState.currentUser)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `GIVEN user was deleted WHEN deleteUser() is called THEN validate state change`() {
-        // GIVEN
-        val currentUserId = "111232232"
+    fun `GIVEN the userId to be deleted WHEN deleteUser() is called THEN validate the invoke() function was called`() =
+        runTest {
+            // GIVEN
+            val currentUserId = 2
 
-        justRun { removeUserUseCase.invoke(currentUserId) }
+            coJustRun { removeUserUseCase.invoke(currentUserId) }
 
-        // WHEN
-        homeViewModel.deleteUser(currentUserId)
+            // WHEN
+            homeViewModel.removeUser(currentUserId)
+            advanceUntilIdle()
 
-        // THEN
-        verify { removeUserUseCase.invoke(currentUserId) }
-    }
+            // THEN
+            coVerify { removeUserUseCase.invoke(currentUserId) }
+        }
 }
