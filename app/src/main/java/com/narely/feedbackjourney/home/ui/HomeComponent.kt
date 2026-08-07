@@ -33,7 +33,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.composables.icons.codicons.R
-import com.narely.feedbackjourney.createuser.CreateEditUserActivity
+import com.narely.feedbackjourney.createedituser.CreateEditUserActivity
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.core.model.UserResponse
 

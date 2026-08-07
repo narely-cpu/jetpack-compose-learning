@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.LocalContext
-import com.narely.feedbackjourney.createuser.CreateEditUserActivity
+import com.narely.feedbackjourney.createedituser.CreateEditUserActivity
 import com.narely.feedbackjourney.R.string
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ViewModelConstructorInComposable")

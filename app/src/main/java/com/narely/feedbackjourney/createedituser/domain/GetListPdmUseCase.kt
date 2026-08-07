@@ -1,17 +1,17 @@
-package com.narely.feedbackjourney.createuser.domain
+package com.narely.feedbackjourney.createedituser.domain
 
 import android.util.Log
 import com.google.gson.Gson
-import com.narely.feedbackjourney.core.data.UsersRepository
 import com.narely.feedbackjourney.core.model.ErrorResponse
+import com.narely.feedbackjourney.createedituser.data.CreateEditUserRepository
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class GetListPdmUseCase @Inject constructor(val usersRepository: UsersRepository) {
+class GetListPdmUseCase @Inject constructor(val createEditUserRepository: CreateEditUserRepository) {
 
     suspend fun invoke(): List<String>? {
         try {
-            val getListPdm = usersRepository.getListPdm()
+            val getListPdm = createEditUserRepository.getListPdm()
             val listPdmEmail: MutableList<String> = mutableListOf()
 
             getListPdm.forEach { listPdmEmail.add(it.email) }

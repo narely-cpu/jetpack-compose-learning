@@ -1,14 +1,13 @@
-package com.narely.feedbackjourney.createuser
+package com.narely.feedbackjourney.createedituser.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.narely.feedbackjourney.core.model.UserDataModel
-import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.core.model.UserType.valueOf
-import com.narely.feedbackjourney.createuser.domain.CreateUserUseCase
-import com.narely.feedbackjourney.createuser.domain.EditUserUseCase
-import com.narely.feedbackjourney.createuser.domain.GetListPdmUseCase
-import com.narely.feedbackjourney.createuser.domain.GetUserUseCase
+import com.narely.feedbackjourney.createedituser.domain.model.UserDataModel
+import com.narely.feedbackjourney.createedituser.ui.UserTypeEnum.valueOf
+import com.narely.feedbackjourney.createedituser.domain.CreateUserUseCase
+import com.narely.feedbackjourney.createedituser.domain.EditUserUseCase
+import com.narely.feedbackjourney.createedituser.domain.GetListPdmUseCase
+import com.narely.feedbackjourney.createedituser.domain.GetUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -132,8 +131,8 @@ class CreateEditUserViewModel @Inject constructor(
 
     fun needPDMAssignedOrIsEmptyPdmEmailField(): Boolean {
         return when (uiState.value.userType) {
-            UserType.COLLABORATOR.userValue -> uiState.value.pdmEmail.isNullOrEmpty()
-            UserType.PDM.userValue -> false
+            UserTypeEnum.COLLABORATOR.userValue -> uiState.value.pdmEmail.isNullOrEmpty()
+            UserTypeEnum.PDM.userValue -> false
             else -> false
         }
     }
@@ -146,7 +145,7 @@ class CreateEditUserViewModel @Inject constructor(
         return if (uiState.value.userType.isEmpty()) {
             false
         } else {
-            valueOf(uiState.value.userType) == UserType.COLLABORATOR
+            valueOf(uiState.value.userType) == UserTypeEnum.COLLABORATOR
         }
     }
 }

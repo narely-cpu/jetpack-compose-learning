@@ -1,9 +1,9 @@
-package com.narely.feedbackjourney.createuser.domain
+package com.narely.feedbackjourney.createedituser.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
-import com.narely.feedbackjourney.core.model.UserDataModel
+import com.narely.feedbackjourney.createedituser.domain.model.UserDataModel
 import com.narely.feedbackjourney.core.model.UserResponse
-import com.narely.feedbackjourney.core.model.UserType
+import com.narely.feedbackjourney.createedituser.ui.UserTypeEnum
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.InjectMockKs
@@ -34,7 +34,7 @@ class GetUserUseCaseTest {
                 id = userId,
                 name = "savi",
                 email = "savi@ciandt.com",
-                type = UserType.PDM.userValue,
+                type = UserTypeEnum.PDM.userValue,
                 pdmId = null,
                 active = true
             )
