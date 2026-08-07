@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.createuser
+package com.narely.feedbackjourney.createedituser.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column

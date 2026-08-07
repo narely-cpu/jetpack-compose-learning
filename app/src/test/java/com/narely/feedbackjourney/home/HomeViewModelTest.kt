@@ -2,7 +2,7 @@ package com.narely.feedbackjourney.home
 
 import com.narely.feedbackjourney.home.domain.GetUsersUseCase
 import com.narely.feedbackjourney.core.model.UserResponse
-import com.narely.feedbackjourney.core.model.UserType
+import com.narely.feedbackjourney.createedituser.ui.UserTypeEnum
 import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
 import com.narely.feedbackjourney.home.ui.HomeViewModel
 import com.narely.feedbackjourney.home.ui.HomeViewState
@@ -78,7 +78,7 @@ class HomeViewModelTest {
                 id = 1,
                 name = "New name",
                 email = "New email First",
-                type = UserType.PDM.userValue,
+                type = UserTypeEnum.PDM.userValue,
                 pdmId = null,
                 active = true
             )
@@ -86,7 +86,7 @@ class HomeViewModelTest {
                 id = 2,
                 name = "New name",
                 email = "New email Second",
-                type = UserType.PDM.userValue,
+                type = UserTypeEnum.PDM.userValue,
                 pdmId = null,
                 active = true
             )
@@ -113,7 +113,7 @@ class HomeViewModelTest {
             id = 1,
             name = "New name",
             email = "New email",
-            type = UserType.PDM.userValue,
+            type = UserTypeEnum.PDM.userValue,
             pdmId = null,
             active = true
         )

@@ -1,21 +1,19 @@
-package com.narely.feedbackjourney.createuser
+package com.narely.feedbackjourney.createedituser
 
-import android.R
-import com.narely.feedbackjourney.core.model.UserDataModel
-import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.createuser.domain.CreateUserUseCase
-import com.narely.feedbackjourney.createuser.domain.EditUserUseCase
-import com.narely.feedbackjourney.createuser.domain.GetListPdmUseCase
-import com.narely.feedbackjourney.createuser.domain.GetUserUseCase
+import com.narely.feedbackjourney.createedituser.domain.model.UserDataModel
+import com.narely.feedbackjourney.createedituser.ui.UserTypeEnum
+import com.narely.feedbackjourney.createedituser.domain.CreateUserUseCase
+import com.narely.feedbackjourney.createedituser.domain.EditUserUseCase
+import com.narely.feedbackjourney.createedituser.domain.GetListPdmUseCase
+import com.narely.feedbackjourney.createedituser.domain.GetUserUseCase
+import com.narely.feedbackjourney.createedituser.ui.CreateEditUserViewModel
+import com.narely.feedbackjourney.createedituser.ui.CreateEditUserViewState
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.justRun
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -68,8 +66,9 @@ class CreateEditUserViewModelTest {
             name = "New name",
             email = "New email",
             password = "New password",
-            userType = UserType.PDM.userValue,
-            pdmEmail = null)
+            userType = UserTypeEnum.PDM.userValue,
+            pdmEmail = null
+        )
 
         // WHEN
         createEditUserViewModel.updateUiState(newState)
@@ -154,7 +153,7 @@ class CreateEditUserViewModelTest {
                 name = "New name",
                 email = "New email",
                 password = "New password",
-                type = UserType.PDM.userValue,
+                type = UserTypeEnum.PDM.userValue,
                 pdmEmail = null)
 
             coEvery { getUserUseCase.invoke(userModel.id)} returns userModel
@@ -192,7 +191,7 @@ class CreateEditUserViewModelTest {
                 name = "New name",
                 email = "New email",
                 password = "New password",
-                type = UserType.PDM.userValue,
+                type = UserTypeEnum.PDM.userValue,
                 pdmEmail = null
             )
             val newCurrentUser = CreateEditUserViewState(
@@ -348,14 +347,14 @@ class CreateEditUserViewModelTest {
                 name = "New name",
                 email = "New email First",
                 password = "New password",
-                type = UserType.PDM.userValue,
+                type = UserTypeEnum.PDM.userValue,
                 pdmEmail = null
             )
             val userSecond = UserDataModel(id = 2,
                 name = "New name",
                 email = "New email Second",
                 password = "New password",
-                type = UserType.PDM.userValue,
+                type = UserTypeEnum.PDM.userValue,
                 pdmEmail = null
             )
 
@@ -391,7 +390,7 @@ class CreateEditUserViewModelTest {
     @Test
     fun `GIVEN all mandatory fields are filled in WHEN areMandatoryFieldsFilled() is called THEN validate return true`() {
         // GIVEN
-        createEditUserViewModel.updateUiUserType(UserType.COLLABORATOR.userValue)
+        createEditUserViewModel.updateUiUserType(UserTypeEnum.COLLABORATOR.userValue)
 
         // WHEN
         val result = createEditUserViewModel.areMandatoryFieldsFilled()
@@ -415,7 +414,7 @@ class CreateEditUserViewModelTest {
     @Test
     fun `GIVEN a user who is a collaborator and an existing pdmEmail WHEN needPDMAssignedOrIsEmptyPdmEmailField() is called THEN validate return false`() {
         // GIVEN
-        createEditUserViewModel.updateUiUserType(UserType.COLLABORATOR.userValue)
+        createEditUserViewModel.updateUiUserType(UserTypeEnum.COLLABORATOR.userValue)
         createEditUserViewModel.updateUiPdmEmail("emailpdm@ciandt.com")
 
         // WHEN
@@ -428,7 +427,7 @@ class CreateEditUserViewModelTest {
     @Test
     fun `GIVEN a user who is a collaborator and a non-existent pdm WHEN needPDMAssignedOrIsEmptyPdmEmailField() is called THEN validate return true`() {
         // GIVEN
-        createEditUserViewModel.updateUiUserType(UserType.COLLABORATOR.userValue)
+        createEditUserViewModel.updateUiUserType(UserTypeEnum.COLLABORATOR.userValue)
 
         // WHEN
         val result = createEditUserViewModel.needPDMAssignedOrIsEmptyPdmEmailField()
@@ -440,7 +439,7 @@ class CreateEditUserViewModelTest {
     @Test
     fun `GIVEN a user who is a pdm and pdm does not exist WHEN needPDMAssignedOrIsEmptyPdmEmailField() is called THEN validate return false`() {
         // GIVEN
-        createEditUserViewModel.updateUiUserType(UserType.PDM.userValue)
+        createEditUserViewModel.updateUiUserType(UserTypeEnum.PDM.userValue)
 
         // WHEN
         val result = createEditUserViewModel.needPDMAssignedOrIsEmptyPdmEmailField()
@@ -452,7 +451,7 @@ class CreateEditUserViewModelTest {
     @Test
     fun `GIVEN mandatory fields is filled and user is a pdm WHEN isButtonEnable() is called THEN validate return true`() {
         // GIVEN
-        createEditUserViewModel.updateUiUserType(UserType.PDM.userValue)
+        createEditUserViewModel.updateUiUserType(UserTypeEnum.PDM.userValue)
 
         // WHEN
         val result = createEditUserViewModel.isButtonEnable()
@@ -465,7 +464,7 @@ class CreateEditUserViewModelTest {
     fun `GIVEN mandatory fields is incomplete and user is admin WHEN isButtonEnable() is called THEN validate return false`() {
         // GIVEN
         createEditUserViewModel.updateUiName("")
-        createEditUserViewModel.updateUiUserType(UserType.ADMIN.userValue)
+        createEditUserViewModel.updateUiUserType(UserTypeEnum.ADMIN.userValue)
 
         // WHEN
         val result = createEditUserViewModel.isButtonEnable()
@@ -477,7 +476,7 @@ class CreateEditUserViewModelTest {
     @Test
     fun `GIVEN mandatory fields is filled, user is Collaborator and pdmEmail is empty WHEN isButtonEnable() is called THEN validate return false`() {
         // GIVEN
-        createEditUserViewModel.updateUiUserType(UserType.COLLABORATOR.userValue)
+        createEditUserViewModel.updateUiUserType(UserTypeEnum.COLLABORATOR.userValue)
 
         // WHEN
         val result = createEditUserViewModel.isButtonEnable()
@@ -489,7 +488,7 @@ class CreateEditUserViewModelTest {
     @Test
     fun `GIVEN mandatory fields is filled, user is a collaborator and pdmEmail is filled WHEN isButtonEnable() is called THEN validate return true`() {
         // GIVEN
-        createEditUserViewModel.updateUiUserType(UserType.COLLABORATOR.userValue)
+        createEditUserViewModel.updateUiUserType(UserTypeEnum.COLLABORATOR.userValue)
         createEditUserViewModel.updateUiPdmEmail("pdmteste@ciandt.com")
 
         // WHEN
@@ -502,7 +501,7 @@ class CreateEditUserViewModelTest {
     @Test
     fun `GIVEN usertype is collaborator WHEN isCollaborator() is called THEN validate return true`() {
         // GIVEN
-        createEditUserViewModel.updateUiUserType(UserType.COLLABORATOR.userValue)
+        createEditUserViewModel.updateUiUserType(UserTypeEnum.COLLABORATOR.userValue)
 
         // WHEN
         val result = createEditUserViewModel.isCollaborator()
@@ -514,7 +513,7 @@ class CreateEditUserViewModelTest {
     @Test
     fun `GIVEN usertype isn't collaborator WHEN isCollaborator() is called THEN validate return false`() {
         // GIVEN
-        createEditUserViewModel.updateUiUserType(UserType.PDM.userValue)
+        createEditUserViewModel.updateUiUserType(UserTypeEnum.PDM.userValue)
 
         // WHEN
         val result = createEditUserViewModel.isCollaborator()

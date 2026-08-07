@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.createuser
+package com.narely.feedbackjourney.createedituser.ui
 
 data class CreateEditUserViewState(
     val id: Int? = null,
