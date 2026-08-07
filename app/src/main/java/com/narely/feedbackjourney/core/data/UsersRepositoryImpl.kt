@@ -4,8 +4,6 @@ import com.narely.feedbackjourney.core.model.CreateUserRequest
 import com.narely.feedbackjourney.core.model.UpdateUserRequest
 import com.narely.feedbackjourney.core.model.UserResponse
 import com.narely.feedbackjourney.core.services.ApiService
-import com.narely.feedbackjourney.home.login.LoginRequest
-import com.narely.feedbackjourney.home.login.LoginResponse
 import javax.inject.Inject
 
 interface UsersRepository {
@@ -15,7 +13,6 @@ interface UsersRepository {
     suspend fun removeUser(id: Int)
     suspend fun updateUser(id: Int, request: UpdateUserRequest)
     suspend fun getListPdm(): List<UserResponse>
-    suspend fun login(request: LoginRequest): LoginResponse
 }
 
 class UsersRepositoryImpl @Inject constructor(private val apiService: ApiService): UsersRepository {
@@ -48,9 +45,5 @@ class UsersRepositoryImpl @Inject constructor(private val apiService: ApiService
         val listPdm = getListPdmResponse.content
 
         return listPdm
-    }
-
-    override suspend fun login(request: LoginRequest): LoginResponse {
-        return apiService.login(request)
     }
 }

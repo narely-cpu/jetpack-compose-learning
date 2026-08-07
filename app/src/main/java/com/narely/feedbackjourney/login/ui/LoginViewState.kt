@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.home.login
+package com.narely.feedbackjourney.login.ui
 
 data class LoginViewState(
     val email: String = "Email",

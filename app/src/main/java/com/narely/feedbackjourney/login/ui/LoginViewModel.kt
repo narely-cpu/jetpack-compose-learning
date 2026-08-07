@@ -1,13 +1,13 @@
-package com.narely.feedbackjourney.home.login
+package com.narely.feedbackjourney.login.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.narely.feedbackjourney.login.domain.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.invoke
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase): ViewModel() {

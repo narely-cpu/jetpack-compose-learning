@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.home.login
+package com.narely.feedbackjourney.login.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 

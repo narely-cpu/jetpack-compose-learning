@@ -4,8 +4,8 @@ import com.narely.feedbackjourney.core.model.CreateUserRequest
 import com.narely.feedbackjourney.core.model.UpdateUserRequest
 import com.narely.feedbackjourney.core.model.UserResponse
 import com.narely.feedbackjourney.core.model.UsersListResponse
-import com.narely.feedbackjourney.home.login.LoginRequest
-import com.narely.feedbackjourney.home.login.LoginResponse
+import com.narely.feedbackjourney.login.data.remote.model.LoginRequest
+import com.narely.feedbackjourney.login.data.remote.model.LoginResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -30,9 +30,6 @@ interface ApiService {
     @GET("users?type=PDM&size=100")
     @Headers("Authorization: Bearer $TOKEN")
     suspend fun getListPdm(): UsersListResponse
-
-    @POST("users/auth/login")
-    suspend fun login(@Body request: LoginRequest): LoginResponse
 
     @POST("users")
     @Headers("Authorization: Bearer $TOKEN")

@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.home.login
+package com.narely.feedbackjourney.login.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

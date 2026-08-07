@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.home.login
+package com.narely.feedbackjourney.login.data.remote.model
 
 data class LoginRequest(
     val email: String,
