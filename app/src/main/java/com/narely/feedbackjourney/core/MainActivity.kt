@@ -6,9 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import com.narely.feedbackjourney.home.HomeScreen
-import com.narely.feedbackjourney.home.HomeViewModel
-import com.narely.feedbackjourney.home.login.LoginViewModel
+import com.narely.feedbackjourney.home.ui.HomeScreen
+import com.narely.feedbackjourney.home.ui.HomeViewModel
+import com.narely.feedbackjourney.login.ui.LoginViewModel
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 import dagger.hilt.android.AndroidEntryPoint
 

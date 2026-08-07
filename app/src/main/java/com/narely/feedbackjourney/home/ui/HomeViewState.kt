@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.home
+package com.narely.feedbackjourney.home.ui
 
 import com.narely.feedbackjourney.core.model.UserResponse
 

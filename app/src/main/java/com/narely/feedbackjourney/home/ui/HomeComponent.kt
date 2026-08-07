@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.home
+package com.narely.feedbackjourney.home.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
