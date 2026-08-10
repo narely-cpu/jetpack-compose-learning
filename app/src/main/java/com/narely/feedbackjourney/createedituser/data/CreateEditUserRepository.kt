@@ -29,7 +29,7 @@ class CreateEditUserRepositoryImpl @Inject constructor(private val createEditUse
 
     override suspend fun getListPdm(): List<UserResponse> {
         val getListPdmResponse = createEditUserApi.getListPdm()
-        val listPdm = getListPdmResponse.content
+        val listPdm = getListPdmResponse.listUsers
 
         return listPdm
     }
