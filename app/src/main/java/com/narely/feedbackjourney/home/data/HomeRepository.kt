@@ -13,7 +13,7 @@ class HomeRepositoryImpl @Inject constructor(private val homeApi: HomeApi): Home
 
     override suspend fun getUsers(): List<UserResponse> {
         val getUsersResponse = homeApi.getUsers()
-        val listUsers = getUsersResponse.content.filter { it.active }
+        val listUsers = getUsersResponse.listUsers.filter { it.active }
 
         return listUsers
     }
