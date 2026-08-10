@@ -63,13 +63,11 @@ fun CreateEditUserScreen(
                 userId = formsUiState.id,
                 userName = formsUiState.name,
                 userEmail = formsUiState.email,
-                userPassword = formsUiState.password,
                 userType = formsUiState.userType,
                 userPdmEmail = formsUiState.pdmEmail,
                 listPdm = formsUiState.listPdm,
                 onUserNameChange = { viewModel.updateUiName(it) },
                 onUserEmailChange = { viewModel.updateUiEmail(it) },
-                onUserPasswordChange = { viewModel.updateUiPassword(it) },
                 onUserTypeChange = { viewModel.updateUiUserType(it) },
                 onUserPdmEmailChange = { viewModel.updateUiPdmEmail(it) },
                 onCreateUser = { viewModel.createUser(onFinishedActivity) },
@@ -114,13 +112,11 @@ private fun FormCreateEditUserLayout(
     userId: Int?,
     userName: String,
     userEmail: String,
-    userPassword: String,
     userType: String,
     userPdmEmail: String?,
     listPdm: List<String>?,
     onUserNameChange: (String) -> Unit,
     onUserEmailChange: (String) -> Unit,
-    onUserPasswordChange: (String) -> Unit,
     onUserTypeChange: (String) -> Unit,
     onUserPdmEmailChange: (String) -> Unit,
     onCreateUser: () -> Unit,
@@ -132,7 +128,6 @@ private fun FormCreateEditUserLayout(
     Column() {
         TextInputForm(valueState = userName, updateValueState =onUserNameChange)
         TextInputForm(valueState = userEmail, updateValueState =onUserEmailChange)
-        TextInputForm(valueState = userPassword, updateValueState = onUserPasswordChange)
         ChooseTypeUser(valueState = userType, updateValueState =onUserTypeChange)
         ChoosePDMUser(
             valueState = userPdmEmail,
@@ -226,7 +221,8 @@ private fun ChooseTypeUser(
         isCollaborator = true,
         options,
         valueState,
-        updateValueState)
+        updateValueState
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -235,7 +231,8 @@ private fun ChoosePDMUser(
     valueState: String?,
     isCollaborator: Boolean,
     updateValueState: (String) -> Unit,
-    listPdm: List<String>?) {
+    listPdm: List<String>?
+) {
     DropDownChooseUsers(
         label = stringResource(string.choose_pdm_label),
         isCollaborator = isCollaborator,
