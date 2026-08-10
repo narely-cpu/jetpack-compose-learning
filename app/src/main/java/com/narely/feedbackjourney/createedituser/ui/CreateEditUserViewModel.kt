@@ -40,12 +40,6 @@ class CreateEditUserViewModel @Inject constructor(
         )
     }
 
-    fun updateUiPassword(newPassword: String) {
-        updateUiState(
-            uiState.value.copy(password = newPassword)
-        )
-    }
-
     fun updateUiUserType(newUserType: String) {
         updateUiState(
             uiState.value.copy(userType = newUserType)
@@ -72,7 +66,6 @@ class CreateEditUserViewModel @Inject constructor(
                     id = newCurrentUser.id,
                     name = newCurrentUser.name,
                     email = newCurrentUser.email,
-                    password = newCurrentUser.password,
                     userType = newCurrentUser.type,
                     pdmEmail = newCurrentUser.pdmEmail,
                 )
@@ -123,7 +116,6 @@ class CreateEditUserViewModel @Inject constructor(
         val areMandatoryFieldsFilled =
                 uiState.value.name.isNotEmpty() &&
                 uiState.value.email.isNotEmpty() &&
-                uiState.value.password.isNotEmpty() &&
                 uiState.value.userType.isNotEmpty()
 
         return areMandatoryFieldsFilled

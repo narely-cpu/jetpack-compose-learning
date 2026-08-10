@@ -11,7 +11,6 @@ import javax.inject.Inject
 class GetUserUseCase @Inject constructor(val createEditUserRepository: CreateEditUserRepository) {
 
     suspend fun invoke(id: Int): UserDataModel? {
-        val password = "Collaborator123!"
 
         try {
             val pdmList = createEditUserRepository.getListPdm()
@@ -23,7 +22,6 @@ class GetUserUseCase @Inject constructor(val createEditUserRepository: CreateEdi
                     id = id,
                     name = userResponse.name,
                     email = userResponse.email,
-                    password = password,
                     type = userResponse.type,
                     pdmEmail = pdmEmail
                 )
