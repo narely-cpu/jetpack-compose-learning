@@ -1,9 +1,8 @@
 package com.narely.feedbackjourney.createedituser.data.remote
 
-import com.narely.feedbackjourney.createedituser.data.remote.model.CreateUserRequest
-import com.narely.feedbackjourney.createedituser.data.remote.model.UpdateUserRequest
 import com.narely.feedbackjourney.core.data.remote.model.UserResponse
 import com.narely.feedbackjourney.core.data.remote.model.UsersListResponse
+import com.narely.feedbackjourney.createedituser.data.remote.model.CreateEditUserRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -24,9 +23,9 @@ interface CreateEditUserApi {
 
     @POST("users")
     @Headers("Authorization: Bearer $TOKEN")
-    suspend fun createUser(@Body request: CreateUserRequest): UserResponse
+    suspend fun createUser(@Body request: CreateEditUserRequest): UserResponse
 
     @PUT("users/{id}")
     @Headers("Authorization: Bearer $TOKEN")
-    suspend fun updateUser(@Path("id") id: Int, @Body request: UpdateUserRequest): UserResponse
+    suspend fun updateUser(@Path("id") id: Int, @Body request: CreateEditUserRequest): UserResponse
 }

@@ -17,6 +17,7 @@ class GetUserUseCase @Inject constructor(val createEditUserRepository: CreateEdi
             val pdmList = createEditUserRepository.getListPdm()
             val userResponse = createEditUserRepository.getUser(id)
             val pdmEmail = pdmList.find { it.id == userResponse?.pdmId }?.email
+
             if (userResponse != null) {
                 val user = UserDataModel(
                     id = id,

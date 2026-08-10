@@ -1,15 +1,14 @@
 package com.narely.feedbackjourney.createedituser.data
 
-import com.narely.feedbackjourney.createedituser.data.remote.model.CreateUserRequest
-import com.narely.feedbackjourney.createedituser.data.remote.model.UpdateUserRequest
 import com.narely.feedbackjourney.core.data.remote.model.UserResponse
 import com.narely.feedbackjourney.createedituser.data.remote.CreateEditUserApi
+import com.narely.feedbackjourney.createedituser.data.remote.model.CreateEditUserRequest
 import javax.inject.Inject
 
 interface CreateEditUserRepository {
     suspend fun getUser(id: Int): UserResponse?
-    suspend fun createUser(request: CreateUserRequest)
-    suspend fun updateUser(id: Int, request: UpdateUserRequest)
+    suspend fun createUser(request: CreateEditUserRequest)
+    suspend fun updateUser(id: Int, request: CreateEditUserRequest)
     suspend fun getListPdm(): List<UserResponse>
 }
 
@@ -19,11 +18,11 @@ class CreateEditUserRepositoryImpl @Inject constructor(private val createEditUse
         return createEditUserApi.getUser(id)
     }
 
-    override suspend fun createUser(request: CreateUserRequest) {
+    override suspend fun createUser(request: CreateEditUserRequest) {
         createEditUserApi.createUser(request)
     }
 
-    override suspend fun updateUser(id: Int, request: UpdateUserRequest) {
+    override suspend fun updateUser(id: Int, request: CreateEditUserRequest) {
         createEditUserApi.updateUser(id, request)
     }
 

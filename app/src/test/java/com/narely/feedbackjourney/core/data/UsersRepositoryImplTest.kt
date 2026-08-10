@@ -1,7 +1,6 @@
 package com.narely.feedbackjourney.core.data
 
 import com.narely.feedbackjourney.createedituser.data.remote.model.CreateUserRequest
-import com.narely.feedbackjourney.createedituser.data.remote.model.UpdateUserRequest
 import com.narely.feedbackjourney.createedituser.domain.model.UserDataModel
 import com.narely.feedbackjourney.core.data.remote.model.UserResponse
 import com.narely.feedbackjourney.createedituser.ui.UserTypeEnum
