@@ -3,7 +3,7 @@ package com.narely.feedbackjourney.createedituser.domain
 import com.google.gson.Gson
 import com.narely.feedbackjourney.core.data.remote.model.ErrorResponse
 import com.narely.feedbackjourney.createedituser.data.CreateEditUserRepository
-import com.narely.feedbackjourney.createedituser.data.remote.model.UpdateUserRequest
+import com.narely.feedbackjourney.createedituser.data.remote.model.CreateEditUserRequest
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class EditUserUseCase @Inject constructor(val createEditUserRepository: CreateEd
         try {
             val pdmList = createEditUserRepository.getListPdm()
             val pdmId = pdmList.find { it.email == pdmEmail}?.id
-            val request = UpdateUserRequest(
+            val request = CreateEditUserRequest(
                 name = name,
                 email = email,
                 type = userType,
