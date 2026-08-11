@@ -1,13 +1,13 @@
 package com.narely.feedbackjourney.createedituser
 
-import com.narely.feedbackjourney.createedituser.domain.model.UserDataModel
-import com.narely.feedbackjourney.createedituser.ui.UserTypeEnum
-import com.narely.feedbackjourney.createedituser.domain.CreateUserUseCase
-import com.narely.feedbackjourney.createedituser.domain.EditUserUseCase
-import com.narely.feedbackjourney.createedituser.domain.GetListPdmUseCase
-import com.narely.feedbackjourney.createedituser.domain.GetUserUseCase
-import com.narely.feedbackjourney.createedituser.ui.CreateEditUserViewModel
-import com.narely.feedbackjourney.createedituser.ui.CreateEditUserViewState
+import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.features.createedituser.domain.CreateUserUseCase
+import com.narely.feedbackjourney.features.createedituser.domain.EditUserUseCase
+import com.narely.feedbackjourney.features.createedituser.domain.GetListPdmUseCase
+import com.narely.feedbackjourney.features.createedituser.domain.GetUserUseCase
+import com.narely.feedbackjourney.features.createedituser.ui.CreateEditUserViewModel
+import com.narely.feedbackjourney.features.createedituser.ui.CreateEditUserViewState
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -418,7 +418,7 @@ class CreateEditUserViewModelTest {
         createEditUserViewModel.updateUiPdmEmail("emailpdm@ciandt.com")
 
         // WHEN
-        val result = createEditUserViewModel.needPDMAssignedOrIsEmptyPdmEmailField()
+        val result = createEditUserViewModel.hasPdmAssigned()
 
         // THEN
         Assertions.assertEquals(false, result)
@@ -430,7 +430,7 @@ class CreateEditUserViewModelTest {
         createEditUserViewModel.updateUiUserType(UserTypeEnum.COLLABORATOR.userValue)
 
         // WHEN
-        val result = createEditUserViewModel.needPDMAssignedOrIsEmptyPdmEmailField()
+        val result = createEditUserViewModel.hasPdmAssigned()
 
         // THEN
         Assertions.assertEquals(true, result)
@@ -442,7 +442,7 @@ class CreateEditUserViewModelTest {
         createEditUserViewModel.updateUiUserType(UserTypeEnum.PDM.userValue)
 
         // WHEN
-        val result = createEditUserViewModel.needPDMAssignedOrIsEmptyPdmEmailField()
+        val result = createEditUserViewModel.hasPdmAssigned()
 
         // THEN
         Assertions.assertEquals(false, result)

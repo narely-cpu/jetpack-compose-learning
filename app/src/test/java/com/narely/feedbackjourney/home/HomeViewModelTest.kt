@@ -1,11 +1,11 @@
 package com.narely.feedbackjourney.home
 
-import com.narely.feedbackjourney.home.domain.GetUsersUseCase
+import com.narely.feedbackjourney.features.home.domain.GetUsersUseCase
 import com.narely.feedbackjourney.core.data.remote.model.UserResponse
-import com.narely.feedbackjourney.createedituser.ui.UserTypeEnum
-import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
-import com.narely.feedbackjourney.home.ui.HomeViewModel
-import com.narely.feedbackjourney.home.ui.HomeViewState
+import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.features.home.domain.RemoveUserUseCase
+import com.narely.feedbackjourney.features.home.ui.HomeViewModel
+import com.narely.feedbackjourney.features.home.ui.HomeViewState
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun
