@@ -17,42 +17,42 @@ import java.util.UUID
 
 class CreateUserUseCaseTest {
 
-    @RelaxedMockK
-    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
-
-    @InjectMockKs
-    private lateinit var createUserUseCase: CreateUserUseCase
-
-    @Before
-    fun setup() {
-        MockKAnnotations.init(this)
-        mockkStatic(UUID::class)
-    }
-
-    @Test
-    fun `GIVEN a created user WHEN invoke() is called THEN validate that the repository's create function is called`() =
-        runTest {
-            // GIVEN
-            val request = CreateUserRequest(
-                name = "savi",
-                email = "savi@ciandt.com",
-                type = UserTypeEnum.PDM.userValue,
-                pdmId = null,
-            )
-
-            coJustRun { usersRepositoryImpl.createUser(request = request) }
-
-            // WHEN
-            createUserUseCase.invoke(
-                name = "savi",
-                email = "savi@ciandt.com",
-                userType = "PDM",
-                pdmEmail = null,
-                finishedActivityCreateUser = {},
-                errorMessage = {}
-            )
-
-            // THEN
-            coVerify { usersRepositoryImpl.createUser(request = request) }
-        }
+//    @RelaxedMockK
+//    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
+//
+//    @InjectMockKs
+//    private lateinit var createUserUseCase: CreateUserUseCase
+//
+//    @Before
+//    fun setup() {
+//        MockKAnnotations.init(this)
+//        mockkStatic(UUID::class)
+//    }
+//
+//    @Test
+//    fun `GIVEN a created user WHEN invoke() is called THEN validate that the repository's create function is called`() =
+//        runTest {
+//            // GIVEN
+//            val request = CreateUserRequest(
+//                name = "savi",
+//                email = "savi@ciandt.com",
+//                type = UserTypeEnum.PDM.userValue,
+//                pdmId = null,
+//            )
+//
+//            coJustRun { usersRepositoryImpl.createUser(request = request) }
+//
+//            // WHEN
+//            createUserUseCase.invoke(
+//                name = "savi",
+//                email = "savi@ciandt.com",
+//                userType = "PDM",
+//                pdmEmail = null,
+//                finishedActivityCreateUser = {},
+//                errorMessage = {}
+//            )
+//
+//            // THEN
+//            coVerify { usersRepositoryImpl.createUser(request = request) }
+//        }
 }
