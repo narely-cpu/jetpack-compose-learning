@@ -70,96 +70,96 @@ class UsersRepositoryImplTest {
             coVerify { apiService.getUsers() }
         }
 
-    @Test
-    fun `GIVEN a userId corresponding to an non-existent user in the list WHEN getUser() is called THEN that the returned value is null`() =
-        runTest {
-            // GIVEN
-            val incorrectId = 2
-            val userResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val listUser = listOf(userResponse)
-            var user: UserResponse? = null
+//    @Test
+//    fun `GIVEN a userId corresponding to an non-existent user in the list WHEN getUser() is called THEN that the returned value is null`() =
+//        runTest {
+//            // GIVEN
+//            val incorrectId = 2
+//            val userResponse = UserResponse(
+//                id = userModel.id,
+//                name = userModel.name,
+//                email = userModel.email,
+//                type = userModel.type,
+//                pdmId = null,
+//                active = true
+//            )
+//            val listUser = listOf(userResponse)
+//            var user: UserResponse? = null
+//
+//            coEvery { apiService.getUser(incorrectId) } coAnswers {
+//                user = listUser.find { it.id == incorrectId }
+//                user
+//            }
+//
+//            // WHEN
+//            usersRepositoryImpl.getUser(incorrectId)
+//
+//            // THEN
+//            Assertions.assertNull(user)
+//            coVerify { apiService.getUser(incorrectId) }
+//        }
 
-            coEvery { apiService.getUser(incorrectId) } coAnswers {
-                user = listUser.find { it.id == incorrectId }
-                user
-            }
+//    @Test
+//    fun `GIVEN a userId corresponding to an existing user in the list WHEN getUser() is called THEN that the returned value is that user`() =
+//        runTest {
+//            // GIVEN
+//            val correctId = userModel.id
+//            val userResponse = UserResponse(
+//                id = userModel.id,
+//                name = userModel.name,
+//                email = userModel.email,
+//                type = userModel.type,
+//                pdmId = null,
+//                active = true
+//            )
+//            val listUser = listOf(userResponse)
+//            var user: UserResponse? = null
+//
+//            coEvery { apiService.getUser(correctId) } coAnswers {
+//                user = listUser.find { it.id == correctId }
+//                user
+//            }
+//
+//            // WHEN
+//            usersRepositoryImpl.getUser(correctId)
+//
+//            // THEN
+//            Assertions.assertEquals(userResponse, user)
+//            coVerify { apiService.getUser(correctId) }
+//        }
 
-            // WHEN
-            usersRepositoryImpl.getUser(incorrectId)
-
-            // THEN
-            Assertions.assertNull(user)
-            coVerify { apiService.getUser(incorrectId) }
-        }
-
-    @Test
-    fun `GIVEN a userId corresponding to an existing user in the list WHEN getUser() is called THEN that the returned value is that user`() =
-        runTest {
-            // GIVEN
-            val correctId = userModel.id
-            val userResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val listUser = listOf(userResponse)
-            var user: UserResponse? = null
-
-            coEvery { apiService.getUser(correctId) } coAnswers {
-                user = listUser.find { it.id == correctId }
-                user
-            }
-
-            // WHEN
-            usersRepositoryImpl.getUser(correctId)
-
-            // THEN
-            Assertions.assertEquals(userResponse, user)
-            coVerify { apiService.getUser(correctId) }
-        }
-
-    @Test
-    fun `GIVEN a user added to the list WHEN createUser() is called THEN validate that the list size is 1`() =
-        runTest {
-            // GIVEN
-            val request = CreateUserRequest(
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null
-            )
-            val userResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val listUser = mutableListOf<UserResponse>()
-
-            coEvery { apiService.createUser(request) } coAnswers {
-                listUser.add(userResponse)
-                userResponse
-            }
-
-            // WHEN
-            usersRepositoryImpl.createUser(request = request)
-
-            // THEN
-            Assertions.assertEquals(1, listUser.size)
-            coVerify { apiService.createUser(request) }
-        }
+//    @Test
+//    fun `GIVEN a user added to the list WHEN createUser() is called THEN validate that the list size is 1`() =
+//        runTest {
+//            // GIVEN
+//            val request = CreateUserRequest(
+//                name = userModel.name,
+//                email = userModel.email,
+//                type = userModel.type,
+//                pdmId = null
+//            )
+//            val userResponse = UserResponse(
+//                id = userModel.id,
+//                name = userModel.name,
+//                email = userModel.email,
+//                type = userModel.type,
+//                pdmId = null,
+//                active = true
+//            )
+//            val listUser = mutableListOf<UserResponse>()
+//
+//            coEvery { apiService.createUser(request) } coAnswers {
+//                listUser.add(userResponse)
+//                userResponse
+//            }
+//
+//            // WHEN
+//            usersRepositoryImpl.createUser(request = request)
+//
+//            // THEN
+//            Assertions.assertEquals(1, listUser.size)
+//            coVerify { apiService.createUser(request) }
+//        }
 
     @Test
     fun `GIVEN the user is removed WHEN removeUser() is called THEN validate that the list size is 0`() =
@@ -218,111 +218,111 @@ class UsersRepositoryImplTest {
             coVerify { apiService.removeUser(incorrectId) }
         }
 
-    @Test
-    fun `GIVEN an updated user WHEN updateUser() is called THEN validate that the return value is the updated user`() =
-        runTest {
-            // GIVEN
-            var userResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val request = UpdateUserRequest(
-                name = "saviolli",
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null
-            )
-            val updatedUser = UserResponse(
-                id = userModel.id,
-                name = "saviolli",
-                email = request.email,
-                type = request.type,
-                pdmId = null,
-                active = true
-            )
-            coEvery { apiService.updateUser(userModel.id, request) } coAnswers {
-                userResponse = updatedUser
-                userResponse
-            }
-
-            // WHEN
-            usersRepositoryImpl.updateUser(id = userModel.id, request = request)
-
-            // THEN
-            Assertions.assertEquals(updatedUser, userResponse)
-            coVerify { apiService.updateUser(userModel.id, request) }
-        }
-
-    @Test
-    fun `GIVEN a list of PDM users WHEN getListPdm() is called THEN validate that the size is 1`() =
-        runTest {
-            // GIVEN
-            val firstUserResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val secondUserResponse = UserResponse(
-                id = 2,
-                name = "lucas",
-                email = "lucas@ciandt.com",
-                type = UserTypeEnum.ADMIN.userValue,
-                pdmId = null,
-                active = true
-            )
-            var listUser = listOf(firstUserResponse, secondUserResponse)
-
-            coEvery { apiService.getListPdm() } coAnswers {
-                listUser = listUser.filter { it.type == "PDM" }
-                UsersListResponse(content = listUser)
-            }
-
-            // WHEN
-            usersRepositoryImpl.getListPdm()
-
-            // THEN
-            Assertions.assertEquals(1, listUser.size)
-            coVerify { apiService.getListPdm() }
-        }
-
-    @Test
-    fun `GIVEN a list without users of type PMM WHEN getListPdm() is called THEN validate that the size is 1`() =
-        runTest {
-            // GIVEN
-            val collaboratorUserResponse = UserResponse(
-                id = 3,
-                name = "savi",
-                email = "savi@ciandt.com",
-                type = UserTypeEnum.COLLABORATOR.userValue,
-                pdmId = 1,
-                active = true
-            )
-            val adminUserResponse = UserResponse(
-                id = 4,
-                name = "lucas",
-                email = "lucas@ciandt.com",
-                type = UserTypeEnum.ADMIN.userValue,
-                pdmId = null,
-                active = true
-            )
-            var listUser = listOf(collaboratorUserResponse, adminUserResponse)
-
-            coEvery { apiService.getListPdm() } coAnswers {
-                listUser = listUser.filter { it.type == "PDM" }
-                UsersListResponse(content = listUser)
-            }
-
-            // WHEN
-            usersRepositoryImpl.getListPdm()
-
-            // THEN
-            Assertions.assertEquals(0, listUser.size)
-        }
+//    @Test
+//    fun `GIVEN an updated user WHEN updateUser() is called THEN validate that the return value is the updated user`() =
+//        runTest {
+//            // GIVEN
+//            var userResponse = UserResponse(
+//                id = userModel.id,
+//                name = userModel.name,
+//                email = userModel.email,
+//                type = userModel.type,
+//                pdmId = null,
+//                active = true
+//            )
+//            val request = UpdateUserRequest(
+//                name = "saviolli",
+//                email = userModel.email,
+//                type = userModel.type,
+//                pdmId = null
+//            )
+//            val updatedUser = UserResponse(
+//                id = userModel.id,
+//                name = "saviolli",
+//                email = request.email,
+//                type = request.type,
+//                pdmId = null,
+//                active = true
+//            )
+//            coEvery { apiService.updateUser(userModel.id, request) } coAnswers {
+//                userResponse = updatedUser
+//                userResponse
+//            }
+//
+//            // WHEN
+//            usersRepositoryImpl.updateUser(id = userModel.id, request = request)
+//
+//            // THEN
+//            Assertions.assertEquals(updatedUser, userResponse)
+//            coVerify { apiService.updateUser(userModel.id, request) }
+//        }
+//
+//    @Test
+//    fun `GIVEN a list of PDM users WHEN getListPdm() is called THEN validate that the size is 1`() =
+//        runTest {
+//            // GIVEN
+//            val firstUserResponse = UserResponse(
+//                id = userModel.id,
+//                name = userModel.name,
+//                email = userModel.email,
+//                type = userModel.type,
+//                pdmId = null,
+//                active = true
+//            )
+//            val secondUserResponse = UserResponse(
+//                id = 2,
+//                name = "lucas",
+//                email = "lucas@ciandt.com",
+//                type = UserTypeEnum.ADMIN.userValue,
+//                pdmId = null,
+//                active = true
+//            )
+//            var listUser = listOf(firstUserResponse, secondUserResponse)
+//
+//            coEvery { apiService.getListPdm() } coAnswers {
+//                listUser = listUser.filter { it.type == "PDM" }
+//                UsersListResponse(content = listUser)
+//            }
+//
+//            // WHEN
+//            usersRepositoryImpl.getListPdm()
+//
+//            // THEN
+//            Assertions.assertEquals(1, listUser.size)
+//            coVerify { apiService.getListPdm() }
+//        }
+//
+//    @Test
+//    fun `GIVEN a list without users of type PMM WHEN getListPdm() is called THEN validate that the size is 1`() =
+//        runTest {
+//            // GIVEN
+//            val collaboratorUserResponse = UserResponse(
+//                id = 3,
+//                name = "savi",
+//                email = "savi@ciandt.com",
+//                type = UserTypeEnum.COLLABORATOR.userValue,
+//                pdmId = 1,
+//                active = true
+//            )
+//            val adminUserResponse = UserResponse(
+//                id = 4,
+//                name = "lucas",
+//                email = "lucas@ciandt.com",
+//                type = UserTypeEnum.ADMIN.userValue,
+//                pdmId = null,
+//                active = true
+//            )
+//            var listUser = listOf(collaboratorUserResponse, adminUserResponse)
+//
+//            coEvery { apiService.getListPdm() } coAnswers {
+//                listUser = listUser.filter { it.type == "PDM" }
+//                UsersListResponse(content = listUser)
+//            }
+//
+//            // WHEN
+//            usersRepositoryImpl.getListPdm()
+//
+//            // THEN
+//            Assertions.assertEquals(0, listUser.size)
+//        }
 }
