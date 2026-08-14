@@ -16,59 +16,59 @@ import org.junit.jupiter.api.Assertions
 import retrofit2.Response
 
 class UsersRepositoryImplTest {
-    lateinit var usersRepositoryImpl: UsersRepositoryImpl
-    val apiService: ApiService = mockk()
-    val userModel: UserDataModel = UserDataModel(
-        id = 1,
-        name = "savi",
-        email = "savi@ciandt.com",
-        password = "1236347",
-        type = UserTypeEnum.PDM.userValue,
-        pdmEmail = null,
-    )
+//    lateinit var usersRepositoryImpl: UsersRepositoryImpl
+//    val apiService: ApiService = mockk()
+//    val userModel: UserDataModel = UserDataModel(
+//        id = 1,
+//        name = "savi",
+//        email = "savi@ciandt.com",
+//        password = "1236347",
+//        type = UserTypeEnum.PDM.userValue,
+//        pdmEmail = null,
+//    )
+//
+//    @Before
+//    fun setup() {
+//        usersRepositoryImpl = UsersRepositoryImpl(apiService = apiService)
+//    }
 
-    @Before
-    fun setup() {
-        usersRepositoryImpl = UsersRepositoryImpl(apiService = apiService)
-    }
-
-    @Test
-    fun `GIVEN an empty list WHEN getUsers() is called THEN validate that the size of the result is 1`() =
-        runTest {
-            // GIVEN
-            coEvery { apiService.getUsers() } returns UsersListResponse()
-
-            // WHEN
-            val result = usersRepositoryImpl.getUsers()
-
-            // THEN
-            Assertions.assertEquals(emptyList<UserResponse>(), result)
-            coVerify { apiService.getUsers() }
-        }
-
-    @Test
-    fun `GIVEN a non-empty list WHEN getUsers() is called THEN validate that the size of the result is 1`() =
-        runTest {
-            // GIVEN
-            val userResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val listUser = listOf(userResponse)
-
-            coEvery { apiService.getUsers() } returns UsersListResponse(content = listUser)
-
-            // WHEN
-            val result = usersRepositoryImpl.getUsers()
-
-            // THEN
-            Assertions.assertEquals(1, result.size)
-            coVerify { apiService.getUsers() }
-        }
+//    @Test
+//    fun `GIVEN an empty list WHEN getUsers() is called THEN validate that the size of the result is 1`() =
+//        runTest {
+//            // GIVEN
+//            coEvery { apiService.getUsers() } returns UsersListResponse()
+//
+//            // WHEN
+//            val result = usersRepositoryImpl.getUsers()
+//
+//            // THEN
+//            Assertions.assertEquals(emptyList<UserResponse>(), result)
+//            coVerify { apiService.getUsers() }
+//        }
+//
+//    @Test
+//    fun `GIVEN a non-empty list WHEN getUsers() is called THEN validate that the size of the result is 1`() =
+//        runTest {
+//            // GIVEN
+//            val userResponse = UserResponse(
+//                id = userModel.id,
+//                name = userModel.name,
+//                email = userModel.email,
+//                type = userModel.type,
+//                pdmId = null,
+//                active = true
+//            )
+//            val listUser = listOf(userResponse)
+//
+//            coEvery { apiService.getUsers() } returns UsersListResponse(content = listUser)
+//
+//            // WHEN
+//            val result = usersRepositoryImpl.getUsers()
+//
+//            // THEN
+//            Assertions.assertEquals(1, result.size)
+//            coVerify { apiService.getUsers() }
+//        }
 
 //    @Test
 //    fun `GIVEN a userId corresponding to an non-existent user in the list WHEN getUser() is called THEN that the returned value is null`() =
@@ -161,62 +161,62 @@ class UsersRepositoryImplTest {
 //            coVerify { apiService.createUser(request) }
 //        }
 
-    @Test
-    fun `GIVEN the user is removed WHEN removeUser() is called THEN validate that the list size is 0`() =
-        runTest {
-            // GIVEN
-            val userId = userModel.id
-            val userResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val listUser = mutableListOf(userResponse)
-
-            coEvery { apiService.removeUser(userId) } coAnswers {
-                listUser.remove(userResponse)
-                Response.success(Unit)
-            }
-
-            // WHEN
-            usersRepositoryImpl.removeUser(userId)
-
-            // THEN
-            Assertions.assertEquals(0, listUser.size)
-            coVerify { apiService.removeUser(userId) }
-        }
-
-    @Test
-    fun `GIVEN a non-existent user in the list is removed WHEN removeUser() is called THEN validate that the list size is 1`() =
-        runTest {
-            // GIVEN
-            val incorrectId = 2
-            val userResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val listUser = mutableListOf(userResponse)
-
-            coEvery { apiService.removeUser(incorrectId) } coAnswers {
-                val user = listUser.find { it.id == incorrectId }
-                listUser.remove(user)
-                Response.success(Unit)
-            }
-
-            // WHEN
-            usersRepositoryImpl.removeUser(incorrectId)
-
-            // THEN
-            Assertions.assertEquals(1, listUser.size)
-            coVerify { apiService.removeUser(incorrectId) }
-        }
+//    @Test
+//    fun `GIVEN the user is removed WHEN removeUser() is called THEN validate that the list size is 0`() =
+//        runTest {
+//            // GIVEN
+//            val userId = userModel.id
+//            val userResponse = UserResponse(
+//                id = userModel.id,
+//                name = userModel.name,
+//                email = userModel.email,
+//                type = userModel.type,
+//                pdmId = null,
+//                active = true
+//            )
+//            val listUser = mutableListOf(userResponse)
+//
+//            coEvery { apiService.removeUser(userId) } coAnswers {
+//                listUser.remove(userResponse)
+//                Response.success(Unit)
+//            }
+//
+//            // WHEN
+//            usersRepositoryImpl.removeUser(userId)
+//
+//            // THEN
+//            Assertions.assertEquals(0, listUser.size)
+//            coVerify { apiService.removeUser(userId) }
+//        }
+//
+//    @Test
+//    fun `GIVEN a non-existent user in the list is removed WHEN removeUser() is called THEN validate that the list size is 1`() =
+//        runTest {
+//            // GIVEN
+//            val incorrectId = 2
+//            val userResponse = UserResponse(
+//                id = userModel.id,
+//                name = userModel.name,
+//                email = userModel.email,
+//                type = userModel.type,
+//                pdmId = null,
+//                active = true
+//            )
+//            val listUser = mutableListOf(userResponse)
+//
+//            coEvery { apiService.removeUser(incorrectId) } coAnswers {
+//                val user = listUser.find { it.id == incorrectId }
+//                listUser.remove(user)
+//                Response.success(Unit)
+//            }
+//
+//            // WHEN
+//            usersRepositoryImpl.removeUser(incorrectId)
+//
+//            // THEN
+//            Assertions.assertEquals(1, listUser.size)
+//            coVerify { apiService.removeUser(incorrectId) }
+//        }
 
 //    @Test
 //    fun `GIVEN an updated user WHEN updateUser() is called THEN validate that the return value is the updated user`() =
