@@ -1,6 +1,5 @@
 package com.narely.feedbackjourney.features.createedituser.ui
 
-import androidx.compose.runtime.internal.composableLambda
 import com.narely.feedbackjourney.features.createedituser.domain.CreateUserUseCase
 import com.narely.feedbackjourney.features.createedituser.domain.EditUserUseCase
 import com.narely.feedbackjourney.features.createedituser.domain.GetListPdmUseCase

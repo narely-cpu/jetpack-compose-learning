@@ -5,7 +5,6 @@ import com.narely.feedbackjourney.features.createedituser.data.remote.model.Crea
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
 import io.mockk.MockKAnnotations
-import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
@@ -13,7 +12,6 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
 
 class EditUserUseCaseTest {
 
