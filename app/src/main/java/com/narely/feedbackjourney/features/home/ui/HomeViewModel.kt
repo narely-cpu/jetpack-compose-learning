@@ -22,7 +22,7 @@ class HomeViewModel @Inject constructor(
         MutableStateFlow(HomeViewState())
     val uiState: StateFlow<HomeViewState> = _uiState
 
-    fun updateUiState(uiState: HomeViewState) {
+    private fun updateUiState(uiState: HomeViewState) {
         _uiState.value = uiState
     }
 

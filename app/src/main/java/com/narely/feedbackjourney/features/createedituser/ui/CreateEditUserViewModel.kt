@@ -1,6 +1,5 @@
 package com.narely.feedbackjourney.features.createedituser.ui
 
-import androidx.compose.runtime.internal.composableLambda
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
@@ -25,54 +24,50 @@ class CreateEditUserViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<CreateEditUserViewState> = MutableStateFlow(CreateEditUserViewState())
     val uiState: StateFlow<CreateEditUserViewState> = _uiState
 
-    fun updateUiState(uiState: CreateEditUserViewState) {
+    private fun updateUiState(uiState: CreateEditUserViewState) {
         _uiState.value = uiState
     }
 
-    fun updateCollaboratorUiState(collaboratorUiState: UserDataModel) {
-        updateUiCollaborator(newCollaborator = collaboratorUiState)
-    }
-
-    fun updateUiName(newName: String) {
-        updateCollaboratorUiState(
-            uiState.value.collaborator.copy(name = newName)
-        )
-    }
-
-    fun updateUiEmail(newEmail: String) {
-        updateCollaboratorUiState(
-            uiState.value.collaborator.copy(email = newEmail)
-        )
-    }
-
-    fun updateUiUserType(newUserType: String) {
-        updateCollaboratorUiState(
-            uiState.value.collaborator.copy(type = UserTypeEnum.valueOf(newUserType))
-        )
-    }
-
-    fun updateUiPdmEmail(newPdmEmail: String) {
-        updateCollaboratorUiState(
-            uiState.value.collaborator.copy(pdmEmail = newPdmEmail)
-        )
-    }
-
-    fun updateUiCollaborator(newCollaborator: UserDataModel) {
+    private fun updateUiCollaborator(newCollaborator: UserDataModel) {
         updateUiState(
             uiState.value.copy(collaborator = newCollaborator)
         )
         getPdmUser()
     }
 
-    fun updateUiPdm(newPdm: UserDataModel?) {
+    private fun updateUiPdm(newPdm: UserDataModel?) {
         updateUiState(
             uiState.value.copy(pdm = newPdm)
         )
     }
 
-    fun updateUiListPdm(newListPdm: List<UserDataModel>?) {
+    private fun updateUiListPdm(newListPdm: List<UserDataModel>?) {
         updateUiState(
             uiState.value.copy(listPdm = newListPdm)
+        )
+    }
+
+    fun updateUiName(newName: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(name = newName)
+        )
+    }
+
+    fun updateUiEmail(newEmail: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(email = newEmail)
+        )
+    }
+
+    fun updateUiUserType(newUserType: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(type = UserTypeEnum.valueOf(newUserType))
+        )
+    }
+
+    fun updateUiPdmEmail(newPdmEmail: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(pdmEmail = newPdmEmail)
         )
     }
 
@@ -89,7 +84,7 @@ class CreateEditUserViewModel @Inject constructor(
         )
     }
 
-    suspend fun readUser(id: Int): UserDataModel? {
+    private suspend fun readUser(id: Int): UserDataModel? {
         return getUserUseCase.invoke(id = id, listPdm = uiState.value.listPdm)
     }
 
@@ -115,12 +110,12 @@ class CreateEditUserViewModel @Inject constructor(
         updateUiListPdm(newListPdm = getListPdmUseCase.invoke())
     }
 
-    fun getPdmUser() {
+    private fun getPdmUser() {
         val pdm = uiState.value.listPdm?.find { it.email == uiState.value.collaborator.pdmEmail }
         updateUiPdm(newPdm = pdm)
     }
 
-    fun areMandatoryFieldsFilled(): Boolean {
+    private fun areMandatoryFieldsFilled(): Boolean {
         val areMandatoryFieldsFilled =
                 uiState.value.collaborator.name.isNotEmpty() &&
                 uiState.value.collaborator.email.isNotEmpty() &&
@@ -129,7 +124,7 @@ class CreateEditUserViewModel @Inject constructor(
         return areMandatoryFieldsFilled
     }
 
-    fun hasPdmAssigned(): Boolean {
+    private fun hasPdmAssigned(): Boolean {
         return when (uiState.value.collaborator.type) {
             UserTypeEnum.COLLABORATOR -> uiState.value.pdm?.email?.isNotEmpty() ?: false
             UserTypeEnum.PDM -> true
