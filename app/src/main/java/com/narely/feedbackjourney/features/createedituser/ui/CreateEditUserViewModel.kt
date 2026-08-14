@@ -32,7 +32,6 @@ class CreateEditUserViewModel @Inject constructor(
         updateUiState(
             uiState.value.copy(collaborator = newCollaborator)
         )
-        getPdmUser()
     }
 
     private fun updateUiPdm(newPdm: UserDataModel?) {
@@ -47,41 +46,26 @@ class CreateEditUserViewModel @Inject constructor(
         )
     }
 
-    fun updateUiName(newName: String) {
-        updateUiCollaborator(
-            uiState.value.collaborator.copy(name = newName)
-        )
+    private fun getPdmUser() {
+        val pdm = uiState.value.listPdm?.find { it.email == uiState.value.collaborator.pdmEmail }
+        updateUiPdm(newPdm = pdm)
     }
 
-    fun updateUiEmail(newEmail: String) {
-        updateUiCollaborator(
-            uiState.value.collaborator.copy(email = newEmail)
-        )
+    private fun areMandatoryFieldsFilled(): Boolean {
+        val areMandatoryFieldsFilled =
+            uiState.value.collaborator.name.isNotEmpty() &&
+                    uiState.value.collaborator.email.isNotEmpty() &&
+                    uiState.value.collaborator.type.name.isNotEmpty()
+
+        return areMandatoryFieldsFilled
     }
 
-    fun updateUiUserType(newUserType: String) {
-        updateUiCollaborator(
-            uiState.value.collaborator.copy(type = UserTypeEnum.valueOf(newUserType))
-        )
-    }
-
-    fun updateUiPdmEmail(newPdmEmail: String) {
-        updateUiCollaborator(
-            uiState.value.collaborator.copy(pdmEmail = newPdmEmail)
-        )
-    }
-
-    fun updateUiCurrentUser(newCurrentUserId: Int) = viewModelScope.launch {
-        val newCurrentUser = readUser(newCurrentUserId)
-        if (newCurrentUser != null) {
-            updateUiCollaborator(newCollaborator = newCurrentUser)
+    private fun hasPdmAssigned(): Boolean {
+        return when (uiState.value.collaborator.type) {
+            UserTypeEnum.COLLABORATOR -> uiState.value.pdm?.email?.isNotEmpty() ?: false
+            UserTypeEnum.PDM -> true
+            else -> true
         }
-    }
-
-    fun updateUiErrorMessage(newErrorMessage: String?) {
-        updateUiState(
-            uiState.value.copy(errorMessage = newErrorMessage)
-        )
     }
 
     private suspend fun readUser(id: Int): UserDataModel? {
@@ -110,26 +94,49 @@ class CreateEditUserViewModel @Inject constructor(
         updateUiListPdm(newListPdm = getListPdmUseCase.invoke())
     }
 
-    private fun getPdmUser() {
-        val pdm = uiState.value.listPdm?.find { it.email == uiState.value.collaborator.pdmEmail }
-        updateUiPdm(newPdm = pdm)
-    }
-
-    private fun areMandatoryFieldsFilled(): Boolean {
-        val areMandatoryFieldsFilled =
-                uiState.value.collaborator.name.isNotEmpty() &&
-                uiState.value.collaborator.email.isNotEmpty() &&
-                uiState.value.collaborator.type.name.isNotEmpty()
-
-        return areMandatoryFieldsFilled
-    }
-
-    private fun hasPdmAssigned(): Boolean {
-        return when (uiState.value.collaborator.type) {
-            UserTypeEnum.COLLABORATOR -> uiState.value.pdm?.email?.isNotEmpty() ?: false
-            UserTypeEnum.PDM -> true
-            else -> true
+    fun onCreateUiCreateEditView(userId: Int) {
+        getListPdm().invokeOnCompletion {
+            updateUiCurrentUser(newCurrentUserId = userId)
         }
+    }
+
+    fun updateUiName(newName: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(name = newName)
+        )
+    }
+
+    fun updateUiEmail(newEmail: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(email = newEmail)
+        )
+    }
+
+    fun updateUiUserType(newUserType: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(type = UserTypeEnum.valueOf(newUserType))
+        )
+    }
+
+    fun updateUiPdmEmail(newPdmEmail: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(pdmEmail = newPdmEmail)
+        )
+        getPdmUser()
+    }
+
+    fun updateUiCurrentUser(newCurrentUserId: Int) = viewModelScope.launch {
+        val newCurrentUser = readUser(newCurrentUserId)
+
+        if (newCurrentUser != null) {
+            updateUiCollaborator(newCollaborator = newCurrentUser)
+        }
+    }
+
+    fun updateUiErrorMessage(newErrorMessage: String?) {
+        updateUiState(
+            uiState.value.copy(errorMessage = newErrorMessage)
+        )
     }
 
     fun isButtonEnable(): Boolean {
