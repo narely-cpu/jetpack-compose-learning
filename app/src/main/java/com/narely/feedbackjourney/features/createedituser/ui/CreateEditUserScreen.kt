@@ -46,7 +46,6 @@ fun CreateEditUserScreen(
 ) {
     LaunchedEffect(Unit) {
         viewModel.getListPdm().invokeOnCompletion { if (userId != 0) viewModel.updateUiCurrentUser(userId) }
-
     }
 
     val formsUiState by viewModel.uiState.collectAsState()
