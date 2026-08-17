@@ -16,7 +16,7 @@ import retrofit2.Response
 
 class HomeRepositoryTest {
 
-    lateinit var  homeRepositoryImpl: HomeRepositoryImpl
+    lateinit var homeRepositoryImpl: HomeRepositoryImpl
 
     val homeApi: HomeApi = mockk()
     val userModel: UserDataModel = UserDataModel(
