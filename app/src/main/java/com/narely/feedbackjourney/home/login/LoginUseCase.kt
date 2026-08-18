@@ -13,13 +13,15 @@ class LoginUseCase @Inject constructor(val usersRepository: UsersRepository) {
         password: String,
         tokenResponse: (String?) -> Unit,
         errorMessage: (String?) -> Unit
-    ): LoginResponse {
+    ): LoginResponse? {
         val request = LoginRequest(email = email, password = password)
 
         try {
             val loginResponse = usersRepository.login(request)
 
             tokenResponse(loginResponse.token)
+
+            return loginResponse
         } catch (e: Exception) {
             if (e is HttpException) {
                 val errorResponse = e.response()?.errorBody()?.string()
@@ -31,8 +33,8 @@ class LoginUseCase @Inject constructor(val usersRepository: UsersRepository) {
             } else {
                 errorMessage(e.message)
             }
-        }
 
-        return usersRepository.login(request)
+            return null
+        }
     }
 }
