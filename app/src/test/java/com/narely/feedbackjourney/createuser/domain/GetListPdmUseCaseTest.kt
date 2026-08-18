@@ -1,8 +1,6 @@
-package com.narely.feedbackjourney.core.domain
+package com.narely.feedbackjourney.createuser.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
-import com.narely.feedbackjourney.core.model.UserDataModel
-import com.narely.feedbackjourney.core.model.UserType
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -11,13 +9,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 
-class GetUsersUseCaseTest {
-
+class GetListPdmUseCaseTest {
     @MockK
     private lateinit var usersRepositoryImpl: UsersRepositoryImpl
 
     @InjectMockKs
-    private lateinit var getUsersUseCase: GetUsersUseCase
+    private lateinit var getListPdmUseCase: GetListPdmUseCase
 
     @Before
     fun setup() {
@@ -27,10 +24,10 @@ class GetUsersUseCaseTest {
     @Test
     fun `GIVEN list is empty WHEN invoke() is called THEN validate result is empty`() {
         // GIVEN
-        every { usersRepositoryImpl.getUsers() } returns mutableListOf()
+        every { usersRepositoryImpl.getListPdm() } returns emptyList()
 
         // WHEN
-        val result = getUsersUseCase.invoke()
+        val result = getListPdmUseCase.invoke()
 
         // THEN
         Assertions.assertEquals(0, result.size)
@@ -39,24 +36,15 @@ class GetUsersUseCaseTest {
     @Test
     fun `GIVEN list is not empty WHEN invoke() is called THEN validate result is not empty`() {
         // GIVEN
-        val item = UserDataModel(
-            id = "23324984",
-            name = "savi",
-            email = "savi@ciandt.com",
-            password = "1236347",
-            userType = UserType.PDM,
-            pdmEmail = null,
-        )
-        val listUsers = mutableListOf<UserDataModel>()
+        val email = "savi@ciandt.com"
 
-        listUsers.add(item)
-
-        every { usersRepositoryImpl.getUsers() } returns listUsers
+        every { usersRepositoryImpl.getListPdm() } returns listOf(email)
 
         // WHEN
-        val result = getUsersUseCase.invoke()
+        val result = getListPdmUseCase.invoke()
 
         // THEN
         Assertions.assertEquals(1, result.size)
+        Assertions.assertEquals(listOf(email), result)
     }
 }

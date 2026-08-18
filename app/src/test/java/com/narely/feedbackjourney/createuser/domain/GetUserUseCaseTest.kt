@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.core.domain
+package com.narely.feedbackjourney.createuser.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
 import com.narely.feedbackjourney.core.model.UserDataModel
@@ -11,13 +11,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
 
-class GetUsersUseCaseTest {
-
+class GetUserUseCaseTest {
     @MockK
     private lateinit var usersRepositoryImpl: UsersRepositoryImpl
 
     @InjectMockKs
-    private lateinit var getUsersUseCase: GetUsersUseCase
+    private lateinit var getUserUseCase: GetUserUseCase
 
     @Before
     fun setup() {
@@ -25,38 +24,36 @@ class GetUsersUseCaseTest {
     }
 
     @Test
-    fun `GIVEN list is empty WHEN invoke() is called THEN validate result is empty`() {
+    fun `GIVEN userId not null WHEN invoke() is called THEN validate correct user is returned`() {
         // GIVEN
-        every { usersRepositoryImpl.getUsers() } returns mutableListOf()
-
-        // WHEN
-        val result = getUsersUseCase.invoke()
-
-        // THEN
-        Assertions.assertEquals(0, result.size)
-    }
-
-    @Test
-    fun `GIVEN list is not empty WHEN invoke() is called THEN validate result is not empty`() {
-        // GIVEN
+        val userId = "23324984"
         val item = UserDataModel(
-            id = "23324984",
+            id = userId,
             name = "savi",
             email = "savi@ciandt.com",
             password = "1236347",
             userType = UserType.PDM,
             pdmEmail = null,
         )
-        val listUsers = mutableListOf<UserDataModel>()
 
-        listUsers.add(item)
-
-        every { usersRepositoryImpl.getUsers() } returns listUsers
+        every { usersRepositoryImpl.getUser(userId) } returns item
 
         // WHEN
-        val result = getUsersUseCase.invoke()
+        val result = getUserUseCase.invoke(userId)
 
         // THEN
-        Assertions.assertEquals(1, result.size)
+        Assertions.assertEquals(item, result)
+    }
+
+    @Test
+    fun `GIVEN userId is null WHEN invoke() is called THEN validate result is null`() {
+        // GIVEN
+        every { usersRepositoryImpl.getUser(null) } returns null
+
+        // WHEN
+        val result = getUserUseCase.invoke(null)
+
+        // THEN
+        Assertions.assertNull(result)
     }
 }

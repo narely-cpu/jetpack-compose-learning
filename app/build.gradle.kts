@@ -1,18 +1,9 @@
-﻿import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.android)
-}
-
-val localProperties = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if (file.exists()) {
-        load(file.inputStream())
-    }
 }
 
 android {
@@ -31,9 +22,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        val adminToken = localProperties.getProperty("ADMIN_TOKEN") ?: ""
-        buildConfigField("String", "ADMIN_TOKEN", "\"$adminToken\"")
     }
 
     buildTypes {
@@ -48,7 +36,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
-        buildConfig = true
         compose = true
     }
     kotlinOptions {
@@ -67,17 +54,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.icons.codicons.android)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.hilt)
-    implementation(libs.retrofit)
-    implementation(libs.gson)
-    implementation(libs.converter.gson)
-    ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
+    implementation(libs.kotlin.stdlib)
     testImplementation(libs.junit.jupiter)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -85,4 +65,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.hilt)
+    ksp(libs.hilt.compiler)
 }
