@@ -1,6 +1,7 @@
 package com.narely.feedbackjourney.home.domain
 
 import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
+import com.narely.feedbackjourney.features.home.domain.RemoveUserUseCase
 import io.mockk.MockKAnnotations
 import io.mockk.coJustRun
 import io.mockk.coVerify

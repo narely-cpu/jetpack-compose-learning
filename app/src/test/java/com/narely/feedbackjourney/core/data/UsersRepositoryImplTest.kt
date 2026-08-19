@@ -1,11 +1,10 @@
 package com.narely.feedbackjourney.core.data
 
-import com.narely.feedbackjourney.core.model.CreateUserRequest
-import com.narely.feedbackjourney.core.model.UpdateUserRequest
-import com.narely.feedbackjourney.core.model.UserDataModel
-import com.narely.feedbackjourney.core.model.UserResponse
-import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.core.model.UsersListResponse
+import com.narely.feedbackjourney.createedituser.data.remote.model.CreateUserRequest
+import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
+import com.narely.feedbackjourney.core.data.remote.model.UserResponse
+import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.core.data.remote.model.UsersListResponse
 import com.narely.feedbackjourney.core.services.ApiService
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -24,7 +23,7 @@ class UsersRepositoryImplTest {
         name = "savi",
         email = "savi@ciandt.com",
         password = "1236347",
-        type = UserType.PDM.userValue,
+        type = UserTypeEnum.PDM.userValue,
         pdmEmail = null,
     )
 
@@ -274,7 +273,7 @@ class UsersRepositoryImplTest {
                 id = 2,
                 name = "lucas",
                 email = "lucas@ciandt.com",
-                type = UserType.ADMIN.userValue,
+                type = UserTypeEnum.ADMIN.userValue,
                 pdmId = null,
                 active = true
             )
@@ -301,7 +300,7 @@ class UsersRepositoryImplTest {
                 id = 3,
                 name = "savi",
                 email = "savi@ciandt.com",
-                type = UserType.COLLABORATOR.userValue,
+                type = UserTypeEnum.COLLABORATOR.userValue,
                 pdmId = 1,
                 active = true
             )
@@ -309,7 +308,7 @@ class UsersRepositoryImplTest {
                 id = 4,
                 name = "lucas",
                 email = "lucas@ciandt.com",
-                type = UserType.ADMIN.userValue,
+                type = UserTypeEnum.ADMIN.userValue,
                 pdmId = null,
                 active = true
             )

@@ -1,9 +1,11 @@
 package com.narely.feedbackjourney.home
 
-import com.narely.feedbackjourney.core.domain.GetUsersUseCase
-import com.narely.feedbackjourney.core.model.UserResponse
-import com.narely.feedbackjourney.core.model.UserType
-import com.narely.feedbackjourney.home.domain.RemoveUserUseCase
+import com.narely.feedbackjourney.features.home.domain.GetUsersUseCase
+import com.narely.feedbackjourney.core.data.remote.model.UserResponse
+import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.features.home.domain.RemoveUserUseCase
+import com.narely.feedbackjourney.features.home.ui.HomeViewModel
+import com.narely.feedbackjourney.features.home.ui.HomeViewState
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -76,7 +78,7 @@ class HomeViewModelTest {
                 id = 1,
                 name = "New name",
                 email = "New email First",
-                type = UserType.PDM.userValue,
+                type = UserTypeEnum.PDM.userValue,
                 pdmId = null,
                 active = true
             )
@@ -84,7 +86,7 @@ class HomeViewModelTest {
                 id = 2,
                 name = "New name",
                 email = "New email Second",
-                type = UserType.PDM.userValue,
+                type = UserTypeEnum.PDM.userValue,
                 pdmId = null,
                 active = true
             )
@@ -111,7 +113,7 @@ class HomeViewModelTest {
             id = 1,
             name = "New name",
             email = "New email",
-            type = UserType.PDM.userValue,
+            type = UserTypeEnum.PDM.userValue,
             pdmId = null,
             active = true
         )
