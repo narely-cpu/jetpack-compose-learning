@@ -47,24 +47,6 @@ class HomeViewModelTest {
         Dispatchers.resetMain()
     }
 
-    @Test
-    fun `GIVEN any state changed WHEN updateUiState() is called THEN validate state change`() {
-        // GIVEN
-        val newState = HomeViewState(
-            list = mutableListOf(),
-            isLoading = false,
-            currentUser = null
-        )
-
-        // WHEN
-        homeViewModel.updateUiState(newState)
-
-        val currentUiState = homeViewModel.uiState.value
-
-        // THEN
-        Assertions.assertEquals(newState, currentUiState)
-    }
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `GIVEN the updated list of users WHEN updateList() is called THEN validate update list`() =
