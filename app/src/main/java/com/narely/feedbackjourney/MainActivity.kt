@@ -1,5 +1,6 @@
 package com.narely.feedbackjourney
 
+//noinspection SuspiciousImport
 import android.R
 import android.os.Build
 import android.os.Bundle
@@ -7,8 +8,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import com.narely.feedbackjourney.features.home.ui.HomeScreen
 import com.narely.feedbackjourney.features.home.ui.HomeViewModel
+import com.narely.feedbackjourney.features.login.ui.LoginScreen
 import com.narely.feedbackjourney.features.login.ui.LoginViewModel
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +25,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FeedbackJourneyTheme {
-                HomeScreen(homeViewModel)
+//                HomeScreen(homeViewModel)
+                LoginScreen(loginViewModel)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     overrideActivityTransition(
