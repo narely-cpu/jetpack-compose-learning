@@ -12,6 +12,8 @@
     <string name="delete_dialog_title">Delete User</string>
     <string name="edit_user">Edit User</string>
     <string name="email_label">Email</string>
+    <string name="forget_password">Esqueci a senha</string>
+    <string name="make_login">Fazer Login</string>
     <string name="name_label">Name</string>
     <string name="password_label">Password</string>
     <string name="pdm_label">PDM</string>
