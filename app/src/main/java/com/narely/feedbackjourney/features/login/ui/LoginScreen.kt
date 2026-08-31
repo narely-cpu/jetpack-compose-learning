@@ -1,7 +1,6 @@
 package com.narely.feedbackjourney.features.login.ui
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,10 +21,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.narely.feedbackjourney.R
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.ui.theme.Blue80
 import com.narely.feedbackjourney.ui.theme.Grey40
@@ -52,15 +49,6 @@ fun LoginScreen(viewModel: LoginViewModel) {
             loginOnClick = { viewModel.login() }
         )
     }
-}
-
-@Composable
-private fun EnterpriseLogo() {
-    Image(
-        painter = painterResource(id = R.drawable.frame_logo),
-        contentDescription = stringResource(id = string.cit_logo),
-        modifier = Modifier.padding(bottom = 64.dp)
-    )
 }
 
 @Composable
