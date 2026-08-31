@@ -42,6 +42,7 @@ import com.narely.feedbackjourney.ui.theme.Typography
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
     val homeUiState = viewModel.uiState.collectAsState()
+
     Scaffold(
         containerColor = Grey40
     ) { innerPadding ->
