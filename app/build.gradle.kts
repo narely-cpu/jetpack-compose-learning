@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.gson)
     implementation(libs.converter.gson)
+    implementation(libs.icons.heroicons.outline.android)
+    implementation(libs.androidx.compose.material.icons.extended)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
