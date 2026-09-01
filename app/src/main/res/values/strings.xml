@@ -23,6 +23,7 @@
     <string name="forgot_password">Esqueci a senha</string>
     <string name="login_button_label">Fazer Login</string>
     <string name="name_label">Nome</string>
+    <string name="new_collaborator">Novo colaborador</string>
     <string name="password_label">Senha</string>
     <string name="pdm_label">PDM</string>
     <string name="save_user">Save User</string>

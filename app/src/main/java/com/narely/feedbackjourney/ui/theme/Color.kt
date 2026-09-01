@@ -12,10 +12,8 @@ val Magenta80 = Color(0xFFA34A87)
 
 val Orange80 = Color(0xFFFA5A50)
 
-val Purple80 = Color(0xFF485794)
 val Purple40 = Color(0xFFB6BCD4)
-
-
+val Purple80 = Color(0xFF485794)
 
 
 
