@@ -32,6 +32,13 @@
             tools:ignore="MissingClass">
         </activity>
         <activity
+            android:name=".features.managementuser.ManagementUserActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FeedbackJourney"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="MissingClass">
+        </activity>
+        <activity
             android:name=".features.createedituser.CreateEditUserActivity"
             android:exported="true"
             android:theme="@style/Theme.FeedbackJourney"

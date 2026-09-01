@@ -4,7 +4,8 @@ import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
 import com.narely.feedbackjourney.commons.data.remote.model.UsersListResponse
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
-import com.narely.feedbackjourney.features.home.data.remote.HomeApi
+import com.narely.feedbackjourney.features.managementuser.data.HomeRepositoryImpl
+import com.narely.feedbackjourney.features.managementuser.data.remote.HomeApi
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
