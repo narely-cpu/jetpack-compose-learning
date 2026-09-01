@@ -2,8 +2,8 @@ package com.narely.feedbackjourney.features.home.ui
 
 import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
-import com.narely.feedbackjourney.features.home.domain.GetUsersUseCase
-import com.narely.feedbackjourney.features.home.domain.RemoveUserUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.GetUsersUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.RemoveUserUseCase
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun

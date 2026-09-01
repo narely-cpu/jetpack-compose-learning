@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.features.home.data.remote
+package com.narely.feedbackjourney.features.managementuser.data.remote
 
 import com.narely.feedbackjourney.BuildConfig
 import com.narely.feedbackjourney.commons.data.remote.model.UsersListResponse
@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
 
-interface HomeApi {
+interface ManagementUserApi {
 
     @GET("users")
     @Headers("Authorization: Bearer ${BuildConfig.ADMIN_TOKEN}")
