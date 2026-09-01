@@ -1,5 +1,6 @@
 package com.narely.feedbackjourney.features.home.ui
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.narely.feedbackjourney.R
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.commons.ui.EnterpriseLogo
+import com.narely.feedbackjourney.features.createedituser.CreateEditUserActivity
 import com.narely.feedbackjourney.features.home.domain.model.MyListItem
 import com.narely.feedbackjourney.ui.theme.Blue40
 import com.narely.feedbackjourney.ui.theme.Blue80
@@ -43,6 +46,11 @@ import com.narely.feedbackjourney.ui.theme.Typography
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
+    HomeScreenLayout()
+}
+
+@Composable
+private fun HomeScreenLayout() {
     Scaffold(
         containerColor = Grey40
     ) { innerPadding ->
@@ -206,9 +214,17 @@ private fun MyJourneyComponent() {
 
 @Composable
 private fun MyTeamComponent() {
+    val context = LocalContext.current
     val list = listOf(
         MyListItem(
-            onClick = {},
+            onClick = {
+                context.startActivity(
+                    Intent(
+                        context,
+                        CreateEditUserActivity::class.java
+                    )
+                )
+            },
             painterId = R.drawable.members,
             contentDescription = string.manage_members
         )
@@ -232,5 +248,5 @@ private fun MyTeamComponent() {
 @Composable
 @Preview
 private fun HomeScreenPreview() {
-//    HomeScreen()
+    HomeScreenLayout()
 }
