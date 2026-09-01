@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import com.narely.feedbackjourney.R
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.commons.ui.EnterpriseLogo
-import com.narely.feedbackjourney.features.createedituser.CreateEditUserActivity
-import com.narely.feedbackjourney.features.home.domain.model.MyListItem
+import com.narely.feedbackjourney.features.managementuser.domain.model.MyListItem
+import com.narely.feedbackjourney.features.managementuser.ManagementUserActivity
 import com.narely.feedbackjourney.ui.theme.Blue40
 import com.narely.feedbackjourney.ui.theme.Blue80
 import com.narely.feedbackjourney.ui.theme.Grey40
@@ -221,7 +221,7 @@ private fun MyTeamComponent() {
                 context.startActivity(
                     Intent(
                         context,
-                        CreateEditUserActivity::class.java
+                        ManagementUserActivity::class.java
                     )
                 )
             },
