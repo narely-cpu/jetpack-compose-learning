@@ -3,8 +3,10 @@ package com.narely.feedbackjourney.features.managementuser.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +22,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +31,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,6 +40,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.narely.feedbackjourney.R
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.ui.theme.Blue40
@@ -46,27 +54,53 @@ import com.narely.feedbackjourney.ui.theme.Purple80
 import com.narely.feedbackjourney.ui.theme.Typography
 
 @Composable
-fun ManagementUserScreen() {
-    //TODO: ADD VIEWMODEL
-    val userList = listOf(
-        InfoUsers("Nome do Colaborador", "Nome do PDM"),
-        InfoUsers("Nome do Colaborador", "Nome do PDM"),
-        InfoUsers("Nome do Colaborador", "Nome do PDM"),
-    )
+fun ManagementUserScreen(
+    viewModel: ManagementUserViewModel,
+    onFinishedActivity: () -> Unit
+) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val uiState = viewModel.uiState.collectAsState().value
+
+    DisposableEffect(lifecycleOwner) {
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    viewModel.updateList()
+                }
+                else -> Unit
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
 
     Scaffold(
         containerColor = Grey40,
-        topBar = { TopBarManagementUser() },
-        bottomBar = { BottomBarManagementUser() }
+        topBar = { TopBarManagementUser(onFinishedActivity) },
+        bottomBar = { BottomBarManagementUser(viewModel) }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues = innerPadding)
-                .padding(top = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(1.dp)
-        ) {
-            items(userList) { item ->
-                UserListItem(item.name, item.pdmName)
+        if (uiState.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(paddingValues = innerPadding)
+                    .padding(top = 24.dp),
+                verticalArrangement = Arrangement.spacedBy(1.dp)
+            ) {
+                items(uiState.listUsers) { item ->
+                    UserListItem(item.name, item.email)
+                }
             }
         }
     }
@@ -74,7 +108,7 @@ fun ManagementUserScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBarManagementUser() {
+private fun TopBarManagementUser(onFinishedActivity: () -> Unit) {
     CenterAlignedTopAppBar(
         title = {
             Text(
@@ -84,27 +118,29 @@ private fun TopBarManagementUser() {
             )
         },
         navigationIcon = {
-            Icon(
-                imageVector = Icons.Default.ChevronLeft,
-                contentDescription = stringResource(string.back_button),
-                tint = Magenta80
-            )
+            IconButton(onClick = { onFinishedActivity.invoke() }) {
+                Icon(
+                    imageVector = Icons.Default.ChevronLeft,
+                    contentDescription = stringResource(string.back_button),
+                    tint = Magenta80
+                )
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(Color.White)
     )
 }
 
 @Composable
-private fun BottomBarManagementUser() {
+private fun BottomBarManagementUser(viewModel: ManagementUserViewModel) {
     BottomAppBar(
         modifier = Modifier.height(99.dp),
         containerColor = Color.White
     ) {
         Button(
-            onClick = {},
+            onClick = { viewModel.updateShowModal(true)},
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 24.dp),
+                .padding(horizontal = 16.dp),
             colors = ButtonColors(
                 containerColor = Purple80,
                 contentColor = Color.White,
@@ -157,6 +193,7 @@ private fun InfoUser(name: String, pdmName: String?) {
                 color = Color.Black
             )
             // TODO: Add a check so it doesn't appear if the user is not a collaborator
+
             Text(
                 "PDM | ${pdmName}",
                 style = Typography.bodySmall,
@@ -201,10 +238,8 @@ private fun ConfigUser() {
     }
 }
 
-data class InfoUsers(val name: String, val pdmName: String?)
-
-@Composable
-@Preview
-private fun ManagementUserScreenPreview() {
-    ManagementUserScreen()
-}
+//@Composable
+//@Preview
+//private fun ManagementUserScreenPreview() {
+//    ManagementUserScreen()
+//}

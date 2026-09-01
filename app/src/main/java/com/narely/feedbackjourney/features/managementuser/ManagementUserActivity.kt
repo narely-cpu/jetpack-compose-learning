@@ -21,7 +21,9 @@ class ManagementUserActivity : ComponentActivity()  {
         enableEdgeToEdge()
         setContent {
             FeedbackJourneyTheme {
-                ManagementUserScreen()
+                ManagementUserScreen(viewModel = managementUserViewModel) {
+                    finish()
+                }
             }
         }
     }

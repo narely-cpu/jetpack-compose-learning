@@ -1,18 +1,18 @@
-package com.narely.feedbackjourney.features.home.domain
+package com.narely.feedbackjourney.features.managementuser.domain
 
 import android.util.Log
 import com.google.gson.Gson
 import com.narely.feedbackjourney.commons.data.remote.model.ErrorResponse
 import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
-import com.narely.feedbackjourney.features.home.data.HomeRepository
+import com.narely.feedbackjourney.features.managementuser.data.ManagementUserRepository
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class GetUsersUseCase @Inject constructor(val homeRepository: HomeRepository) {
+class GetUsersUseCase @Inject constructor(val managementUserRepository: ManagementUserRepository) {
 
     suspend fun invoke(): List<UserResponse> {
         try {
-            return homeRepository.getUsers()
+            return managementUserRepository.getUsers()
         } catch (e: Exception) {
             if (e is HttpException) {
                 val errorResponse = e.response()?.errorBody()?.string()
