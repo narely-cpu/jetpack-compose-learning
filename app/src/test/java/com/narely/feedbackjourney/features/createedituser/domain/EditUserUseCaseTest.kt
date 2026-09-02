@@ -1,10 +1,10 @@
-package com.narely.feedbackjourney.createedituser.domain
+package com.narely.feedbackjourney.features.createedituser.domain
 
-import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
-import com.narely.feedbackjourney.features.createedituser.domain.EditUserUseCase
+import com.narely.feedbackjourney.features.createedituser.data.CreateEditUserRepositoryImpl
+import com.narely.feedbackjourney.features.createedituser.data.remote.model.CreateEditUserRequest
+import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
 import io.mockk.MockKAnnotations
-import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.impl.annotations.InjectMockKs
@@ -16,7 +16,7 @@ import org.junit.Test
 class EditUserUseCaseTest {
 
     @MockK
-    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
+    private lateinit var createEditUserRepositoryImpl: CreateEditUserRepositoryImpl
 
     @InjectMockKs
     private lateinit var editUserUseCase: EditUserUseCase
@@ -31,28 +31,31 @@ class EditUserUseCaseTest {
         runTest {
             //GIVEN
             val userId = 1
-            val request = UpdateUserRequest(
+            val request = CreateEditUserRequest(
                 name = "saviolli",
                 email = "savi@ciandt.com",
-                type = UserTypeEnum.PDM.userValue,
+                type = UserTypeEnum.PDM.name,
                 pdmId = null
             )
+            val collaboratorUser = UserDataModel(
+                id = userId,
+                name = "savi",
+                email = "savi@ciandt.com",
+                type = UserTypeEnum.PDM,
+                pdmEmail = null,
+            )
 
-            coEvery { usersRepositoryImpl.getListPdm() } returns emptyList()
-            coJustRun { usersRepositoryImpl.updateUser(id = userId, request = request) }
+            coJustRun { createEditUserRepositoryImpl.updateUser(id = userId, request = request) }
 
             //WHEN
             editUserUseCase.invoke(
-                id = userId,
-                name = request.name,
-                email = request.email,
-                userType = request.type,
-                pdmEmail = null,
+                collaborator = collaboratorUser,
+                pdm = null,
                 finishedActivityCreateUser = {},
                 errorMessage = {}
             )
 
             //THEN
-            coVerify { usersRepositoryImpl.updateUser(id = userId, request = request) }
+            coVerify { createEditUserRepositoryImpl.updateUser(id = userId, request = request) }
         }
 }

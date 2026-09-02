@@ -1,9 +1,9 @@
-package com.narely.feedbackjourney.createedituser.domain
+package com.narely.feedbackjourney.features.createedituser.domain
 
-import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
+import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
+import com.narely.feedbackjourney.features.createedituser.data.CreateEditUserRepositoryImpl
+import com.narely.feedbackjourney.features.createedituser.domain.mapper.toUserType
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
-import com.narely.feedbackjourney.core.data.remote.model.UserResponse
-import com.narely.feedbackjourney.features.createedituser.domain.GetUserUseCase
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Assertions
 
 class GetUserUseCaseTest {
     @MockK
-    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
+    private lateinit var createEditUserRepositoryImpl: CreateEditUserRepositoryImpl
 
     @InjectMockKs
     private lateinit var getUserUseCase: GetUserUseCase
@@ -35,7 +35,7 @@ class GetUserUseCaseTest {
                 id = userId,
                 name = "savi",
                 email = "savi@ciandt.com",
-                type = UserTypeEnum.PDM.userValue,
+                type = UserTypeEnum.PDM.name,
                 pdmId = null,
                 active = true
             )
@@ -43,16 +43,14 @@ class GetUserUseCaseTest {
                 id = userResponse.id,
                 name = userResponse.name,
                 email = userResponse.email,
-                password = "Collaborator123!",
-                type = userResponse.type,
+                type = userResponse.type.toUserType(),
                 pdmEmail = null,
             )
 
-            coEvery { usersRepositoryImpl.getListPdm() } returns listOf(userResponse)
-            coEvery { usersRepositoryImpl.getUser(userId) } returns userResponse
+            coEvery { createEditUserRepositoryImpl.getUser(userId) } returns userResponse
 
             // WHEN
-            val result = getUserUseCase.invoke(userId)
+            val result = getUserUseCase.invoke(id = userId, listPdm = listOf(item))
 
             // THEN
             Assertions.assertEquals(item, result)
@@ -64,11 +62,10 @@ class GetUserUseCaseTest {
             // GIVEN
             val incorrectId = 2
 
-            coEvery { usersRepositoryImpl.getListPdm() } returns emptyList()
-            coEvery { usersRepositoryImpl.getUser(incorrectId) } returns null
+            coEvery { createEditUserRepositoryImpl.getUser(incorrectId) } returns null
 
             // WHEN
-            val result = getUserUseCase.invoke(incorrectId)
+            val result = getUserUseCase.invoke(incorrectId, listPdm = emptyList())
 
             // THEN
             Assertions.assertNull(result)

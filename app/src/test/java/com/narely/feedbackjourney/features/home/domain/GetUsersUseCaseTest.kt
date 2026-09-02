@@ -1,9 +1,8 @@
-package com.narely.feedbackjourney.core.domain
+package com.narely.feedbackjourney.features.home.domain
 
-import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
-import com.narely.feedbackjourney.core.data.remote.model.UserResponse
+import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
-import com.narely.feedbackjourney.features.home.domain.GetUsersUseCase
+import com.narely.feedbackjourney.features.home.data.HomeRepositoryImpl
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.InjectMockKs
@@ -14,9 +13,8 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions
 
 class GetUsersUseCaseTest {
-
     @MockK
-    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
+    private lateinit var homeRepositoryImpl: HomeRepositoryImpl
 
     @InjectMockKs
     private lateinit var getUsersUseCase: GetUsersUseCase
@@ -30,7 +28,7 @@ class GetUsersUseCaseTest {
     fun `GIVEN list is empty WHEN invoke() is called THEN validate result is empty`() =
         runTest {
             // GIVEN
-            coEvery { usersRepositoryImpl.getUsers() } returns listOf()
+            coEvery { homeRepositoryImpl.getUsers() } returns listOf()
 
             // WHEN
             val result = getUsersUseCase.invoke()
@@ -47,13 +45,13 @@ class GetUsersUseCaseTest {
                 id = 1,
                 name = "savi",
                 email = "savi@ciandt.com",
-                type = UserTypeEnum.PDM.userValue,
+                type = UserTypeEnum.PDM.name,
                 pdmId = null,
                 active = true
             )
             val listUsers = listOf(userResponse)
 
-            coEvery { usersRepositoryImpl.getUsers() } returns listUsers
+            coEvery { homeRepositoryImpl.getUsers() } returns listUsers
 
             // WHEN
             val result = getUsersUseCase.invoke()

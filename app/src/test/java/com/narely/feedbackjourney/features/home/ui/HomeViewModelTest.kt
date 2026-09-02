@@ -1,11 +1,9 @@
-package com.narely.feedbackjourney.home
+package com.narely.feedbackjourney.features.home.ui
 
-import com.narely.feedbackjourney.features.home.domain.GetUsersUseCase
-import com.narely.feedbackjourney.core.data.remote.model.UserResponse
+import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.features.home.domain.GetUsersUseCase
 import com.narely.feedbackjourney.features.home.domain.RemoveUserUseCase
-import com.narely.feedbackjourney.features.home.ui.HomeViewModel
-import com.narely.feedbackjourney.features.home.ui.HomeViewState
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun
@@ -25,7 +23,6 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions
 
 class HomeViewModelTest {
-
     private val testDispatcher = StandardTestDispatcher()
 
     @MockK
@@ -50,24 +47,6 @@ class HomeViewModelTest {
         Dispatchers.resetMain()
     }
 
-    @Test
-    fun `GIVEN any state changed WHEN updateUiState() is called THEN validate state change`() {
-        // GIVEN
-        val newState = HomeViewState(
-            list = mutableListOf(),
-            isLoading = false,
-            currentUser = null
-        )
-
-        // WHEN
-        homeViewModel.updateUiState(newState)
-
-        val currentUiState = homeViewModel.uiState.value
-
-        // THEN
-        Assertions.assertEquals(newState, currentUiState)
-    }
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `GIVEN the updated list of users WHEN updateList() is called THEN validate update list`() =
@@ -78,7 +57,7 @@ class HomeViewModelTest {
                 id = 1,
                 name = "New name",
                 email = "New email First",
-                type = UserTypeEnum.PDM.userValue,
+                type = UserTypeEnum.PDM.name,
                 pdmId = null,
                 active = true
             )
@@ -86,7 +65,7 @@ class HomeViewModelTest {
                 id = 2,
                 name = "New name",
                 email = "New email Second",
-                type = UserTypeEnum.PDM.userValue,
+                type = UserTypeEnum.PDM.name,
                 pdmId = null,
                 active = true
             )
@@ -113,7 +92,7 @@ class HomeViewModelTest {
             id = 1,
             name = "New name",
             email = "New email",
-            type = UserTypeEnum.PDM.userValue,
+            type = UserTypeEnum.PDM.name,
             pdmId = null,
             active = true
         )

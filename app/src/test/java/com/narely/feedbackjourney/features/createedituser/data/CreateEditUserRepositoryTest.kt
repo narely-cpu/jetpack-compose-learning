@@ -1,11 +1,11 @@
-package com.narely.feedbackjourney.core.data
+package com.narely.feedbackjourney.features.createedituser.data
 
-import com.narely.feedbackjourney.createedituser.data.remote.model.CreateUserRequest
+import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
+import com.narely.feedbackjourney.commons.data.remote.model.UsersListResponse
+import com.narely.feedbackjourney.features.createedituser.data.remote.CreateEditUserApi
+import com.narely.feedbackjourney.features.createedituser.data.remote.model.CreateEditUserRequest
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
-import com.narely.feedbackjourney.core.data.remote.model.UserResponse
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
-import com.narely.feedbackjourney.core.data.remote.model.UsersListResponse
-import com.narely.feedbackjourney.core.services.ApiService
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,62 +13,22 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
-import retrofit2.Response
 
-class UsersRepositoryImplTest {
-    lateinit var usersRepositoryImpl: UsersRepositoryImpl
-    val apiService: ApiService = mockk()
+class CreateEditUserRepositoryTest {
+    lateinit var createEditUserRepositoryImpl: CreateEditUserRepositoryImpl
+    val createEditUserApi: CreateEditUserApi = mockk()
     val userModel: UserDataModel = UserDataModel(
         id = 1,
         name = "savi",
         email = "savi@ciandt.com",
-        password = "1236347",
-        type = UserTypeEnum.PDM.userValue,
+        type = UserTypeEnum.PDM,
         pdmEmail = null,
     )
 
     @Before
     fun setup() {
-        usersRepositoryImpl = UsersRepositoryImpl(apiService = apiService)
+        createEditUserRepositoryImpl = CreateEditUserRepositoryImpl(createEditUserApi = createEditUserApi)
     }
-
-    @Test
-    fun `GIVEN an empty list WHEN getUsers() is called THEN validate that the size of the result is 1`() =
-        runTest {
-            // GIVEN
-            coEvery { apiService.getUsers() } returns UsersListResponse()
-
-            // WHEN
-            val result = usersRepositoryImpl.getUsers()
-
-            // THEN
-            Assertions.assertEquals(emptyList<UserResponse>(), result)
-            coVerify { apiService.getUsers() }
-        }
-
-    @Test
-    fun `GIVEN a non-empty list WHEN getUsers() is called THEN validate that the size of the result is 1`() =
-        runTest {
-            // GIVEN
-            val userResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val listUser = listOf(userResponse)
-
-            coEvery { apiService.getUsers() } returns UsersListResponse(content = listUser)
-
-            // WHEN
-            val result = usersRepositoryImpl.getUsers()
-
-            // THEN
-            Assertions.assertEquals(1, result.size)
-            coVerify { apiService.getUsers() }
-        }
 
     @Test
     fun `GIVEN a userId corresponding to an non-existent user in the list WHEN getUser() is called THEN that the returned value is null`() =
@@ -79,24 +39,24 @@ class UsersRepositoryImplTest {
                 id = userModel.id,
                 name = userModel.name,
                 email = userModel.email,
-                type = userModel.type,
+                type = userModel.type.name,
                 pdmId = null,
                 active = true
             )
             val listUser = listOf(userResponse)
             var user: UserResponse? = null
 
-            coEvery { apiService.getUser(incorrectId) } coAnswers {
+            coEvery { createEditUserApi.getUser(incorrectId) } coAnswers {
                 user = listUser.find { it.id == incorrectId }
                 user
             }
 
             // WHEN
-            usersRepositoryImpl.getUser(incorrectId)
+            createEditUserRepositoryImpl.getUser(incorrectId)
 
             // THEN
             Assertions.assertNull(user)
-            coVerify { apiService.getUser(incorrectId) }
+            coVerify { createEditUserApi.getUser(incorrectId) }
         }
 
     @Test
@@ -108,114 +68,57 @@ class UsersRepositoryImplTest {
                 id = userModel.id,
                 name = userModel.name,
                 email = userModel.email,
-                type = userModel.type,
+                type = userModel.type.name,
                 pdmId = null,
                 active = true
             )
             val listUser = listOf(userResponse)
             var user: UserResponse? = null
 
-            coEvery { apiService.getUser(correctId) } coAnswers {
+            coEvery { createEditUserApi.getUser(correctId) } coAnswers {
                 user = listUser.find { it.id == correctId }
                 user
             }
 
             // WHEN
-            usersRepositoryImpl.getUser(correctId)
+            createEditUserRepositoryImpl.getUser(correctId)
 
             // THEN
             Assertions.assertEquals(userResponse, user)
-            coVerify { apiService.getUser(correctId) }
+            coVerify { createEditUserApi.getUser(correctId) }
         }
 
     @Test
     fun `GIVEN a user added to the list WHEN createUser() is called THEN validate that the list size is 1`() =
         runTest {
             // GIVEN
-            val request = CreateUserRequest(
+            val request = CreateEditUserRequest(
                 name = userModel.name,
                 email = userModel.email,
-                type = userModel.type,
+                type = userModel.type.name,
                 pdmId = null
             )
             val userResponse = UserResponse(
                 id = userModel.id,
                 name = userModel.name,
                 email = userModel.email,
-                type = userModel.type,
+                type = userModel.type.name,
                 pdmId = null,
                 active = true
             )
             val listUser = mutableListOf<UserResponse>()
 
-            coEvery { apiService.createUser(request) } coAnswers {
+            coEvery { createEditUserApi.createUser(request) } coAnswers {
                 listUser.add(userResponse)
                 userResponse
             }
 
             // WHEN
-            usersRepositoryImpl.createUser(request = request)
+            createEditUserRepositoryImpl.createUser(request = request)
 
             // THEN
             Assertions.assertEquals(1, listUser.size)
-            coVerify { apiService.createUser(request) }
-        }
-
-    @Test
-    fun `GIVEN the user is removed WHEN removeUser() is called THEN validate that the list size is 0`() =
-        runTest {
-            // GIVEN
-            val userId = userModel.id
-            val userResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val listUser = mutableListOf(userResponse)
-
-            coEvery { apiService.removeUser(userId) } coAnswers {
-                listUser.remove(userResponse)
-                Response.success(Unit)
-            }
-
-            // WHEN
-            usersRepositoryImpl.removeUser(userId)
-
-            // THEN
-            Assertions.assertEquals(0, listUser.size)
-            coVerify { apiService.removeUser(userId) }
-        }
-
-    @Test
-    fun `GIVEN a non-existent user in the list is removed WHEN removeUser() is called THEN validate that the list size is 1`() =
-        runTest {
-            // GIVEN
-            val incorrectId = 2
-            val userResponse = UserResponse(
-                id = userModel.id,
-                name = userModel.name,
-                email = userModel.email,
-                type = userModel.type,
-                pdmId = null,
-                active = true
-            )
-            val listUser = mutableListOf(userResponse)
-
-            coEvery { apiService.removeUser(incorrectId) } coAnswers {
-                val user = listUser.find { it.id == incorrectId }
-                listUser.remove(user)
-                Response.success(Unit)
-            }
-
-            // WHEN
-            usersRepositoryImpl.removeUser(incorrectId)
-
-            // THEN
-            Assertions.assertEquals(1, listUser.size)
-            coVerify { apiService.removeUser(incorrectId) }
+            coVerify { createEditUserApi.createUser(request) }
         }
 
     @Test
@@ -226,14 +129,14 @@ class UsersRepositoryImplTest {
                 id = userModel.id,
                 name = userModel.name,
                 email = userModel.email,
-                type = userModel.type,
+                type = userModel.type.name,
                 pdmId = null,
                 active = true
             )
-            val request = UpdateUserRequest(
+            val request = CreateEditUserRequest(
                 name = "saviolli",
                 email = userModel.email,
-                type = userModel.type,
+                type = userModel.type.name,
                 pdmId = null
             )
             val updatedUser = UserResponse(
@@ -244,17 +147,17 @@ class UsersRepositoryImplTest {
                 pdmId = null,
                 active = true
             )
-            coEvery { apiService.updateUser(userModel.id, request) } coAnswers {
+            coEvery { createEditUserApi.updateUser(userModel.id, request) } coAnswers {
                 userResponse = updatedUser
                 userResponse
             }
 
             // WHEN
-            usersRepositoryImpl.updateUser(id = userModel.id, request = request)
+            createEditUserRepositoryImpl.updateUser(id = userModel.id, request = request)
 
             // THEN
             Assertions.assertEquals(updatedUser, userResponse)
-            coVerify { apiService.updateUser(userModel.id, request) }
+            coVerify { createEditUserApi.updateUser(userModel.id, request) }
         }
 
     @Test
@@ -265,7 +168,7 @@ class UsersRepositoryImplTest {
                 id = userModel.id,
                 name = userModel.name,
                 email = userModel.email,
-                type = userModel.type,
+                type = userModel.type.name,
                 pdmId = null,
                 active = true
             )
@@ -273,23 +176,23 @@ class UsersRepositoryImplTest {
                 id = 2,
                 name = "lucas",
                 email = "lucas@ciandt.com",
-                type = UserTypeEnum.ADMIN.userValue,
+                type = UserTypeEnum.ADMIN.name,
                 pdmId = null,
                 active = true
             )
             var listUser = listOf(firstUserResponse, secondUserResponse)
 
-            coEvery { apiService.getListPdm() } coAnswers {
+            coEvery { createEditUserApi.getListPdm() } coAnswers {
                 listUser = listUser.filter { it.type == "PDM" }
-                UsersListResponse(content = listUser)
+                UsersListResponse(listUsers = listUser)
             }
 
             // WHEN
-            usersRepositoryImpl.getListPdm()
+            createEditUserRepositoryImpl.getListPdm()
 
             // THEN
             Assertions.assertEquals(1, listUser.size)
-            coVerify { apiService.getListPdm() }
+            coVerify { createEditUserApi.getListPdm() }
         }
 
     @Test
@@ -300,7 +203,7 @@ class UsersRepositoryImplTest {
                 id = 3,
                 name = "savi",
                 email = "savi@ciandt.com",
-                type = UserTypeEnum.COLLABORATOR.userValue,
+                type = UserTypeEnum.COLLABORATOR.name,
                 pdmId = 1,
                 active = true
             )
@@ -308,19 +211,19 @@ class UsersRepositoryImplTest {
                 id = 4,
                 name = "lucas",
                 email = "lucas@ciandt.com",
-                type = UserTypeEnum.ADMIN.userValue,
+                type = UserTypeEnum.ADMIN.name,
                 pdmId = null,
                 active = true
             )
             var listUser = listOf(collaboratorUserResponse, adminUserResponse)
 
-            coEvery { apiService.getListPdm() } coAnswers {
+            coEvery { createEditUserApi.getListPdm() } coAnswers {
                 listUser = listUser.filter { it.type == "PDM" }
-                UsersListResponse(content = listUser)
+                UsersListResponse(listUsers = listUser)
             }
 
             // WHEN
-            usersRepositoryImpl.getListPdm()
+            createEditUserRepositoryImpl.getListPdm()
 
             // THEN
             Assertions.assertEquals(0, listUser.size)

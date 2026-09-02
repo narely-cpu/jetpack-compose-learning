@@ -1,9 +1,10 @@
-package com.narely.feedbackjourney.createedituser.domain
+package com.narely.feedbackjourney.features.createedituser.domain
 
-import com.narely.feedbackjourney.core.data.UsersRepositoryImpl
-import com.narely.feedbackjourney.core.data.remote.model.UserResponse
+import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
+import com.narely.feedbackjourney.features.createedituser.data.CreateEditUserRepositoryImpl
+import com.narely.feedbackjourney.features.createedituser.domain.mapper.toUserType
+import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
-import com.narely.feedbackjourney.features.createedituser.domain.GetListPdmUseCase
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -15,8 +16,9 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions
 
 class GetListPdmUseCaseTest {
+
     @MockK
-    private lateinit var usersRepositoryImpl: UsersRepositoryImpl
+    private lateinit var createEditUserRepositoryImpl: CreateEditUserRepositoryImpl
 
     @InjectMockKs
     private lateinit var getListPdmUseCase: GetListPdmUseCase
@@ -30,20 +32,20 @@ class GetListPdmUseCaseTest {
     fun `GIVEN an any PDM list WHEN invoke() is called THEN validate that the repository's getListPdm function is called`() =
         runTest {
             // GIVEN
-            coEvery { usersRepositoryImpl.getListPdm() } returns emptyList()
+            coEvery { createEditUserRepositoryImpl.getListPdm() } returns emptyList()
 
             // WHEN
             getListPdmUseCase.invoke()
 
             // THEN
-            coVerify { usersRepositoryImpl.getListPdm() }
+            coVerify { createEditUserRepositoryImpl.getListPdm() }
         }
 
     @Test
     fun `GIVEN an empty PDM list WHEN invoke() is called THEN validate result is empty`() =
         runTest {
             // GIVEN
-            coEvery { usersRepositoryImpl.getListPdm() } returns emptyList()
+            coEvery { createEditUserRepositoryImpl.getListPdm() } returns emptyList()
 
             // WHEN
             val result = getListPdmUseCase.invoke()
@@ -60,18 +62,25 @@ class GetListPdmUseCaseTest {
                 id = 1,
                 name = "savi",
                 email = "savi@ciandt.com",
-                type = UserTypeEnum.PDM.userValue,
+                type = UserTypeEnum.PDM.name,
                 pdmId = null,
                 active = true
             )
+            val userDataModel = UserDataModel(
+                id = userResponse.id,
+                name = userResponse.name,
+                email = userResponse.email,
+                type = userResponse.type.toUserType(),
+                pdmEmail = null,
+            )
 
-            coEvery { usersRepositoryImpl.getListPdm() } returns listOf(userResponse)
+            coEvery { createEditUserRepositoryImpl.getListPdm() } returns listOf(userResponse)
 
             // WHEN
             val result = getListPdmUseCase.invoke()
 
             // THEN
             Assertions.assertEquals(1, result?.size)
-            Assertions.assertEquals(listOf(userResponse.email), result)
+            Assertions.assertEquals(listOf(userDataModel), result)
         }
 }

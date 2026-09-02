@@ -14,8 +14,20 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase): ViewMo
     private val _uiState: MutableStateFlow<LoginViewState> = MutableStateFlow(LoginViewState())
     val uiState: StateFlow<LoginViewState> = _uiState
 
-    fun updateUiState(uiState: LoginViewState) {
+    private fun updateUiState(uiState: LoginViewState) {
         _uiState.value = uiState
+    }
+
+    private fun updateUiToken(newToken: String?) {
+        updateUiState(
+            uiState.value.copy(token = newToken)
+        )
+    }
+
+    private fun updateUiErrorMessage(newErrorMessage: String?) {
+        updateUiState(
+            uiState.value.copy(errorMessage = newErrorMessage)
+        )
     }
 
     fun updateUiEmail(newEmail: String) {
@@ -27,18 +39,6 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase): ViewMo
     fun updateUiPassword(newPassword: String) {
         updateUiState(
             uiState.value.copy(password = newPassword)
-        )
-    }
-
-    fun updateUiToken(newToken: String?) {
-        updateUiState(
-            uiState.value.copy(token = newToken)
-        )
-    }
-
-    fun updateUiErrorMessage(newErrorMessage: String?) {
-        updateUiState(
-            uiState.value.copy(errorMessage = newErrorMessage)
         )
     }
 
