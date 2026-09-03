@@ -74,13 +74,17 @@ private fun FormLoginLayout(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         TextInputForm(
-            labelId = string.email_label,
+            label = stringResource(string.email_label),
+            placeholder = null,
             valueState = userEmail,
+            trailingIcon = null,
             updateValueState = onUserEmailChange
         )
         TextInputForm(
-            labelId = string.password_label,
+            label = stringResource(string.password_label),
+            placeholder = null,
             valueState = userPassword,
+            trailingIcon = null,
             updateValueState = onUserPasswordChange
         )
         ForgetPasswordButton {  }
@@ -118,8 +122,7 @@ private fun ForgetPasswordButton(onClick: () -> Unit) {
         horizontalAlignment = Alignment.End
     ) {
         TextButton(
-            onClick = onClick,
-
+            onClick = onClick
         ) {
             Text(
                 stringResource(string.forget_password),
