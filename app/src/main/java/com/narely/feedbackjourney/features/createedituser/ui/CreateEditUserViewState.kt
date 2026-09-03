@@ -4,7 +4,7 @@ import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataM
 
 data class CreateEditUserViewState(
     var collaborator: UserDataModel = UserDataModel(),
-    val errorMessage: String? = "",
+    val errorMessage: String? = null,
     val isLoading: Boolean = false,
     val listPdm: List<UserDataModel>? = emptyList(),
     val pdm: UserDataModel? = null,
