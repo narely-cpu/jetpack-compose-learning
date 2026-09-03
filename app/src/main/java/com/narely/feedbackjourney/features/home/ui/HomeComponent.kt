@@ -129,7 +129,7 @@ private fun UserItem(
         }
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
             EditAndDeleteButtonComponent(
-                description = stringResource(string.edit_user),
+                description = stringResource(string.edit_collaborador),
                 icon = R.drawable.codicons_ic_edit) {
                 context.startActivity(
                     Intent(

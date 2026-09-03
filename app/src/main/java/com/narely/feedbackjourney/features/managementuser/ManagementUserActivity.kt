@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import com.narely.feedbackjourney.features.createedituser.ui.CreateEditUserViewModel
 import com.narely.feedbackjourney.features.managementuser.ui.ManagementUserScreen
 import com.narely.feedbackjourney.features.managementuser.ui.ManagementUserViewModel
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
@@ -21,7 +22,7 @@ class ManagementUserActivity : ComponentActivity()  {
         enableEdgeToEdge()
         setContent {
             FeedbackJourneyTheme {
-                ManagementUserScreen(viewModel = managementUserViewModel) {
+                ManagementUserScreen(managementUserViewModel = managementUserViewModel) {
                     finish()
                 }
             }
