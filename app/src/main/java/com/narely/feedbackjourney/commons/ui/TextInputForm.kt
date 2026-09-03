@@ -25,6 +25,7 @@ fun TextInputForm(
     placeholder: String?,
     valueState: String,
     trailingIcon: @Composable (() -> Unit)?,
+    modifier: Modifier,
     updateValueState: (String) -> Unit,
 ) {
     Column(
@@ -54,9 +55,7 @@ fun TextInputForm(
                 focusedPlaceholderColor = Grey80,
                 unfocusedPlaceholderColor = Grey80
             ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
+            modifier = modifier,
             trailingIcon = trailingIcon
         )
     }
@@ -70,5 +69,7 @@ private fun TextInputFormPreview() {
         placeholder = "Placeholder",
         valueState = "",
         trailingIcon = { Text("oi") },
+        modifier = Modifier.fillMaxWidth()
+            .height(50.dp)
     ) {}
 }

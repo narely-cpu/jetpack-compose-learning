@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -78,6 +79,9 @@ private fun FormLoginLayout(
             placeholder = null,
             valueState = userEmail,
             trailingIcon = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
             updateValueState = onUserEmailChange
         )
         TextInputForm(
@@ -85,6 +89,9 @@ private fun FormLoginLayout(
             placeholder = null,
             valueState = userPassword,
             trailingIcon = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
             updateValueState = onUserPasswordChange
         )
         ForgetPasswordButton {  }
