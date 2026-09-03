@@ -37,7 +37,6 @@ fun HomeScreen(viewModel: HomeViewModel) {
     }) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             HomeComponent(viewModel)
-//            LoginScreen(viewModel)
         }
     }
 }

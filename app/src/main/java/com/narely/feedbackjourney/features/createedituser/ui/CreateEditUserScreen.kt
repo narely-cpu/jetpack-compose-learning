@@ -33,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.composables.icons.codicons.R
 import com.narely.feedbackjourney.R.string
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ContextCastToActivity")
