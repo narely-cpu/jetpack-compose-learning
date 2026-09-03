@@ -8,7 +8,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import com.narely.feedbackjourney.features.home.ui.HomeViewModel
 import com.narely.feedbackjourney.features.login.ui.LoginScreen
 import com.narely.feedbackjourney.features.login.ui.LoginViewModel
 import com.narely.feedbackjourney.ui.theme.FeedbackJourneyTheme
