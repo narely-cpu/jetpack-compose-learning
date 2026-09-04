@@ -63,7 +63,7 @@ class ManagementUserViewModel  @Inject constructor(
         val areMandatoryFieldsFilled =
             uiState.value.collaborator.name.isNotEmpty() &&
                     uiState.value.collaborator.email.isNotEmpty() &&
-                    uiState.value.collaborator.type.name.isNotEmpty()
+                    uiState.value.collaborator.type?.name.isNullOrEmpty()
 
         return areMandatoryFieldsFilled
     }
@@ -108,6 +108,12 @@ class ManagementUserViewModel  @Inject constructor(
     fun updateShowModal(showModal: Boolean) {
         updateUiState(
             uiState.value.copy(showModal = showModal)
+        )
+    }
+
+    fun updateShowAlert(showAlert: Boolean) {
+        updateUiState(
+            uiState.value.copy(showAlert = showAlert)
         )
     }
 

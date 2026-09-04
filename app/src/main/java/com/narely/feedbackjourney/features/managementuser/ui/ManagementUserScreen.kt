@@ -105,7 +105,12 @@ fun ManagementUserScreen(
                 verticalArrangement = Arrangement.spacedBy(1.dp)
             ) {
                 items(uiState.value.listUsers) { item ->
-                    UserListItem(item.name, item.email)
+                    UserListItem(
+                        name = item.name,
+                        pdmName = item.email,
+                        updateUser = { managementUserViewModel.updateShowModal(true) },
+                        deleteUser = { managementUserViewModel.updateShowAlert(true) }
+                    )
                 }
             }
             if (uiState.value.showModal) {
@@ -167,7 +172,12 @@ private fun BottomBarManagementUser(viewModel: ManagementUserViewModel) {
 }
 
 @Composable
-private fun UserListItem(name: String, pdmName: String?) {
+private fun UserListItem(
+    name: String,
+    pdmName: String?,
+    updateUser: () -> Unit,
+    deleteUser: () -> Unit
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -176,7 +186,7 @@ private fun UserListItem(name: String, pdmName: String?) {
             .background(color = Color.White)
     ) {
         InfoUser(name = name, pdmName = pdmName)
-        ConfigUser()
+        ConfigUser(updateUser, deleteUser)
     }
 }
 
@@ -213,7 +223,7 @@ private fun InfoUser(name: String, pdmName: String?) {
 }
 
 @Composable
-private fun ConfigUser() {
+private fun ConfigUser(updateUser: () -> Unit, deleteUser: () -> Unit) {
     Row(
         modifier = Modifier
             .padding(end = 16.dp),
@@ -221,7 +231,7 @@ private fun ConfigUser() {
         verticalAlignment = Alignment.CenterVertically
         ) {
         IconButton(
-            onClick = {},
+            onClick = { deleteUser.invoke() },
             modifier = Modifier.size(24.dp)
         ) {
             Image(
@@ -236,7 +246,7 @@ private fun ConfigUser() {
         )
 
         IconButton(
-            onClick = {},
+            onClick = { updateUser.invoke() },
             modifier = Modifier.size(24.dp)
         ) {
             Image(
@@ -251,11 +261,11 @@ private fun ConfigUser() {
 @Composable
 private fun CreateEditUsersModalScreen(viewModel: ManagementUserViewModel) {
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false
+        skipPartiallyExpanded = true
     )
 
     ModalBottomSheet(
-        onDismissRequest = {},
+        onDismissRequest = { viewModel.updateShowModal(false) },
         sheetState = sheetState,
         dragHandle = null
     ) {
