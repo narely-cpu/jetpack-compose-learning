@@ -3,7 +3,7 @@ package com.narely.feedbackjourney.features.createedituser.data.remote
 import com.narely.feedbackjourney.BuildConfig
 import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
 import com.narely.feedbackjourney.commons.data.remote.model.UsersListResponse
-import com.narely.feedbackjourney.features.createedituser.data.remote.model.CreateEditUserRequest
+import com.narely.feedbackjourney.features.managementuser.data.remote.model.CreateEditUserRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers

@@ -1,14 +1,15 @@
 package com.narely.feedbackjourney.features.managementuser.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
-import com.narely.feedbackjourney.features.createedituser.domain.CreateUserUseCase
-import com.narely.feedbackjourney.features.createedituser.domain.EditUserUseCase
-import com.narely.feedbackjourney.features.createedituser.domain.GetListPdmUseCase
-import com.narely.feedbackjourney.features.createedituser.domain.GetUserUseCase
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.features.managementuser.domain.CreateUserUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.EditUserUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.GetListPdmUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.GetUserUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserTypeEnum
 import com.narely.feedbackjourney.features.managementuser.domain.GetUsersUseCase
 import com.narely.feedbackjourney.features.managementuser.domain.RemoveUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.logging.Logger
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -63,7 +65,7 @@ class ManagementUserViewModel  @Inject constructor(
         val areMandatoryFieldsFilled =
             uiState.value.collaborator.name.isNotEmpty() &&
                     uiState.value.collaborator.email.isNotEmpty() &&
-                    uiState.value.collaborator.type?.name.isNullOrEmpty()
+                    !uiState.value.collaborator.type?.name.isNullOrEmpty()
 
         return areMandatoryFieldsFilled
     }
@@ -117,20 +119,26 @@ class ManagementUserViewModel  @Inject constructor(
         )
     }
 
-    fun createUser(finishedActivityCreateUser: () -> Unit) = viewModelScope.launch {
+    fun createUser() = viewModelScope.launch {
         createUserUseCase.invoke(
             collaborator = uiState.value.collaborator,
             pdm = uiState.value.pdm,
-            finishedActivityCreateUser = finishedActivityCreateUser,
+            updateManagementUser = {
+                updateList()
+                updateShowModal(false)
+            },
             errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
         )
     }
 
-    fun editUser(finishedActivityCreateUser: () -> Unit) = viewModelScope.launch {
+    fun editUser() = viewModelScope.launch {
         editUserUseCase.invoke(
             collaborator = uiState.value.collaborator,
             pdm = uiState.value.pdm,
-            finishedActivityCreateUser = finishedActivityCreateUser,
+            updateManagementUser = {
+                updateList()
+                updateShowModal(false)
+            },
             errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
         )
     }

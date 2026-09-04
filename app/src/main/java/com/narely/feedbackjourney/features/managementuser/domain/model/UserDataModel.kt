@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.features.createedituser.domain.model
+package com.narely.feedbackjourney.features.managementuser.domain.model
 
 data class UserDataModel(
     val id: Int = 0,

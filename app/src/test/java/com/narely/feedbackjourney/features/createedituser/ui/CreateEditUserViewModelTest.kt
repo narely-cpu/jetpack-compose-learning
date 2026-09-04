@@ -1,16 +1,15 @@
 package com.narely.feedbackjourney.features.createedituser.ui
 
-import com.narely.feedbackjourney.features.createedituser.domain.CreateUserUseCase
-import com.narely.feedbackjourney.features.createedituser.domain.EditUserUseCase
-import com.narely.feedbackjourney.features.createedituser.domain.GetListPdmUseCase
-import com.narely.feedbackjourney.features.createedituser.domain.GetUserUseCase
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.features.managementuser.domain.CreateUserUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.EditUserUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.GetListPdmUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.GetUserUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserTypeEnum
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers

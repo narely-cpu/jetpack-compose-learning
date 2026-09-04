@@ -19,8 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -49,7 +47,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.narely.feedbackjourney.R
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.features.createedituser.ui.CreateEditUserScreen
-import com.narely.feedbackjourney.features.createedituser.ui.CreateEditUserViewModel
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
 import com.narely.feedbackjourney.ui.theme.Blue40
 import com.narely.feedbackjourney.ui.theme.Blue80
 import com.narely.feedbackjourney.ui.theme.Grey40
@@ -57,7 +55,6 @@ import com.narely.feedbackjourney.ui.theme.Grey80
 import com.narely.feedbackjourney.ui.theme.Magenta80
 import com.narely.feedbackjourney.ui.theme.Purple80
 import com.narely.feedbackjourney.ui.theme.Typography
-import kotlin.getValue
 
 @Composable
 fun ManagementUserScreen(
@@ -114,7 +111,23 @@ fun ManagementUserScreen(
                 }
             }
             if (uiState.value.showModal) {
-                CreateEditUsersModalScreen(viewModel = managementUserViewModel)
+                CreateEditUsersModalScreen(
+                    onCreateUiCreateEditView = {
+                        managementUserViewModel.onCreateUiCreateEditView(0)
+                    },
+                    collaborator = uiState.value.collaborator,
+                    updateShowModal = { managementUserViewModel.updateShowModal(false) },
+                    isButtonEnable = managementUserViewModel.isButtonEnable(),
+                    createUser = { managementUserViewModel.createUser() },
+                    editUser = { managementUserViewModel.editUser() },
+                    listPdm = uiState.value.listPdm,
+                    updateUiName = { managementUserViewModel.updateUiName(it) },
+                    updateUiEmail = { managementUserViewModel.updateUiEmail(it) },
+                    updateUiUserType = { managementUserViewModel.updateUiUserType(it) },
+                    updateUiPdmEmail = { managementUserViewModel.updateUiPdmEmail(it) },
+                    isCollaborator = managementUserViewModel.isCollaborator(),
+                    errorMessage = uiState.value.errorMessage
+                )
             }
         }
     }
@@ -259,16 +272,45 @@ private fun ConfigUser(updateUser: () -> Unit, deleteUser: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CreateEditUsersModalScreen(viewModel: ManagementUserViewModel) {
+private fun CreateEditUsersModalScreen(
+    onCreateUiCreateEditView: () -> Unit,
+    collaborator: UserDataModel?,
+    updateShowModal: (Boolean) -> Unit,
+    isButtonEnable: Boolean,
+    createUser: () -> Unit,
+    editUser: () -> Unit,
+    listPdm: List<UserDataModel>?,
+    updateUiName: (String) -> Unit,
+    updateUiEmail: (String) -> Unit,
+    updateUiUserType: (String) -> Unit,
+    updateUiPdmEmail: (String) -> Unit,
+    isCollaborator: Boolean,
+    errorMessage: String?,
+) {
+
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
 
     ModalBottomSheet(
-        onDismissRequest = { viewModel.updateShowModal(false) },
+        onDismissRequest = { updateShowModal(false) },
         sheetState = sheetState,
         dragHandle = null
     ) {
-        CreateEditUserScreen(userId = 0, viewModel = viewModel)
+        CreateEditUserScreen(
+            onCreateUiCreateEditView = onCreateUiCreateEditView,
+            collaborator = collaborator,
+            updateShowModal = updateShowModal,
+            isButtonEnable = isButtonEnable,
+            createUser = createUser,
+            editUser = editUser,
+            listPdm = listPdm,
+            updateUiName = updateUiName,
+            updateUiEmail = updateUiEmail,
+            updateUiUserType = updateUiUserType,
+            updateUiPdmEmail = updateUiPdmEmail,
+            isCollaborator = isCollaborator,
+            errorMessage = errorMessage
+        )
     }
 }

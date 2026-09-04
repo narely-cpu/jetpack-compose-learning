@@ -1,9 +1,10 @@
 package com.narely.feedbackjourney.features.createedituser.domain
 
 import com.narely.feedbackjourney.features.createedituser.data.CreateEditUserRepositoryImpl
-import com.narely.feedbackjourney.features.createedituser.data.remote.model.CreateEditUserRequest
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.features.managementuser.data.remote.model.CreateEditUserRequest
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.features.managementuser.domain.EditUserUseCase
 import io.mockk.MockKAnnotations
 import io.mockk.coJustRun
 import io.mockk.coVerify

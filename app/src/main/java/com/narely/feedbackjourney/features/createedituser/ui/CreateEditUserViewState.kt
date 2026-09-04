@@ -1,6 +1,6 @@
 package com.narely.feedbackjourney.features.createedituser.ui
 
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
 
 data class CreateEditUserViewState(
     var collaborator: UserDataModel = UserDataModel(),

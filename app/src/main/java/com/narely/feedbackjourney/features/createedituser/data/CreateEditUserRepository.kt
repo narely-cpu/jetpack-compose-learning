@@ -2,7 +2,7 @@ package com.narely.feedbackjourney.features.createedituser.data
 
 import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
 import com.narely.feedbackjourney.features.createedituser.data.remote.CreateEditUserApi
-import com.narely.feedbackjourney.features.createedituser.data.remote.model.CreateEditUserRequest
+import com.narely.feedbackjourney.features.managementuser.data.remote.model.CreateEditUserRequest
 import javax.inject.Inject
 
 interface CreateEditUserRepository {

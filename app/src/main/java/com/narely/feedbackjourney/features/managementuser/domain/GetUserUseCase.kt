@@ -1,20 +1,20 @@
-package com.narely.feedbackjourney.features.createedituser.domain
+package com.narely.feedbackjourney.features.managementuser.domain
 
 import android.util.Log
 import com.google.gson.Gson
 import com.narely.feedbackjourney.commons.data.remote.model.ErrorResponse
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
-import com.narely.feedbackjourney.features.createedituser.data.CreateEditUserRepository
-import com.narely.feedbackjourney.features.createedituser.domain.mapper.toDomain
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.managementuser.data.ManagementUserRepository
+import com.narely.feedbackjourney.features.managementuser.domain.mapper.toDomain
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class GetUserUseCase @Inject constructor(val createEditUserRepository: CreateEditUserRepository) {
+class GetUserUseCase @Inject constructor(val managementUserRepository: ManagementUserRepository) {
 
     suspend fun invoke(id: Int, listPdm: List<UserDataModel>?): UserDataModel? {
 
         try {
-            val userResponse = createEditUserRepository.getUser(id)
+            val userResponse = managementUserRepository.getUser(id)
             val pdm = listPdm?.find { it.id == userResponse?.pdmId }
             val user = userResponse?.toDomain(pdmEmail = pdm?.email)
 

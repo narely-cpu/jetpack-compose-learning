@@ -1,20 +1,20 @@
-package com.narely.feedbackjourney.features.createedituser.domain
+package com.narely.feedbackjourney.features.managementuser.domain
 
 import com.google.gson.Gson
 import com.narely.feedbackjourney.commons.data.remote.model.ErrorResponse
-import com.narely.feedbackjourney.features.createedituser.data.CreateEditUserRepository
-import com.narely.feedbackjourney.features.createedituser.data.remote.model.CreateEditUserRequest
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.features.managementuser.data.ManagementUserRepository
+import com.narely.feedbackjourney.features.managementuser.data.remote.model.CreateEditUserRequest
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserTypeEnum
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class CreateUserUseCase @Inject constructor(val createEditUserRepository: CreateEditUserRepository) {
+class EditUserUseCase @Inject constructor(val managementUserRepository: ManagementUserRepository) {
 
     suspend fun invoke(
         collaborator: UserDataModel,
         pdm: UserDataModel?,
-        finishedActivityCreateUser: () -> Unit,
+        updateManagementUser: () -> Unit,
         errorMessage: (String?) -> Unit
     ) {
         try {
@@ -25,8 +25,8 @@ class CreateUserUseCase @Inject constructor(val createEditUserRepository: Create
                 pdmId = pdm?.id
             )
 
-            createEditUserRepository.createUser(request)
-            finishedActivityCreateUser()
+            managementUserRepository.updateUser(id = collaborator.id, request = request)
+            updateManagementUser()
         } catch (e: Exception) {
             if (e is HttpException) {
                 val errorResponse = e.response()?.errorBody()?.string()
