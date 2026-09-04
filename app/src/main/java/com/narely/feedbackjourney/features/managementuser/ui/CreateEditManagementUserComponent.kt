@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.features.createedituser.ui
+package com.narely.feedbackjourney.features.managementuser.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,7 +49,7 @@ import com.narely.feedbackjourney.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateEditUserScreen(
+fun CreateEditManagementUserComponent(
     onCreateUiCreateEditView: () -> Unit,
     collaborator: UserDataModel?,
     updateShowModal: (Boolean) -> Unit,
