@@ -5,6 +5,7 @@ import com.narely.feedbackjourney.commons.data.remote.model.ErrorResponse
 import com.narely.feedbackjourney.features.createedituser.data.CreateEditUserRepository
 import com.narely.feedbackjourney.features.createedituser.data.remote.model.CreateEditUserRequest
 import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.createedituser.domain.model.UserTypeEnum
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -20,7 +21,7 @@ class EditUserUseCase @Inject constructor(val createEditUserRepository: CreateEd
             val request = CreateEditUserRequest(
                 name = collaborator.name,
                 email = collaborator.email,
-                type = collaborator.type.name,
+                type = collaborator.type?.name ?: UserTypeEnum.COLLABORATOR.name,
                 pdmId = pdm?.id
             )
 

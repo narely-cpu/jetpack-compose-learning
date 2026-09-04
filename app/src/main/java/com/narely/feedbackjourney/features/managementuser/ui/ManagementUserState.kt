@@ -12,4 +12,5 @@ data class ManagementUserState(
     val isLoading: Boolean = false,
     val listPdm: List<UserDataModel>? = emptyList(),
     val pdm: UserDataModel? = null,
+    val showAlert: Boolean = false
 )

@@ -34,6 +34,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,6 +60,10 @@ fun CreateEditUserScreen(
         viewModel.onCreateUiCreateEditView(userId)
     }
 
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current
+    val screenHeightPx = with(density) { configuration.screenHeightDp.dp }
+    val height = screenHeightPx.value * 0.7
     val formsUiState by viewModel.uiState.collectAsState()
     val title = if (formsUiState.collaborator.id == 0) stringResource(string.new_collaborator) else stringResource(string.edit_collaborador)
 
@@ -76,7 +82,7 @@ fun CreateEditUserScreen(
             )
         },
         containerColor = Color.White,
-        modifier = Modifier.height(770.dp),
+        modifier = Modifier.height(height.dp)
     ) { innerPadding ->
         Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
             FormCreateEditUserLayout(
@@ -240,8 +246,8 @@ private fun DropDownChooseUsers(
                         tint = Magenta80
                     )
                 }
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = (expanded && isCollaborator))
             },
+            readOnly = true,
             modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
             .fillMaxWidth(),
         )
