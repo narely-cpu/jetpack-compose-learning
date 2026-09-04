@@ -56,7 +56,7 @@ class CreateEditUserViewModel @Inject constructor(
         val areMandatoryFieldsFilled =
             uiState.value.collaborator.name.isNotEmpty() &&
                     uiState.value.collaborator.email.isNotEmpty() &&
-                    uiState.value.collaborator.type.name.isNotEmpty()
+                    uiState.value.collaborator.type?.name.isNullOrEmpty()
 
         return areMandatoryFieldsFilled
     }
