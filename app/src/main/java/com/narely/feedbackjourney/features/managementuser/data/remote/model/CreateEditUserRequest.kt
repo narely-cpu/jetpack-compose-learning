@@ -1,4 +1,4 @@
-package com.narely.feedbackjourney.features.createedituser.data.remote.model
+package com.narely.feedbackjourney.features.managementuser.data.remote.model
 
 data class CreateEditUserRequest(
     val name: String,
