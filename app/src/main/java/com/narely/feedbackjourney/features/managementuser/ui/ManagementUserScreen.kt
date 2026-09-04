@@ -46,7 +46,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.narely.feedbackjourney.R
 import com.narely.feedbackjourney.R.string
-import com.narely.feedbackjourney.features.createedituser.ui.CreateEditUserScreen
 import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
 import com.narely.feedbackjourney.ui.theme.Blue40
 import com.narely.feedbackjourney.ui.theme.Blue80
@@ -297,7 +296,7 @@ private fun CreateEditUsersModalScreen(
         sheetState = sheetState,
         dragHandle = null
     ) {
-        CreateEditUserScreen(
+        CreateEditManagementUserComponent(
             onCreateUiCreateEditView = onCreateUiCreateEditView,
             collaborator = collaborator,
             updateShowModal = updateShowModal,
