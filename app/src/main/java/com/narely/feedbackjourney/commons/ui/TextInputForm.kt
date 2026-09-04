@@ -26,6 +26,7 @@ fun TextInputForm(
     valueState: String,
     trailingIcon: @Composable (() -> Unit)?,
     modifier: Modifier,
+    readOnly: Boolean = false,
     updateValueState: (String) -> Unit,
 ) {
     Column(
@@ -55,6 +56,7 @@ fun TextInputForm(
                 focusedPlaceholderColor = Grey80,
                 unfocusedPlaceholderColor = Grey80
             ),
+            readOnly = readOnly,
             modifier = modifier,
             trailingIcon = trailingIcon
         )
@@ -68,7 +70,7 @@ private fun TextInputFormPreview() {
         label = "Email",
         placeholder = "Placeholder",
         valueState = "",
-        trailingIcon = { Text("oi") },
+        trailingIcon = { },
         modifier = Modifier.fillMaxWidth()
             .height(50.dp)
     ) {}
