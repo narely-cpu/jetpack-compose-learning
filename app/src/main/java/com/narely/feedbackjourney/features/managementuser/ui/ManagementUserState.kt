@@ -1,7 +1,7 @@
 package com.narely.feedbackjourney.features.managementuser.ui
 
 import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
-import com.narely.feedbackjourney.features.createedituser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
 
 data class ManagementUserState(
     val listUsers: List<UserResponse> = emptyList<UserResponse>(),
