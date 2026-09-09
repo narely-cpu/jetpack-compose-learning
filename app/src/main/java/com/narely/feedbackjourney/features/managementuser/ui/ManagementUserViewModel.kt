@@ -86,7 +86,13 @@ class ManagementUserViewModel  @Inject constructor(
     }
 
     fun removeUser(id: Int) = viewModelScope.launch {
-        removeUserUseCase.invoke(id)
+        removeUserUseCase.invoke(
+            id = id,
+            deleteManagementUser = {
+                updateShowAlert(false)
+                updateList()
+            }
+        )
     }
 
     fun updateShowModal(showModal: Boolean) {
@@ -106,8 +112,8 @@ class ManagementUserViewModel  @Inject constructor(
             collaborator = uiState.value.collaborator,
             pdm = uiState.value.pdm,
             updateManagementUser = {
-                updateList()
                 updateShowModal(false)
+                updateList()
             },
             errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
         )
@@ -118,8 +124,8 @@ class ManagementUserViewModel  @Inject constructor(
             collaborator = uiState.value.collaborator,
             pdm = uiState.value.pdm,
             updateManagementUser = {
-                updateList()
                 updateShowModal(false)
+                updateList()
             },
             errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
         )
@@ -131,6 +137,7 @@ class ManagementUserViewModel  @Inject constructor(
                 currentUser = null,
                 collaborator = UserDataModel(),
                 pdm = null,
+                errorMessage = null,
                 showModal = true
             )
         )
