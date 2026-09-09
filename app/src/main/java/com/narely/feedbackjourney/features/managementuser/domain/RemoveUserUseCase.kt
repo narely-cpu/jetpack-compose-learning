@@ -9,9 +9,12 @@ import javax.inject.Inject
 
 class RemoveUserUseCase @Inject constructor(val managementUserRepository: ManagementUserRepository) {
 
-    suspend fun invoke(id: Int) {
+    suspend fun invoke(
+        id: Int,
+        deleteManagementUser: () -> Unit) {
         try {
             managementUserRepository.removeUser(id)
+            deleteManagementUser()
         } catch (e: Exception) {
             if (e is HttpException) {
                 val errorResponse = e.response()?.errorBody()?.string()

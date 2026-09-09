@@ -70,9 +70,11 @@ fun CreateEditManagementUserComponent(
     val title = if (collaborator?.id == 0) stringResource(string.new_collaborator) else stringResource(string.edit_collaborador)
 
     Scaffold(
-        topBar = { TopBarCreateEditUser(
-            title = title,
-            closeModal = { updateShowModal(false) } )
+        topBar = {
+            TopBarCreateEditUser(
+                title = title,
+                closeModal = { updateShowModal(false) }
+            )
         },
         bottomBar = {
             BottomBarCreateEditUser(

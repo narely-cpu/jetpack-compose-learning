@@ -46,8 +46,4 @@ class HomeViewModel @Inject constructor(
             uiState.value.copy(currentUser = user)
         )
     }
-
-    fun removeUser(id: Int) = viewModelScope.launch {
-       removeUserUseCase.invoke(id)
-    }
 }
