@@ -1,9 +1,7 @@
 package com.narely.feedbackjourney.features.managementuser.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
 import com.narely.feedbackjourney.features.managementuser.domain.CreateUserUseCase
 import com.narely.feedbackjourney.features.managementuser.domain.EditUserUseCase
 import com.narely.feedbackjourney.features.managementuser.domain.GetListPdmUseCase
@@ -13,13 +11,10 @@ import com.narely.feedbackjourney.features.managementuser.domain.model.UserTypeE
 import com.narely.feedbackjourney.features.managementuser.domain.GetUsersUseCase
 import com.narely.feedbackjourney.features.managementuser.domain.RemoveUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.logging.Logger
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class ManagementUserViewModel  @Inject constructor(
@@ -47,12 +42,6 @@ class ManagementUserViewModel  @Inject constructor(
     private fun updateUiPdm(newPdm: UserDataModel?) {
         updateUiState(
             uiState.value.copy(pdm = newPdm)
-        )
-    }
-
-    private fun updateUiListPdm(newListPdm: List<UserDataModel>?) {
-        updateUiState(
-            uiState.value.copy(listPdm = newListPdm)
         )
     }
 
@@ -87,19 +76,12 @@ class ManagementUserViewModel  @Inject constructor(
             uiState.value.copy(isLoading = true)
         )
 
-        delay(1000.milliseconds)
-
         updateUiState(
             uiState.value.copy(
                 listUsers = getUsersUseCase.invoke(),
+                listPdm = getListPdmUseCase.invoke(),
                 isLoading = false
             )
-        )
-    }
-
-    fun updateCurrentUser(user: UserResponse) {
-        updateUiState(
-            uiState.value.copy(currentUser = user)
         )
     }
 
@@ -143,14 +125,15 @@ class ManagementUserViewModel  @Inject constructor(
         )
     }
 
-    fun getListPdm() = viewModelScope.launch {
-        updateUiListPdm(newListPdm = getListPdmUseCase.invoke())
-    }
-
-    fun onCreateUiCreateEditView(userId: Int) {
-        getListPdm().invokeOnCompletion {
-            updateUiCurrentUser(newCurrentUserId = userId)
-        }
+    fun resetUser() {
+        updateUiState(
+            uiState.value.copy(
+                currentUser = null,
+                collaborator = UserDataModel(),
+                pdm = null,
+                showModal = true
+            )
+        )
     }
 
     fun updateUiName(newName: String) {
@@ -198,5 +181,10 @@ class ManagementUserViewModel  @Inject constructor(
 
     fun isCollaborator(): Boolean {
         return uiState.value.collaborator.type == UserTypeEnum.COLLABORATOR
+    }
+
+    fun getPdmNameById(pdmId: Int?): String? {
+        val pdmName = uiState.value.listPdm?.find { it.id == pdmId }?.name
+        return pdmName
     }
 }
