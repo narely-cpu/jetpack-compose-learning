@@ -47,10 +47,7 @@ fun TextInputForm(
             shape = RoundedCornerShape(16.dp),
             colors = TextFieldDefaults.colors(
                 focusedTextColor = Color.Black,
-                unfocusedTextColor = Grey80,
                 errorTextColor = Color.Red,
-                focusedContainerColor = Grey40,
-                unfocusedContainerColor = Grey40,
                 focusedIndicatorColor = Grey40,
                 unfocusedIndicatorColor = Grey40,
                 focusedPlaceholderColor = Grey80,

@@ -25,7 +25,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,7 +49,6 @@ import com.narely.feedbackjourney.ui.theme.Typography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEditManagementUserComponent(
-    onCreateUiCreateEditView: () -> Unit,
     collaborator: UserDataModel?,
     updateShowModal: (Boolean) -> Unit,
     isButtonEnable: Boolean,
@@ -64,9 +62,6 @@ fun CreateEditManagementUserComponent(
     isCollaborator: Boolean,
     errorMessage: String?,
 ) {
-    LaunchedEffect(Unit) {
-        onCreateUiCreateEditView.invoke()
-    }
 
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
@@ -142,6 +137,8 @@ private fun BottomBarCreateEditUser(
     onCreateUser: () -> Unit,
     onEditUser: () -> Unit,
 ) {
+    val buttonTitle = if (userId == 0) stringResource(string.add_collaborator) else stringResource(string.edit_collaborador)
+
     BottomAppBar(
         modifier = Modifier.height(99.dp),
         containerColor = Color.White
@@ -167,7 +164,7 @@ private fun BottomBarCreateEditUser(
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                stringResource(string.add_collaborator),
+                buttonTitle,
                 style = Typography.labelLarge
             )
         }
