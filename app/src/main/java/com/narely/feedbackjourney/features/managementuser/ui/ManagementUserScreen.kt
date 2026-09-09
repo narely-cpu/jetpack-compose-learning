@@ -11,16 +11,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PersonOutline
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +32,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -109,7 +113,10 @@ fun ManagementUserScreen(
                             managementUserViewModel.updateUiCurrentUser(item.id)
                             managementUserViewModel.updateShowModal(true)
                         },
-                        deleteUser = { managementUserViewModel.updateShowAlert(true) }
+                        deleteUser = {
+                            managementUserViewModel.updateUiCurrentUser(item.id)
+                            managementUserViewModel.updateShowAlert(true)
+                        }
                     )
                 }
             }
@@ -127,6 +134,12 @@ fun ManagementUserScreen(
                     updateUiPdmEmail = { managementUserViewModel.updateUiPdmEmail(it) },
                     isCollaborator = managementUserViewModel.isCollaborator(),
                     errorMessage = uiState.value.errorMessage
+                )
+            }
+            if (uiState.value.showAlert) {
+                AlertDialogDeleteUser(
+                    onDismissRequest = { managementUserViewModel.updateShowAlert(false) },
+                    onConfirmation = { managementUserViewModel.removeUser(uiState.value.collaborator.id) }
                 )
             }
         }
@@ -170,11 +183,9 @@ private fun BottomBarManagementUser(viewModel: ManagementUserViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            colors = ButtonColors(
+            colors = ButtonDefaults.buttonColors(
                 containerColor = Purple80,
-                contentColor = Color.White,
-                disabledContainerColor = Magenta80,
-                disabledContentColor = Color.White
+                contentColor = Color.White
             ),
             shape = RoundedCornerShape(8.dp)
         ) {
@@ -252,7 +263,7 @@ private fun ConfigUser(updateUser: () -> Unit, deleteUser: () -> Unit) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.trash),
-                contentDescription = stringResource(string.delete_button)
+                contentDescription = stringResource(string.confirm_button)
             )
         }
 
@@ -314,4 +325,73 @@ private fun CreateEditUsersModalScreen(
             errorMessage = errorMessage
         )
     }
+}
+
+@Composable
+private fun AlertDialogDeleteUser(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit
+) {
+    AlertDialog(
+        title = {
+            Row(horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    stringResource(string.delete_dialog_title),
+                    style = Typography.labelLarge,
+                )
+                IconButton(onClick = onDismissRequest) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(string.cancel_button),
+                        tint = Magenta80
+                    )
+                }
+            }
+        },
+        titleContentColor = Blue80,
+        text = {
+            Text(stringResource(
+                string.delete_dialog_text),
+                style = Typography.labelMedium
+            )
+        },
+        textContentColor = Color.Black,
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                TextButton(onClick = onDismissRequest) {
+                    Text(
+                        stringResource(string.cancel_button),
+                        style = Typography.labelLarge,
+                        color = Blue80
+                    )
+                }
+
+                Button(
+                    onClick = onConfirmation,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Magenta80,
+                        contentColor = Color.White
+                    ),
+                    shape = RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        stringResource(string.confirm_button),
+                        style = Typography.labelLarge
+                    )
+                }
+            }
+        },
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.width(293.dp)
+    )
 }
