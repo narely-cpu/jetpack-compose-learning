@@ -18,9 +18,7 @@ val localProperties = Properties().apply {
 android {
     namespace = "com.narely.feedbackjourney"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 0
-        }
+        version = release(36)
     }
 
     defaultConfig {

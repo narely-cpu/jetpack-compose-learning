@@ -103,17 +103,18 @@ fun ManagementUserScreen(
                 items(uiState.value.listUsers) { item ->
                     UserListItem(
                         name = item.name,
-                        pdmName = item.email,
-                        updateUser = { managementUserViewModel.updateShowModal(true) },
+                        pdmName = managementUserViewModel.getPdmNameById(item.pdmId),
+                        updateUser = {
+                            managementUserViewModel.resetUser()
+                            managementUserViewModel.updateUiCurrentUser(item.id)
+                            managementUserViewModel.updateShowModal(true)
+                        },
                         deleteUser = { managementUserViewModel.updateShowAlert(true) }
                     )
                 }
             }
             if (uiState.value.showModal) {
                 CreateEditUsersModalScreen(
-                    onCreateUiCreateEditView = {
-                        managementUserViewModel.onCreateUiCreateEditView(0)
-                    },
                     collaborator = uiState.value.collaborator,
                     updateShowModal = { managementUserViewModel.updateShowModal(false) },
                     isButtonEnable = managementUserViewModel.isButtonEnable(),
@@ -163,7 +164,9 @@ private fun BottomBarManagementUser(viewModel: ManagementUserViewModel) {
         containerColor = Color.White
     ) {
         Button(
-            onClick = { viewModel.updateShowModal(true) },
+            onClick = {
+                viewModel.resetUser()
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -223,13 +226,14 @@ private fun InfoUser(name: String, pdmName: String?) {
                 style = Typography.displaySmall,
                 color = Color.Black
             )
-            // TODO: Add a check so it doesn't appear if the user is not a collaborator
 
-            Text(
-                "PDM | ${pdmName}",
-                style = Typography.bodySmall,
-                color = Grey80
-            )
+            pdmName?.let {
+                Text(
+                    "PDM | $pdmName",
+                    style = Typography.bodySmall,
+                    color = Grey80
+                )
+            }
         }
     }
 }
@@ -272,7 +276,6 @@ private fun ConfigUser(updateUser: () -> Unit, deleteUser: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CreateEditUsersModalScreen(
-    onCreateUiCreateEditView: () -> Unit,
     collaborator: UserDataModel?,
     updateShowModal: (Boolean) -> Unit,
     isButtonEnable: Boolean,
@@ -297,7 +300,6 @@ private fun CreateEditUsersModalScreen(
         dragHandle = null
     ) {
         CreateEditManagementUserComponent(
-            onCreateUiCreateEditView = onCreateUiCreateEditView,
             collaborator = collaborator,
             updateShowModal = updateShowModal,
             isButtonEnable = isButtonEnable,
