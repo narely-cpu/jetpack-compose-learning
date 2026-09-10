@@ -8,6 +8,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -16,26 +17,37 @@ import retrofit2.http.Path
 interface ManagementUserApi {
 
     @GET("users")
-    @Headers("Authorization: Bearer ${BuildConfig.ADMIN_TOKEN}")
-    suspend fun getUsers(): UsersListResponse
+    suspend fun getUsers(
+        @Header("Authorization") token: String?
+    ): UsersListResponse
 
     @GET("users/{id}")
-    @Headers("Authorization: Bearer ${BuildConfig.ADMIN_TOKEN}")
-    suspend fun getUser(@Path("id") id: Int): UserResponse?
+    suspend fun getUser(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int
+    ): UserResponse?
 
     @GET("users?type=PDM&size=100")
-    @Headers("Authorization: Bearer ${BuildConfig.ADMIN_TOKEN}")
-    suspend fun getListPdm(): UsersListResponse
+    suspend fun getListPdm(
+        @Header("Authorization") token: String?
+    ): UsersListResponse
 
     @POST("users")
-    @Headers("Authorization: Bearer ${BuildConfig.ADMIN_TOKEN}")
-    suspend fun createUser(@Body request: CreateEditUserRequest): UserResponse
+    suspend fun createUser(
+        @Header("Authorization") token: String?,
+        @Body request: CreateEditUserRequest
+    ): UserResponse
 
     @PUT("users/{id}")
-    @Headers("Authorization: Bearer ${BuildConfig.ADMIN_TOKEN}")
-    suspend fun updateUser(@Path("id") id: Int, @Body request: CreateEditUserRequest): UserResponse
+    suspend fun updateUser(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int,
+        @Body request: CreateEditUserRequest
+    ): UserResponse
 
     @DELETE("users/{id}")
-    @Headers("Authorization: Bearer ${BuildConfig.ADMIN_TOKEN}")
-    suspend fun removeUser(@Path("id") id: Int): Call<Unit>
+    suspend fun removeUser(
+        @Header("Authorization") token: String?,
+        @Path("id") id: Int
+    ): Call<Unit>
 }

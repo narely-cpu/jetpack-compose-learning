@@ -1,7 +1,10 @@
 package com.narely.feedbackjourney.features.login.ui
 
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.narely.feedbackjourney.features.home.HomeActivity
 import com.narely.feedbackjourney.features.login.domain.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,12 +45,20 @@ class LoginViewModel @Inject constructor(val loginUseCase: LoginUseCase): ViewMo
         )
     }
 
-    fun login() = viewModelScope.launch {
+    fun login(context: Context) = viewModelScope.launch {
         loginUseCase.invoke(
             email = uiState.value.email,
             password = uiState.value.password,
             tokenResponse = { updateUiToken(newToken = it) },
-            errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
+            errorMessage = { updateUiErrorMessage(newErrorMessage = it) },
+            successLogin = {
+                context.startActivity(
+                    Intent(
+                        context,
+                        HomeActivity::class.java
+                    )
+                )
+            }
         )
     }
 }

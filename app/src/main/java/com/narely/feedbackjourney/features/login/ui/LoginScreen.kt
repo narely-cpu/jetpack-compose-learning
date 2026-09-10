@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.commons.ui.EnterpriseLogo
 import com.narely.feedbackjourney.commons.ui.TextInputFormComponent
-import com.narely.feedbackjourney.features.home.HomeActivity
 import com.narely.feedbackjourney.ui.theme.Blue80
 import com.narely.feedbackjourney.ui.theme.Magenta80
 import com.narely.feedbackjourney.ui.theme.Typography
@@ -50,15 +49,12 @@ fun LoginScreen(viewModel: LoginViewModel) {
             onUserEmailChange = { viewModel.updateUiEmail(newEmail = it) },
             onUserPasswordChange = { viewModel.updateUiPassword(newPassword = it) },
             loginOnClick = {
-                viewModel.login()
-                context.startActivity(
-                    Intent(
-                        context,
-                        HomeActivity::class.java
-                    )
-                )
+                viewModel.login(context = context)
             }
         )
+        formsUiState.errorMessage?.let {
+            Text("Erro: ${formsUiState.errorMessage}")
+        }
     }
 }
 
