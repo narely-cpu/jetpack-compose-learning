@@ -52,13 +52,10 @@ fun LoginScreen(viewModel: LoginViewModel) {
             onUserPasswordChange = { viewModel.updateUiPassword(newPassword = it) }
         )
         LoginButton {
-            viewModel.login()
-            context.startActivity(
-                Intent(
-                    context,
-                    HomeActivity::class.java
-                )
-            )
+            viewModel.login(context = context)
+        }
+        formsUiState.errorMessage?.let {
+            Text("Erro: ${formsUiState.errorMessage}")
         }
     }
 }
