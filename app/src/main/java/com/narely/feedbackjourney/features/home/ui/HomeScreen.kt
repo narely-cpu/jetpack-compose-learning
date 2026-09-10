@@ -45,7 +45,7 @@ import com.narely.feedbackjourney.ui.theme.Magenta80
 import com.narely.feedbackjourney.ui.theme.Typography
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel) {
+fun HomeScreen() {
     HomeScreenLayout()
 }
 
