@@ -1,14 +1,14 @@
 package com.narely.feedbackjourney.features.login.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -47,9 +47,9 @@ fun LoginScreen(viewModel: LoginViewModel) {
                 userEmail = formsUiState.email,
                 userPassword = formsUiState.password,
                 onUserEmailChange = { viewModel.updateUiEmail(newEmail = it) },
-                onUserPasswordChange = { viewModel.updateUiPassword(newPassword = it) }
+                onUserPasswordChange = { viewModel.updateUiPassword(newPassword = it) },
+                loginOnClick = { viewModel.login() }
             )
-            LoginButton { viewModel.login() }
         }
 }
 
@@ -57,7 +57,7 @@ fun LoginScreen(viewModel: LoginViewModel) {
 private fun EnterpriseLogo() {
     Image(
         painter = painterResource(id = R.drawable.frame_logo),
-        contentDescription = "CI&T",
+        contentDescription = stringResource(id = string.cit_logo),
         modifier = Modifier.padding(bottom = 64.dp)
     )
 }
@@ -67,38 +67,43 @@ private fun FormLoginLayout(
     userEmail: String,
     userPassword: String,
     onUserEmailChange: (String) -> Unit,
-    onUserPasswordChange: (String) -> Unit
+    onUserPasswordChange: (String) -> Unit,
+    loginOnClick: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 24.dp)
     ) {
-        TextInputForm(
-            labelId = string.email_label,
-            valueState = userEmail,
-            updateValueState = onUserEmailChange
-        )
-        TextInputForm(
-            labelId = string.password_label,
-            valueState = userPassword,
-            updateValueState = onUserPasswordChange
-        )
-        ForgetPasswordButton {  }
+        Column(modifier = Modifier.padding(vertical = 32.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                TextInputForm(
+                    labelId = string.email_label,
+                    valueState = userEmail,
+                    updateValueState = onUserEmailChange
+                )
+                TextInputForm(
+                    labelId = string.password_label,
+                    valueState = userPassword,
+                    updateValueState = onUserPasswordChange
+                )
+            }
+            ForgotPasswordButton(onClick = { })
+        }
+        LoginButton(onClick = loginOnClick)
     }
 }
 
 @Composable
 private fun TextInputForm(
-    labelId: Int,
+    @StringRes labelId: Int,
     valueState: String,
     updateValueState: (String) -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(7.dp)
     ) {
         Text(
-            stringResource(labelId),
+            text = stringResource(labelId),
             style = Typography.labelMedium,
             color = Blue80
         )
@@ -114,9 +119,7 @@ private fun TextInputForm(
                 focusedIndicatorColor = Grey40,
                 unfocusedIndicatorColor = Grey40
             ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -124,39 +127,35 @@ private fun TextInputForm(
 @Composable
 private fun LoginButton(onClick: () -> Unit) {
     Button(
-        onClick = {
-            onClick.invoke()
-        },
+        onClick = onClick,
         modifier = Modifier
-            .padding(vertical = 32.dp)
-            .size(width = 256.dp, height = 48.dp),
+            .fillMaxWidth()
+            .padding(horizontal = 49.dp),
         colors = ButtonColors(
             containerColor = Magenta80,
             contentColor = Color.White,
             disabledContainerColor = Magenta80,
             disabledContentColor = Color.White
         ),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        contentPadding = PaddingValues(vertical = 14.5.dp, horizontal = 85.dp)
     ) {
         Text(
-            stringResource(string.make_login),
+            text = stringResource(string.login_button_label),
             style = Typography.labelLarge
         )
     }
 }
 
 @Composable
-private fun ForgetPasswordButton(onClick: () -> Unit) {
+private fun ForgotPasswordButton(onClick: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.End
     ) {
-        TextButton(
-            onClick = onClick,
-
-        ) {
+        TextButton(onClick = onClick) {
             Text(
-                stringResource(string.forget_password),
+                stringResource(string.forgot_password),
                 style = Typography.titleMedium,
                 color = Blue80
             )
