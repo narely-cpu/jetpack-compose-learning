@@ -57,8 +57,8 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 )
             }
             ProfileComponent(
-                userName = homeUiState.value.currentUser?.name ?: "Nome",
-                userType = homeUiState.value.currentUser?.type ?: "Role"
+                userName = homeUiState.value.currentUser?.name ?: "",
+                userType = homeUiState.value.currentUser?.type ?: ""
             )
             MyJourneyComponent()
             MyTeamComponent()
