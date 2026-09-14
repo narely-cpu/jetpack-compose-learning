@@ -16,7 +16,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.FeedbackJourney"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -26,9 +25,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".features.home.HomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FeedbackJourney"
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="MissingClass">
+        </activity>
+        <activity
             android:name=".features.createedituser.CreateEditUserActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.FeedbackJourney"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="MissingClass">

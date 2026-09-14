@@ -1,7 +1,7 @@
 package com.narely.feedbackjourney.features.login.ui
 
+import android.content.Intent
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,11 +22,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.narely.feedbackjourney.R
 import com.narely.feedbackjourney.R.string
+import com.narely.feedbackjourney.commons.ui.EnterpriseLogo
+import com.narely.feedbackjourney.features.home.HomeActivity
 import com.narely.feedbackjourney.ui.theme.Blue80
 import com.narely.feedbackjourney.ui.theme.Grey40
 import com.narely.feedbackjourney.ui.theme.Magenta80
@@ -34,32 +35,33 @@ import com.narely.feedbackjourney.ui.theme.Typography
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel) {
-    val formsUiState by viewModel.uiState.collectAsState()
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            EnterpriseLogo()
-            FormLoginLayout(
-                userEmail = formsUiState.email,
-                userPassword = formsUiState.password,
-                onUserEmailChange = { viewModel.updateUiEmail(newEmail = it) },
-                onUserPasswordChange = { viewModel.updateUiPassword(newPassword = it) },
-                loginOnClick = { viewModel.login() }
-            )
-        }
-}
 
-@Composable
-private fun EnterpriseLogo() {
-    Image(
-        painter = painterResource(id = R.drawable.frame_logo),
-        contentDescription = stringResource(id = string.cit_logo),
-        modifier = Modifier.padding(bottom = 64.dp)
-    )
+    val formsUiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        EnterpriseLogo(modifier = Modifier.padding(bottom = 64.dp))
+        FormLoginLayout(
+            userEmail = formsUiState.email,
+            userPassword = formsUiState.password,
+            onUserEmailChange = { viewModel.updateUiEmail(newEmail = it) },
+            onUserPasswordChange = { viewModel.updateUiPassword(newPassword = it) },
+            loginOnClick = {
+                viewModel.login()
+                context.startActivity(
+                    Intent(
+                        context,
+                        HomeActivity::class.java
+                    )
+                )
+            }
+        )
+    }
 }
 
 @Composable
