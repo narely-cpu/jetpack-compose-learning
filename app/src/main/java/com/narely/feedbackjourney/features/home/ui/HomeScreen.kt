@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -24,17 +22,17 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.narely.feedbackjourney.R
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.commons.ui.EnterpriseLogo
-import com.narely.feedbackjourney.features.home.domain.model.MyListItem
+import com.narely.feedbackjourney.features.home.domain.model.HomeListItem
 import com.narely.feedbackjourney.ui.theme.Blue40
 import com.narely.feedbackjourney.ui.theme.Blue80
 import com.narely.feedbackjourney.ui.theme.Grey40
@@ -43,6 +41,7 @@ import com.narely.feedbackjourney.ui.theme.Typography
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
+    val homeUiState = viewModel.uiState.collectAsState()
     Scaffold(
         containerColor = Grey40
     ) { innerPadding ->
@@ -50,12 +49,17 @@ fun HomeScreen(viewModel: HomeViewModel) {
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
-                .padding(top = 16.dp)
-                .height(56.dp)
             ) {
-                EnterpriseLogo(modifier = Modifier.padding(16.dp))
+                EnterpriseLogo(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .height(24.dp)
+                )
             }
-            ProfileComponent()
+            ProfileComponent(
+                userName = homeUiState.value.currentUser?.name ?: "Nome",
+                userType = homeUiState.value.currentUser?.type ?: "Role"
+            )
             MyJourneyComponent()
             MyTeamComponent()
         }
@@ -63,7 +67,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
 }
 
 @Composable
-private fun ProfileComponent() {
+private fun ProfileComponent(userName: String, userType: String) {
     Column(
         modifier = Modifier
             .padding(start = 16.dp, top = 24.dp, end = 16.dp)
@@ -71,13 +75,13 @@ private fun ProfileComponent() {
             .background(color = Color.White, shape = RoundedCornerShape(8.dp)),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        InfoUser()
+        InfoUser(userName = userName, userType = userType)
         StartFeedbackCollection(onClick = { })
     }
 }
 
 @Composable
-private fun InfoUser() {
+private fun InfoUser(userName: String, userType: String) {
     Row(
         modifier = Modifier.padding(start = 16.dp, top = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -93,12 +97,12 @@ private fun InfoUser() {
         )
         Column(modifier = Modifier.padding(start = 16.dp)) {
             Text(
-                "JOÃO CARLOS DA SILVA",
+                userName,
                 style = Typography.titleMedium,
                 color = Blue80
             )
             Text(
-                "Admin",
+                userType,
                 style = Typography.displaySmall,
                 color = Blue80
             )
@@ -167,22 +171,22 @@ private fun ListItemComponent(onClick: () -> Unit, painterId: Int, contentDescri
 @Composable
 private fun MyJourneyComponent() {
     val list = listOf(
-        MyListItem(
+        HomeListItem(
             onClick = {},
             painterId = R.drawable.face_skill,
             contentDescription = string.skills
         ),
-        MyListItem(
+        HomeListItem(
             onClick = {},
             painterId = R.drawable.clock_evaluation,
             contentDescription =string.evaluation_history
         ),
-        MyListItem(
+        HomeListItem(
             onClick = {},
             painterId = R.drawable.line_pdi,
             contentDescription =string.my_pdi
         ),
-        MyListItem(
+        HomeListItem(
             onClick = {},
             painterId = R.drawable.chart_dashboard,
             contentDescription =string.dashboard
@@ -197,8 +201,8 @@ private fun MyJourneyComponent() {
             .padding(start = 16.dp, top = 32.dp, end = 16.dp, bottom = 16.dp)
     )
 
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(1.dp)) {
-        items(list) { item ->
+    Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
+        list.forEach { item ->
             ListItemComponent(item.onClick, item.painterId, item.contentDescription)
         }
     }
@@ -206,14 +210,6 @@ private fun MyJourneyComponent() {
 
 @Composable
 private fun MyTeamComponent() {
-    val list = listOf(
-        MyListItem(
-            onClick = {},
-            painterId = R.drawable.members,
-            contentDescription = string.manage_members
-        )
-    )
-
     Text(
         stringResource(string.my_team),
         style = Typography.labelLarge,
@@ -222,15 +218,9 @@ private fun MyTeamComponent() {
             .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp)
     )
 
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(1.dp)) {
-        items(list) { item ->
-            ListItemComponent(item.onClick, item.painterId, item.contentDescription)
-        }
-    }
-}
-
-@Composable
-@Preview
-private fun HomeScreenPreview() {
-//    HomeScreen()
+    ListItemComponent(
+        onClick = {},
+        painterId = R.drawable.members,
+        contentDescription = string.manage_members
+    )
 }

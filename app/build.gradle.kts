@@ -53,6 +53,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
     }
 }
 
@@ -74,7 +75,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.gson)
     implementation(libs.converter.gson)
-    implementation(libs.icons.heroicons.outline.android)
     implementation(libs.androidx.compose.material.icons.extended)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
