@@ -1,7 +1,6 @@
 package com.narely.feedbackjourney.features.login.ui
 
 import android.content.Intent
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,8 +13,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,9 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.commons.ui.EnterpriseLogo
+import com.narely.feedbackjourney.commons.ui.TextInputFormComponent
 import com.narely.feedbackjourney.features.home.HomeActivity
 import com.narely.feedbackjourney.ui.theme.Blue80
-import com.narely.feedbackjourney.ui.theme.Grey40
 import com.narely.feedbackjourney.ui.theme.Magenta80
 import com.narely.feedbackjourney.ui.theme.Typography
 
@@ -38,6 +35,7 @@ fun LoginScreen(viewModel: LoginViewModel) {
 
     val formsUiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,51 +76,26 @@ private fun FormLoginLayout(
     ) {
         Column(modifier = Modifier.padding(vertical = 32.dp)) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                TextInputForm(
-                    labelId = string.email_label,
+                TextInputFormComponent(
+                    label = stringResource(string.email_label),
+                    placeholder = null,
                     valueState = userEmail,
+                    trailingIcon = null,
+                    modifier = Modifier.fillMaxWidth(),
                     updateValueState = onUserEmailChange
                 )
-                TextInputForm(
-                    labelId = string.password_label,
+                TextInputFormComponent(
+                    label = stringResource(string.password_label),
+                    placeholder = null,
                     valueState = userPassword,
+                    trailingIcon = null,
+                    modifier = Modifier.fillMaxWidth(),
                     updateValueState = onUserPasswordChange
                 )
             }
             ForgotPasswordButton(onClick = { })
         }
         LoginButton(onClick = loginOnClick)
-    }
-}
-
-@Composable
-private fun TextInputForm(
-    @StringRes labelId: Int,
-    valueState: String,
-    updateValueState: (String) -> Unit
-) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(7.dp)
-    ) {
-        Text(
-            text = stringResource(labelId),
-            style = Typography.labelMedium,
-            color = Blue80
-        )
-        TextField(
-            value = valueState,
-            onValueChange = updateValueState,
-            shape = RoundedCornerShape(16.dp),
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                errorTextColor = Color.Red,
-                focusedContainerColor = Grey40,
-                unfocusedContainerColor = Grey40,
-                focusedIndicatorColor = Grey40,
-                unfocusedIndicatorColor = Grey40
-            ),
-            modifier = Modifier.fillMaxWidth()
-        )
     }
 }
 

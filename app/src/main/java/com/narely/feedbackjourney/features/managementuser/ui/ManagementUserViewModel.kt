@@ -1,0 +1,220 @@
+package com.narely.feedbackjourney.features.managementuser.ui
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.narely.feedbackjourney.features.managementuser.domain.CreateUserUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.EditUserUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.GetListPdmUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.GetUserUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserTypeEnum
+import com.narely.feedbackjourney.features.managementuser.domain.GetUsersUseCase
+import com.narely.feedbackjourney.features.managementuser.domain.RemoveUserUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class ManagementUserViewModel  @Inject constructor(
+    val createUserUseCase: CreateUserUseCase,
+    val editUserUseCase: EditUserUseCase,
+    val getUserUseCase: GetUserUseCase,
+    val getUsersUseCase: GetUsersUseCase,
+    val getListPdmUseCase: GetListPdmUseCase,
+    val removeUserUseCase: RemoveUserUseCase,
+): ViewModel() {
+    private val _uiState: MutableStateFlow<ManagementUserState> =
+        MutableStateFlow(ManagementUserState())
+    val uiState: StateFlow<ManagementUserState> = _uiState
+
+    private fun updateUiState(uiState: ManagementUserState) {
+        _uiState.value = uiState
+    }
+
+    private fun updateUiCollaborator(newCollaborator: UserDataModel) {
+        updateUiState(
+            uiState.value.copy(collaborator = newCollaborator)
+        )
+    }
+
+    private fun updateUiPdm(newPdm: UserDataModel?) {
+        updateUiState(
+            uiState.value.copy(pdm = newPdm)
+        )
+    }
+
+    private fun getPdmUser() {
+        val pdm = uiState.value.listPdm?.find { it.email == uiState.value.collaborator.pdmEmail }
+        updateUiPdm(newPdm = pdm)
+    }
+
+    private fun areMandatoryFieldsFilled(): Boolean {
+        val areMandatoryFieldsFilled =
+            uiState.value.collaborator.name.isNotEmpty() &&
+                    uiState.value.collaborator.email.isNotEmpty() &&
+                    !uiState.value.collaborator.type?.name.isNullOrEmpty()
+
+        return areMandatoryFieldsFilled
+    }
+
+    private fun hasPdmAssigned(): Boolean {
+        return when (uiState.value.collaborator.type) {
+            UserTypeEnum.COLLABORATOR -> uiState.value.pdm?.email?.isNotEmpty() ?: false
+            UserTypeEnum.PDM -> true
+            else -> true
+        }
+    }
+
+    private suspend fun readUser(id: Int): UserDataModel? {
+        return getUserUseCase.invoke(id = id, listPdm = uiState.value.listPdm)
+    }
+
+    private fun createUser() = viewModelScope.launch {
+        createUserUseCase.invoke(
+            collaborator = uiState.value.collaborator,
+            pdm = uiState.value.pdm,
+            updateManagementUser = {
+                updateShowModal(false)
+                updateList()
+            },
+            errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
+        )
+    }
+
+    private fun editUser() = viewModelScope.launch {
+        editUserUseCase.invoke(
+            collaborator = uiState.value.collaborator,
+            pdm = uiState.value.pdm,
+            updateManagementUser = {
+                updateShowModal(false)
+                updateList()
+            },
+            errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
+        )
+    }
+
+    private fun resetUser() {
+        updateUiState(
+            uiState.value.copy(
+                currentUser = null,
+                collaborator = UserDataModel(),
+                pdm = null,
+                errorMessage = null
+            )
+        )
+    }
+
+    fun updateList() = viewModelScope.launch {
+        updateUiState(
+            uiState.value.copy(isLoading = true)
+        )
+
+        updateUiState(
+            uiState.value.copy(
+                listUsers = getUsersUseCase.invoke(),
+                listPdm = getListPdmUseCase.invoke(),
+                isLoading = false
+            )
+        )
+    }
+
+    fun removeUser(id: Int) = viewModelScope.launch {
+        removeUserUseCase.invoke(
+            id = id,
+            deleteManagementUser = {
+                updateShowAlert(false)
+                updateList()
+            }
+        )
+    }
+
+    fun updateShowModal(showModal: Boolean) {
+        updateUiState(
+            uiState.value.copy(showModal = showModal)
+        )
+    }
+
+    fun updateShowAlert(showAlert: Boolean) {
+        updateUiState(
+            uiState.value.copy(showAlert = showAlert)
+        )
+    }
+
+    fun handleConfirmCreateEditUserAction() {
+        if (uiState.value.collaborator.id == 0) {
+            createUser()
+        } else {
+            editUser()
+        }
+    }
+
+    fun handleCreateUserForm() {
+        resetUser()
+        updateShowModal(true)
+    }
+
+    fun handleEditUserForm(userId: Int) {
+        resetUser()
+        updateUiCurrentUser(newCurrentUserId = userId)
+        updateShowModal(true)
+    }
+
+    fun handleRemoveUserAlert(userId: Int) {
+        updateUiCurrentUser(newCurrentUserId = userId)
+        updateShowAlert(true)
+    }
+
+    fun updateUiName(newName: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(name = newName)
+        )
+    }
+
+    fun updateUiEmail(newEmail: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(email = newEmail)
+        )
+    }
+
+    fun updateUiUserType(newUserType: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(type = UserTypeEnum.valueOf(newUserType))
+        )
+    }
+
+    fun updateUiPdmEmail(newPdmEmail: String) {
+        updateUiCollaborator(
+            uiState.value.collaborator.copy(pdmEmail = newPdmEmail)
+        )
+        getPdmUser()
+    }
+
+    fun updateUiCurrentUser(newCurrentUserId: Int) = viewModelScope.launch {
+        val newCurrentUser = readUser(newCurrentUserId)
+
+        if (newCurrentUser != null) {
+            updateUiCollaborator(newCollaborator = newCurrentUser)
+        }
+    }
+
+    fun updateUiErrorMessage(newErrorMessage: String?) {
+        updateUiState(
+            uiState.value.copy(errorMessage = newErrorMessage)
+        )
+    }
+
+    fun isButtonEnable(): Boolean {
+        return areMandatoryFieldsFilled() && hasPdmAssigned()
+    }
+
+    fun isCollaborator(): Boolean {
+        return uiState.value.collaborator.type == UserTypeEnum.COLLABORATOR
+    }
+
+    fun getPdmNameById(pdmId: Int?): String? {
+        val pdmName = uiState.value.listPdm?.find { it.id == pdmId }?.name
+        return pdmName
+    }
+}
