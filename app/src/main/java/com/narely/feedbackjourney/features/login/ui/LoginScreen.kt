@@ -78,7 +78,7 @@ private fun FormLoginLayout(
         Column(modifier = Modifier.padding(vertical = 32.dp)) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 TextInputForm(
-                    labelId = string.email_label,
+                    label = stringResource(string.email_label),
                     placeholder = null,
                     valueState = userEmail,
                     trailingIcon = null,
@@ -88,7 +88,7 @@ private fun FormLoginLayout(
                     updateValueState = onUserEmailChange
                 )
                 TextInputForm(
-                    labelId = string.password_label,
+                    label = stringResource(string.password_label),
                     placeholder = null,
                     valueState = userPassword,
                     trailingIcon = null,
