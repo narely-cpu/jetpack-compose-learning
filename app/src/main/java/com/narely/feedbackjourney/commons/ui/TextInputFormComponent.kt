@@ -20,7 +20,7 @@ import com.narely.feedbackjourney.ui.theme.Grey80
 import com.narely.feedbackjourney.ui.theme.Typography
 
 @Composable
-fun TextInputForm(
+fun TextInputFormComponent(
     label: String?,
     placeholder: String?,
     valueState: String,
@@ -35,7 +35,7 @@ fun TextInputForm(
     ) {
         label?.let {
             Text(
-                label,
+                text = label,
                 style = Typography.labelMedium,
                 color = Blue80
             )
@@ -63,12 +63,13 @@ fun TextInputForm(
 @Preview
 @Composable
 private fun TextInputFormPreview() {
-    TextInputForm(
+    TextInputFormComponent(
         label = "Email",
         placeholder = "Placeholder",
         valueState = "",
         trailingIcon = { },
         modifier = Modifier.fillMaxWidth()
-            .height(50.dp)
-    ) {}
+            .height(50.dp),
+        updateValueState = {}
+    )
 }

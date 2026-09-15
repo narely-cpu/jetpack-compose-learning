@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
 
 @AndroidEntryPoint
-class ManagementUserActivity : ComponentActivity()  {
+class ManagementUserActivity : ComponentActivity() {
 
     val managementUserViewModel: ManagementUserViewModel by viewModels()
 
