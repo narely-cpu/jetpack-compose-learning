@@ -101,8 +101,7 @@ class ManagementUserViewModel  @Inject constructor(
                 currentUser = null,
                 collaborator = UserDataModel(),
                 pdm = null,
-                errorMessage = null,
-                showModal = true
+                errorMessage = null
             )
         )
     }
@@ -153,6 +152,7 @@ class ManagementUserViewModel  @Inject constructor(
 
     fun handleCreateUserForm() {
         resetUser()
+        updateShowModal(true)
     }
 
     fun handleEditUserForm(userId: Int) {

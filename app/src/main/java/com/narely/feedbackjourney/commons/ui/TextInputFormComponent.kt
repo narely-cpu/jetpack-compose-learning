@@ -3,8 +3,6 @@ package com.narely.feedbackjourney.commons.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -30,8 +28,7 @@ fun TextInputFormComponent(
     updateValueState: (String) -> Unit,
 ) {
     Column(
-        modifier = Modifier.padding(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(7.dp)
     ) {
         label?.let {
             Text(
@@ -68,8 +65,7 @@ private fun TextInputFormPreview() {
         placeholder = "Placeholder",
         valueState = "",
         trailingIcon = { },
-        modifier = Modifier.fillMaxWidth()
-            .height(50.dp),
+        modifier = Modifier.fillMaxWidth(),
         updateValueState = {}
     )
 }

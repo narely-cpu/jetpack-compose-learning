@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -168,17 +167,12 @@ private fun TopBarManagementUser(onFinishedActivity: () -> Unit) {
 
 @Composable
 private fun BottomBarManagementUser(viewModel: ManagementUserViewModel) {
-    BottomAppBar(
-        modifier = Modifier.height(99.dp),
-        containerColor = Color.White
-    ) {
+    Box(modifier = Modifier.background(Color.White)) {
         Button(
-            onClick = {
-                viewModel.handleCreateUserForm()
-            },
+            onClick = { viewModel.handleCreateUserForm() },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(vertical = 24.dp, horizontal = 16.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Purple80,
                 contentColor = Color.White
@@ -187,7 +181,8 @@ private fun BottomBarManagementUser(viewModel: ManagementUserViewModel) {
         ) {
             Text(
                 stringResource(string.new_collaborator),
-                style = Typography.labelLarge
+                style = Typography.labelLarge,
+                modifier = Modifier.padding(vertical = 16.dp)
             )
         }
     }

@@ -1,8 +1,9 @@
 package com.narely.feedbackjourney.features.managementuser.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -10,8 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -141,15 +140,12 @@ private fun BottomBarCreateEditUser(
 ) {
     val buttonTitle = if (userId == 0) stringResource(string.add_collaborator) else stringResource(string.edit_collaborador)
 
-    BottomAppBar(
-        modifier = Modifier.height(99.dp),
-        containerColor = Color.White
-    ) {
+    Box(modifier = Modifier.background(Color.White)) {
         Button(
             onClick = handleConfirmCreateEditUserAction,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(vertical = 24.dp, horizontal = 16.dp),
             colors = ButtonColors(
                 containerColor = Purple80,
                 contentColor = Color.White,
@@ -161,7 +157,8 @@ private fun BottomBarCreateEditUser(
         ) {
             Text(
                 text = buttonTitle,
-                style = Typography.labelLarge
+                style = Typography.labelLarge,
+                modifier = Modifier.padding(vertical = 16.dp)
             )
         }
     }
@@ -180,15 +177,13 @@ private fun FormCreateEditUserContent(
     onUserPdmEmailChange: (String) -> Unit,
     isCollaborator: Boolean
 ) {
-    Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         TextInputFormComponent(
             label = null,
             placeholder = stringResource(string.name_label),
             valueState = userName,
             trailingIcon = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
+            modifier = Modifier.fillMaxWidth(),
             updateValueState = onUserNameChange
         )
         TextInputFormComponent(
@@ -196,9 +191,7 @@ private fun FormCreateEditUserContent(
             placeholder = stringResource(string.email_placeholder),
             valueState = userEmail,
             trailingIcon = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
+            modifier = Modifier.fillMaxWidth(),
             updateValueState = onUserEmailChange
         )
         ChooseTypeUser(
@@ -321,10 +314,10 @@ private fun FormCreateEditUserLayoutPreview() {
         userType = null,
         userPdmEmail = "",
         listPdm = emptyList(),
-        onUserNameChange = {  },
-        onUserEmailChange = {  },
+        onUserNameChange = {},
+        onUserEmailChange = {},
         onUserTypeChange = {},
-        onUserPdmEmailChange = {  },
+        onUserPdmEmailChange = {},
         isCollaborator = true
     )
 }
