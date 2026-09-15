@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.commons.ui.EnterpriseLogo
-import com.narely.feedbackjourney.commons.ui.TextInputForm
+import com.narely.feedbackjourney.commons.ui.TextInputFormComponent
 import com.narely.feedbackjourney.features.home.HomeActivity
 import com.narely.feedbackjourney.ui.theme.Blue80
 import com.narely.feedbackjourney.ui.theme.Magenta80
@@ -77,7 +77,7 @@ private fun FormLoginLayout(
     ) {
         Column(modifier = Modifier.padding(vertical = 32.dp)) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                TextInputForm(
+                TextInputFormComponent(
                     label = stringResource(string.email_label),
                     placeholder = null,
                     valueState = userEmail,
@@ -87,7 +87,7 @@ private fun FormLoginLayout(
                         .height(50.dp),
                     updateValueState = onUserEmailChange
                 )
-                TextInputForm(
+                TextInputFormComponent(
                     label = stringResource(string.password_label),
                     placeholder = null,
                     valueState = userPassword,

@@ -109,13 +109,10 @@ fun ManagementUserScreen(
                         name = item.name,
                         pdmName = managementUserViewModel.getPdmNameById(item.pdmId),
                         updateUser = {
-                            managementUserViewModel.resetUser()
-                            managementUserViewModel.updateUiCurrentUser(item.id)
-                            managementUserViewModel.updateShowModal(true)
+                            managementUserViewModel.handleEditUserForm(userId = item.id)
                         },
                         deleteUser = {
-                            managementUserViewModel.updateUiCurrentUser(item.id)
-                            managementUserViewModel.updateShowAlert(true)
+                            managementUserViewModel.handleRemoveUserAlert(userId = item.id)
                         }
                     )
                 }
@@ -125,8 +122,7 @@ fun ManagementUserScreen(
                     collaborator = uiState.value.collaborator,
                     updateShowModal = { managementUserViewModel.updateShowModal(false) },
                     isButtonEnable = managementUserViewModel.isButtonEnable(),
-                    createUser = { managementUserViewModel.createUser() },
-                    editUser = { managementUserViewModel.editUser() },
+                    handleConfirmCreateEditUserAction = { managementUserViewModel.handleConfirmCreateEditUserAction() },
                     listPdm = uiState.value.listPdm,
                     updateUiName = { managementUserViewModel.updateUiName(it) },
                     updateUiEmail = { managementUserViewModel.updateUiEmail(it) },
@@ -178,7 +174,7 @@ private fun BottomBarManagementUser(viewModel: ManagementUserViewModel) {
     ) {
         Button(
             onClick = {
-                viewModel.resetUser()
+                viewModel.handleCreateUserForm()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -240,7 +236,7 @@ private fun InfoUser(name: String, pdmName: String?) {
 
             pdmName?.let {
                 Text(
-                    "PDM | $pdmName",
+                    text = "${stringResource(string.pdm_name)} $pdmName",
                     style = Typography.bodySmall,
                     color = Grey80
                 )
@@ -252,11 +248,10 @@ private fun InfoUser(name: String, pdmName: String?) {
 @Composable
 private fun ConfigUser(updateUser: () -> Unit, deleteUser: () -> Unit) {
     Row(
-        modifier = Modifier
-            .padding(end = 16.dp),
+        modifier = Modifier.padding(end = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
-        ) {
+    ) {
         IconButton(
             onClick = { deleteUser.invoke() },
             modifier = Modifier.size(24.dp)
@@ -290,8 +285,7 @@ private fun CreateEditUsersModalScreen(
     collaborator: UserDataModel?,
     updateShowModal: (Boolean) -> Unit,
     isButtonEnable: Boolean,
-    createUser: () -> Unit,
-    editUser: () -> Unit,
+    handleConfirmCreateEditUserAction: () -> Unit,
     listPdm: List<UserDataModel>?,
     updateUiName: (String) -> Unit,
     updateUiEmail: (String) -> Unit,
@@ -300,10 +294,7 @@ private fun CreateEditUsersModalScreen(
     isCollaborator: Boolean,
     errorMessage: String?,
 ) {
-
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true
-    )
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
         onDismissRequest = { updateShowModal(false) },
@@ -314,8 +305,7 @@ private fun CreateEditUsersModalScreen(
             collaborator = collaborator,
             updateShowModal = updateShowModal,
             isButtonEnable = isButtonEnable,
-            createUser = createUser,
-            editUser = editUser,
+            handleConfirmCreateEditUserAction = handleConfirmCreateEditUserAction,
             listPdm = listPdm,
             updateUiName = updateUiName,
             updateUiEmail = updateUiEmail,
@@ -334,14 +324,14 @@ private fun AlertDialogDeleteUser(
 ) {
     AlertDialog(
         title = {
-            Row(horizontalArrangement = Arrangement.SpaceBetween,
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    stringResource(string.delete_dialog_title),
-                    style = Typography.labelLarge,
+                    text = stringResource(string.delete_dialog_title),
+                    style = Typography.labelLarge
                 )
                 IconButton(onClick = onDismissRequest) {
                     Icon(
@@ -354,8 +344,8 @@ private fun AlertDialogDeleteUser(
         },
         titleContentColor = Blue80,
         text = {
-            Text(stringResource(
-                string.delete_dialog_text),
+            Text(
+                text = stringResource(string.delete_dialog_text),
                 style = Typography.labelMedium
             )
         },
@@ -365,12 +355,11 @@ private fun AlertDialogDeleteUser(
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 TextButton(onClick = onDismissRequest) {
                     Text(
-                        stringResource(string.cancel_button),
+                        text = stringResource(string.cancel_button),
                         style = Typography.labelLarge,
                         color = Blue80
                     )
@@ -385,7 +374,7 @@ private fun AlertDialogDeleteUser(
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
-                        stringResource(string.confirm_button),
+                        text = stringResource(string.confirm_button),
                         style = Typography.labelLarge
                     )
                 }

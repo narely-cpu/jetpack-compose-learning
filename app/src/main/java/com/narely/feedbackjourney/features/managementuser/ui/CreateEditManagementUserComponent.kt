@@ -1,6 +1,8 @@
 package com.narely.feedbackjourney.features.managementuser.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -9,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -37,7 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.narely.feedbackjourney.R.string
-import com.narely.feedbackjourney.commons.ui.TextInputForm
+import com.narely.feedbackjourney.commons.ui.TextInputFormComponent
 import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
 import com.narely.feedbackjourney.features.managementuser.domain.model.UserTypeEnum
 import com.narely.feedbackjourney.ui.theme.Blue80
@@ -52,8 +55,7 @@ fun CreateEditManagementUserComponent(
     collaborator: UserDataModel?,
     updateShowModal: (Boolean) -> Unit,
     isButtonEnable: Boolean,
-    createUser: () -> Unit,
-    editUser: () -> Unit,
+    handleConfirmCreateEditUserAction: () -> Unit,
     listPdm: List<UserDataModel>?,
     updateUiName: (String) -> Unit,
     updateUiEmail: (String) -> Unit,
@@ -80,15 +82,14 @@ fun CreateEditManagementUserComponent(
             BottomBarCreateEditUser(
                 userId = collaborator?.id,
                 enabled = isButtonEnable,
-                onCreateUser = { createUser.invoke() },
-                onEditUser = { editUser.invoke() },
+                handleConfirmCreateEditUserAction = handleConfirmCreateEditUserAction
             )
         },
         containerColor = Color.White,
         modifier = Modifier.height(height.dp)
     ) { innerPadding ->
         Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
-            FormCreateEditUserLayout(
+            FormCreateEditUserContent(
                 userName = collaborator?.name ?: "",
                 userEmail = collaborator?.email ?: "",
                 userType = collaborator?.type,
@@ -114,7 +115,7 @@ private fun TopBarCreateEditUser(title: String, closeModal: () -> Unit) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                title,
+                text = title,
                 style = Typography.labelLarge,
                 color = Blue80
             )
@@ -136,8 +137,7 @@ private fun TopBarCreateEditUser(title: String, closeModal: () -> Unit) {
 private fun BottomBarCreateEditUser(
     userId: Int?,
     enabled: Boolean,
-    onCreateUser: () -> Unit,
-    onEditUser: () -> Unit,
+    handleConfirmCreateEditUserAction: () -> Unit,
 ) {
     val buttonTitle = if (userId == 0) stringResource(string.add_collaborator) else stringResource(string.edit_collaborador)
 
@@ -146,13 +146,7 @@ private fun BottomBarCreateEditUser(
         containerColor = Color.White
     ) {
         Button(
-            onClick = {
-                if (userId == 0) {
-                    onCreateUser()
-                } else {
-                    onEditUser()
-                }
-            },
+            onClick = handleConfirmCreateEditUserAction,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -166,7 +160,7 @@ private fun BottomBarCreateEditUser(
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                buttonTitle,
+                text = buttonTitle,
                 style = Typography.labelLarge
             )
         }
@@ -174,7 +168,7 @@ private fun BottomBarCreateEditUser(
 }
 
 @Composable
-private fun FormCreateEditUserLayout(
+private fun FormCreateEditUserContent(
     userName: String,
     userEmail: String,
     userType: UserTypeEnum?,
@@ -186,9 +180,8 @@ private fun FormCreateEditUserLayout(
     onUserPdmEmailChange: (String) -> Unit,
     isCollaborator: Boolean
 ) {
-
     Column(modifier = Modifier.padding(horizontal = 24.dp)) {
-        TextInputForm(
+        TextInputFormComponent(
             label = null,
             placeholder = stringResource(string.name_label),
             valueState = userName,
@@ -198,7 +191,7 @@ private fun FormCreateEditUserLayout(
                 .height(50.dp),
             updateValueState = onUserNameChange
         )
-        TextInputForm(
+        TextInputFormComponent(
             label = null,
             placeholder = stringResource(string.email_placeholder),
             valueState = userEmail,
@@ -236,7 +229,7 @@ private fun DropDownChooseUsers(
         expanded = (expanded && isCollaborator),
         onExpandedChange = { expanded = it }
     ) {
-        TextInputForm(
+        TextInputFormComponent(
             label = null,
             placeholder = placeholder,
             valueState = valueState ?: "",
@@ -251,8 +244,9 @@ private fun DropDownChooseUsers(
                 }
             },
             readOnly = true,
-            modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
-            .fillMaxWidth(),
+            modifier = Modifier
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+                .fillMaxWidth(),
         )
 
         ExposedDropdownMenu(
@@ -265,7 +259,7 @@ private fun DropDownChooseUsers(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            option,
+                            text = option,
                             style = Typography.labelMedium,
                             color = Color.Black
                         )
@@ -294,10 +288,10 @@ private fun ChooseTypeUser(
 
     DropDownChooseUsers(
         isCollaborator = true,
-        options,
+        options = options,
         placeholder = stringResource(string.choose_type_label),
-        valueState,
-        updateValueState
+        valueState = valueState,
+        updateValueState = updateValueState
     )
 }
 
@@ -321,7 +315,7 @@ private fun ChoosePDMUser(
 @Preview
 @Composable
 private fun FormCreateEditUserLayoutPreview() {
-    FormCreateEditUserLayout(
+    FormCreateEditUserContent(
         userName = "",
         userEmail = "",
         userType = null,

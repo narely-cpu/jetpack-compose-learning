@@ -71,6 +71,42 @@ class ManagementUserViewModel  @Inject constructor(
         return getUserUseCase.invoke(id = id, listPdm = uiState.value.listPdm)
     }
 
+    private fun createUser() = viewModelScope.launch {
+        createUserUseCase.invoke(
+            collaborator = uiState.value.collaborator,
+            pdm = uiState.value.pdm,
+            updateManagementUser = {
+                updateShowModal(false)
+                updateList()
+            },
+            errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
+        )
+    }
+
+    private fun editUser() = viewModelScope.launch {
+        editUserUseCase.invoke(
+            collaborator = uiState.value.collaborator,
+            pdm = uiState.value.pdm,
+            updateManagementUser = {
+                updateShowModal(false)
+                updateList()
+            },
+            errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
+        )
+    }
+
+    private fun resetUser() {
+        updateUiState(
+            uiState.value.copy(
+                currentUser = null,
+                collaborator = UserDataModel(),
+                pdm = null,
+                errorMessage = null,
+                showModal = true
+            )
+        )
+    }
+
     fun updateList() = viewModelScope.launch {
         updateUiState(
             uiState.value.copy(isLoading = true)
@@ -107,40 +143,27 @@ class ManagementUserViewModel  @Inject constructor(
         )
     }
 
-    fun createUser() = viewModelScope.launch {
-        createUserUseCase.invoke(
-            collaborator = uiState.value.collaborator,
-            pdm = uiState.value.pdm,
-            updateManagementUser = {
-                updateShowModal(false)
-                updateList()
-            },
-            errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
-        )
+    fun handleConfirmCreateEditUserAction() {
+        if (uiState.value.collaborator.id == 0) {
+            createUser()
+        } else {
+            editUser()
+        }
     }
 
-    fun editUser() = viewModelScope.launch {
-        editUserUseCase.invoke(
-            collaborator = uiState.value.collaborator,
-            pdm = uiState.value.pdm,
-            updateManagementUser = {
-                updateShowModal(false)
-                updateList()
-            },
-            errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
-        )
+    fun handleCreateUserForm() {
+        resetUser()
     }
 
-    fun resetUser() {
-        updateUiState(
-            uiState.value.copy(
-                currentUser = null,
-                collaborator = UserDataModel(),
-                pdm = null,
-                errorMessage = null,
-                showModal = true
-            )
-        )
+    fun handleEditUserForm(userId: Int) {
+        resetUser()
+        updateUiCurrentUser(newCurrentUserId = userId)
+        updateShowModal(true)
+    }
+
+    fun handleRemoveUserAlert(userId: Int) {
+        updateUiCurrentUser(newCurrentUserId = userId)
+        updateShowAlert(true)
     }
 
     fun updateUiName(newName: String) {

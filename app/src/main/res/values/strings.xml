@@ -27,6 +27,7 @@
     <string name="new_collaborator">Novo colaborador</string>
     <string name="password_label">Senha</string>
     <string name="pdm_label">PDM</string>
+    <string name="pdm_name">PDM |</string>
     <string name="save_user">Save User</string>
     <string name="skills">Habilidades</string>
     <string name="start_new_feedback">Iniciar coleta de feedback</string>
