@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -43,13 +42,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.narely.feedbackjourney.R
 import com.narely.feedbackjourney.R.string
+import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
 import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserTypeEnum
 import com.narely.feedbackjourney.ui.theme.Blue40
 import com.narely.feedbackjourney.ui.theme.Blue80
 import com.narely.feedbackjourney.ui.theme.Grey40
@@ -83,12 +85,63 @@ fun ManagementUserScreen(
         }
     }
 
+    ManagementUserContent(
+        isLoading = uiState.value.isLoading,
+        listUsers = uiState.value.listUsers,
+        showModal = uiState.value.showModal,
+        collaborator = uiState.value.collaborator,
+        listPdm = uiState.value.listPdm,
+        errorMessage = uiState.value.errorMessage,
+        showAlert = uiState.value.showAlert,
+        onFinishedActivity = onFinishedActivity,
+        handleCreateUserForm = { managementUserViewModel.handleCreateUserForm() },
+        getPdmNameById = { managementUserViewModel.getPdmNameById(pdmId = it) },
+        handleEditUserForm = { managementUserViewModel.handleEditUserForm(userId = it) },
+        handleRemoveUserAlert = { managementUserViewModel.handleRemoveUserAlert(userId = it) },
+        updateShowModal = { managementUserViewModel.updateShowModal(it) },
+        isButtonEnable = { managementUserViewModel.isButtonEnable() },
+        handleConfirmCreateEditUserAction = { managementUserViewModel.handleConfirmCreateEditUserAction() },
+        updateUiName = { managementUserViewModel.updateUiName(newName = it) },
+        updateUiEmail = { managementUserViewModel.updateUiEmail(newEmail = it) },
+        updateUiUserType = { managementUserViewModel.updateUiUserType(newUserType = it) },
+        updateUiPdmEmail = { managementUserViewModel.updateUiPdmEmail(newPdmEmail = it) },
+        isCollaborator = { managementUserViewModel.isCollaborator() },
+        updateShowAlert = { managementUserViewModel.updateShowAlert(it) },
+        removeUser = { managementUserViewModel.removeUser(uiState.value.collaborator.id) }
+    )
+}
+
+@Composable
+fun ManagementUserContent(
+    isLoading: Boolean,
+    listUsers: List<UserResponse>,
+    showModal: Boolean,
+    collaborator: UserDataModel,
+    listPdm: List<UserDataModel>?,
+    errorMessage: String?,
+    showAlert: Boolean,
+    onFinishedActivity: () -> Unit,
+    handleCreateUserForm: () -> Unit,
+    getPdmNameById: (Int?) -> String?,
+    handleEditUserForm: (Int) -> Unit,
+    handleRemoveUserAlert: (Int) -> Unit,
+    updateShowModal: (Boolean) -> Unit,
+    isButtonEnable: () -> Boolean,
+    handleConfirmCreateEditUserAction: () -> Unit,
+    updateUiName: (String) -> Unit,
+    updateUiEmail: (String) -> Unit,
+    updateUiUserType: (String) -> Unit,
+    updateUiPdmEmail: (String) -> Unit,
+    isCollaborator: () -> Boolean,
+    updateShowAlert: (Boolean) -> Unit,
+    removeUser: (Int) -> Unit
+) {
     Scaffold(
         containerColor = Grey40,
         topBar = { TopBarManagementUser(onFinishedActivity) },
-        bottomBar = { BottomBarManagementUser(managementUserViewModel) }
+        bottomBar = { BottomBarManagementUser(handleCreateUserForm) }
     ) { innerPadding ->
-        if (uiState.value.isLoading) {
+        if (isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
@@ -103,38 +156,34 @@ fun ManagementUserScreen(
                     .padding(top = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(1.dp)
             ) {
-                items(uiState.value.listUsers) { item ->
+                items(listUsers) { item ->
                     UserListItem(
                         name = item.name,
-                        pdmName = managementUserViewModel.getPdmNameById(item.pdmId),
-                        updateUser = {
-                            managementUserViewModel.handleEditUserForm(userId = item.id)
-                        },
-                        deleteUser = {
-                            managementUserViewModel.handleRemoveUserAlert(userId = item.id)
-                        }
+                        pdmName = getPdmNameById(item.pdmId),
+                        updateUser = { handleEditUserForm(item.id) },
+                        deleteUser = { handleRemoveUserAlert(item.id) }
                     )
                 }
             }
-            if (uiState.value.showModal) {
+            if (showModal) {
                 CreateEditUsersModalScreen(
-                    collaborator = uiState.value.collaborator,
-                    updateShowModal = { managementUserViewModel.updateShowModal(false) },
-                    isButtonEnable = managementUserViewModel.isButtonEnable(),
-                    handleConfirmCreateEditUserAction = { managementUserViewModel.handleConfirmCreateEditUserAction() },
-                    listPdm = uiState.value.listPdm,
-                    updateUiName = { managementUserViewModel.updateUiName(it) },
-                    updateUiEmail = { managementUserViewModel.updateUiEmail(it) },
-                    updateUiUserType = { managementUserViewModel.updateUiUserType(it) },
-                    updateUiPdmEmail = { managementUserViewModel.updateUiPdmEmail(it) },
-                    isCollaborator = managementUserViewModel.isCollaborator(),
-                    errorMessage = uiState.value.errorMessage
+                    collaborator = collaborator,
+                    updateShowModal = { updateShowModal(false) },
+                    isButtonEnable = isButtonEnable(),
+                    handleConfirmCreateEditUserAction = { handleConfirmCreateEditUserAction() },
+                    listPdm = listPdm,
+                    updateUiName = { updateUiName(it) },
+                    updateUiEmail = { updateUiEmail(it) },
+                    updateUiUserType = { updateUiUserType(it) },
+                    updateUiPdmEmail = { updateUiPdmEmail(it) },
+                    isCollaborator = isCollaborator(),
+                    errorMessage = errorMessage
                 )
             }
-            if (uiState.value.showAlert) {
+            if (showAlert) {
                 AlertDialogDeleteUser(
-                    onDismissRequest = { managementUserViewModel.updateShowAlert(false) },
-                    onConfirmation = { managementUserViewModel.removeUser(uiState.value.collaborator.id) }
+                    onDismissRequest = { updateShowAlert(false) },
+                    onConfirmation = { removeUser(collaborator.id) }
                 )
             }
         }
@@ -166,10 +215,10 @@ private fun TopBarManagementUser(onFinishedActivity: () -> Unit) {
 }
 
 @Composable
-private fun BottomBarManagementUser(viewModel: ManagementUserViewModel) {
+private fun BottomBarManagementUser(handleCreateUserForm: () -> Unit) {
     Box(modifier = Modifier.background(Color.White)) {
         Button(
-            onClick = { viewModel.handleCreateUserForm() },
+            onClick = handleCreateUserForm,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 24.dp, horizontal = 16.dp),
@@ -248,7 +297,7 @@ private fun ConfigUser(updateUser: () -> Unit, deleteUser: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = { deleteUser.invoke() },
+            onClick = deleteUser,
             modifier = Modifier.size(24.dp)
         ) {
             Image(
@@ -263,7 +312,7 @@ private fun ConfigUser(updateUser: () -> Unit, deleteUser: () -> Unit) {
         )
 
         IconButton(
-            onClick = { updateUser.invoke() },
+            onClick = updateUser,
             modifier = Modifier.size(24.dp)
         ) {
             Image(
@@ -375,7 +424,86 @@ private fun AlertDialogDeleteUser(
                 }
             }
         },
-        shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.width(293.dp)
+        shape = RoundedCornerShape(16.dp)
+    )
+}
+
+@Preview
+@Composable
+fun ManagementUserContentPreview() {
+    val listUsers = listOf(
+        UserResponse(
+            id = 1,
+            name = "name 1",
+            email = "email1@ciandt.com",
+            type = "PDM",
+            pdmId = null,
+            active = true
+        ),
+        UserResponse(
+            id = 2,
+            name = "name 2",
+            email = "email2@ciandt.com",
+            type = "PDM",
+            pdmId = null,
+            active = true
+        ),
+        UserResponse(
+            id = 3,
+            name = "name 3",
+            email = "email3@ciandt.com",
+            type = "COLLABORATOR",
+            pdmId = 1,
+            active = true
+        ),
+        UserResponse(
+            id = 4,
+            name = "name 4",
+            email = "email4@ciandt.com",
+            type = "COLLABORATOR",
+            pdmId = 2,
+            active = true
+        ),
+    )
+    val listPdm = listOf(
+        UserDataModel(
+            id = 1,
+            name = "nome 1",
+            email = "email1@ciandt.com",
+            type = UserTypeEnum.PDM,
+            pdmEmail = null
+        ),
+        UserDataModel(
+            id = 1,
+            name = "nome 2",
+            email = "email1@ciandt.com",
+            type = UserTypeEnum.PDM,
+            pdmEmail = null
+        )
+    )
+
+    ManagementUserContent(
+        isLoading = false,
+        listUsers = listUsers,
+        showModal = false,
+        collaborator = UserDataModel(),
+        listPdm = listPdm,
+        errorMessage = null,
+        showAlert = true,
+        onFinishedActivity = { },
+        handleCreateUserForm = { },
+        getPdmNameById = { "nome 2" },
+        handleEditUserForm = {},
+        handleRemoveUserAlert = {},
+        updateShowModal = { },
+        isButtonEnable = { true },
+        handleConfirmCreateEditUserAction = {},
+        updateUiName = {},
+        updateUiEmail = {},
+        updateUiUserType = {},
+        updateUiPdmEmail = {},
+        isCollaborator = { false },
+        updateShowAlert = {},
+        removeUser = {},
     )
 }
