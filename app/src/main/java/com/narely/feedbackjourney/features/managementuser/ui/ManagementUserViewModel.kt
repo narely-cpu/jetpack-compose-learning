@@ -39,6 +39,14 @@ class ManagementUserViewModel  @Inject constructor(
         )
     }
 
+    private fun updateUiCurrentUser(newCurrentUserId: Int) = viewModelScope.launch {
+        val newCurrentUser = readUser(newCurrentUserId)
+
+        if (newCurrentUser != null) {
+            updateUiCollaborator(newCollaborator = newCurrentUser)
+        }
+    }
+
     private fun updateUiPdm(newPdm: UserDataModel?) {
         updateUiState(
             uiState.value.copy(pdm = newPdm)
@@ -98,7 +106,6 @@ class ManagementUserViewModel  @Inject constructor(
     private fun resetUser() {
         updateUiState(
             uiState.value.copy(
-                currentUser = null,
                 collaborator = UserDataModel(),
                 pdm = null,
                 errorMessage = null
@@ -191,14 +198,6 @@ class ManagementUserViewModel  @Inject constructor(
             uiState.value.collaborator.copy(pdmEmail = newPdmEmail)
         )
         getPdmUser()
-    }
-
-    fun updateUiCurrentUser(newCurrentUserId: Int) = viewModelScope.launch {
-        val newCurrentUser = readUser(newCurrentUserId)
-
-        if (newCurrentUser != null) {
-            updateUiCollaborator(newCollaborator = newCurrentUser)
-        }
     }
 
     fun updateUiErrorMessage(newErrorMessage: String?) {

@@ -5,7 +5,6 @@ import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataM
 
 data class ManagementUserState(
     val listUsers: List<UserResponse> = emptyList<UserResponse>(),
-    val currentUser: UserResponse? = null,
     val showModal: Boolean = false,
     var collaborator: UserDataModel = UserDataModel(),
     val errorMessage: String? = null,
