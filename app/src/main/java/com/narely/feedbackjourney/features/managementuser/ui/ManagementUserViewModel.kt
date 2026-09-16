@@ -120,13 +120,14 @@ class ManagementUserViewModel  @Inject constructor(
         )
     }
 
-    fun removeUser(id: Int) = viewModelScope.launch {
+    fun removeUser() = viewModelScope.launch {
         removeUserUseCase.invoke(
-            id = id,
+            collaborator = uiState.value.collaborator,
             deleteManagementUser = {
                 updateShowAlert(false)
                 updateList()
-            }
+            },
+            errorMessage = { updateUiErrorMessage(newErrorMessage = it) }
         )
     }
 
@@ -162,6 +163,7 @@ class ManagementUserViewModel  @Inject constructor(
     }
 
     fun handleRemoveUserAlert(userId: Int) {
+        resetUser()
         updateUiCurrentUser(newCurrentUserId = userId)
         updateShowAlert(true)
     }

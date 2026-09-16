@@ -27,6 +27,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -107,7 +108,7 @@ fun ManagementUserScreen(
         updateUiPdmEmail = { managementUserViewModel.updateUiPdmEmail(newPdmEmail = it) },
         isCollaborator = { managementUserViewModel.isCollaborator() },
         updateShowAlert = { managementUserViewModel.updateShowAlert(it) },
-        removeUser = { managementUserViewModel.removeUser(uiState.value.collaborator.id) }
+        removeUser = { managementUserViewModel.removeUser() }
     )
 }
 
@@ -183,7 +184,8 @@ fun ManagementUserContent(
             if (showAlert) {
                 AlertDialogDeleteUser(
                     onDismissRequest = { updateShowAlert(false) },
-                    onConfirmation = { removeUser(collaborator.id) }
+                    onConfirmation = { removeUser(collaborator.id) },
+                    errorMessage = errorMessage
                 )
             }
         }
@@ -364,7 +366,8 @@ private fun CreateEditUsersModalScreen(
 @Composable
 private fun AlertDialogDeleteUser(
     onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit
+    onConfirmation: () -> Unit,
+    errorMessage: String?
 ) {
     AlertDialog(
         title = {
@@ -388,10 +391,15 @@ private fun AlertDialogDeleteUser(
         },
         titleContentColor = Blue80,
         text = {
-            Text(
-                text = stringResource(string.delete_dialog_text),
-                style = Typography.labelMedium
-            )
+            Column() {
+                Text(
+                    text = stringResource(string.delete_dialog_text),
+                    style = Typography.labelMedium
+                )
+                errorMessage?.let {
+                    Text("Error: $it", color = MaterialTheme.colorScheme.error)
+                }
+            }
         },
         textContentColor = Color.Black,
         onDismissRequest = onDismissRequest,
