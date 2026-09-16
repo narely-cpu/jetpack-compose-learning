@@ -1,19 +1,21 @@
 package com.narely.feedbackjourney.features.managementuser.domain
 
-import android.util.Log
 import com.google.gson.Gson
 import com.narely.feedbackjourney.commons.data.remote.model.ErrorResponse
 import com.narely.feedbackjourney.features.managementuser.data.ManagementUserRepository
+import com.narely.feedbackjourney.features.managementuser.domain.model.UserDataModel
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class RemoveUserUseCase @Inject constructor(val managementUserRepository: ManagementUserRepository) {
 
     suspend fun invoke(
-        id: Int,
-        deleteManagementUser: () -> Unit) {
+        collaborator: UserDataModel,
+        deleteManagementUser: () -> Unit,
+        errorMessage: (String?) -> Unit
+    ) {
         try {
-            managementUserRepository.removeUser(id)
+            managementUserRepository.removeUser(collaborator.id)
             deleteManagementUser()
         } catch (e: Exception) {
             if (e is HttpException) {
@@ -21,10 +23,10 @@ class RemoveUserUseCase @Inject constructor(val managementUserRepository: Manage
 
                 errorResponse?.let {
                     val error = Gson().fromJson(it, ErrorResponse::class.java)
-                    Log.e("error http remove user:", error.error)
+                    errorMessage(error.error)
                 }
             } else {
-                e.message?.let { Log.e("error remove user:", it) }
+                errorMessage(e.message)
             }
         }
     }
