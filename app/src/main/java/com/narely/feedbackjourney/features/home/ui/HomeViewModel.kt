@@ -1,7 +1,6 @@
 package com.narely.feedbackjourney.features.home.ui
 
 import androidx.lifecycle.ViewModel
-import com.narely.feedbackjourney.commons.data.remote.model.UserResponse
 import com.narely.feedbackjourney.features.managementuser.domain.GetUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,10 +18,4 @@ class HomeViewModel @Inject constructor(
     private fun updateUiState(uiState: HomeViewState) {
         _uiState.value = uiState
     }
-
-//    fun updateCurrentUser(user: UserResponse) {
-//        updateUiState(
-//            uiState.value.copy(currentUser = user)
-//        )
-//    }
 }
