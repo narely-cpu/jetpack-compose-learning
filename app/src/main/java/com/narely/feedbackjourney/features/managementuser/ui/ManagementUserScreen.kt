@@ -168,7 +168,7 @@ fun ManagementUserContent(
             if (showModal) {
                 CreateEditUsersModalScreen(
                     collaborator = collaborator,
-                    updateShowModal = { updateShowModal(false) },
+                    updateShowModal = { updateShowModal(it) },
                     isButtonEnable = isButtonEnable(),
                     handleConfirmCreateEditUserAction = { handleConfirmCreateEditUserAction() },
                     listPdm = listPdm,
@@ -424,7 +424,8 @@ private fun AlertDialogDeleteUser(
                 }
             }
         },
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.padding(horizontal = 20.dp)
     )
 }
 
@@ -489,7 +490,7 @@ fun ManagementUserContentPreview() {
         collaborator = UserDataModel(),
         listPdm = listPdm,
         errorMessage = null,
-        showAlert = true,
+        showAlert = false,
         onFinishedActivity = { },
         handleCreateUserForm = { },
         getPdmNameById = { "nome 2" },
