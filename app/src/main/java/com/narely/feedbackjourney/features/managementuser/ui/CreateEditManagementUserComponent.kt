@@ -63,7 +63,6 @@ fun CreateEditManagementUserComponent(
     isCollaborator: Boolean,
     errorMessage: String?,
 ) {
-
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
     val screenHeightPx = with(density) { configuration.screenHeightDp.dp }
@@ -102,7 +101,10 @@ fun CreateEditManagementUserComponent(
             )
 
             errorMessage?.let {
-                Text("Error: $it", color = MaterialTheme.colorScheme.error)
+                Text(
+                    text = stringResource(string.error_label) + it,
+                    color = MaterialTheme.colorScheme.error
+                )
             }
         }
     }
@@ -120,7 +122,7 @@ private fun TopBarCreateEditUser(title: String, closeModal: () -> Unit) {
             )
         },
         actions = {
-            IconButton(onClick = { closeModal.invoke() }) {
+            IconButton(onClick = closeModal) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(string.back_button),

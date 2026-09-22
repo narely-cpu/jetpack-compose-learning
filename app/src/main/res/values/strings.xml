@@ -15,6 +15,7 @@
     <string name="edit_collaborador">Editar colaborador</string>
     <string name="email_label">Email</string>
     <string name="email_placeholder">E-mail</string>
+    <string name="error_label">Error :</string>
     <string name="evaluation_history">Histórico de avaliações</string>
     <string name="forgot_password">Esqueci a senha</string>
     <string name="image_profile">Foto de Perfil</string>

@@ -151,7 +151,7 @@ private fun ListItemComponent(onClick: () -> Unit, painterId: Int, contentDescri
                 modifier = Modifier.size(24.dp)
             )
             Text(
-                stringResource(contentDescription),
+                text = stringResource(contentDescription),
                 style = Typography.displaySmall,
                 modifier = Modifier.padding(start = 16.dp)
             )

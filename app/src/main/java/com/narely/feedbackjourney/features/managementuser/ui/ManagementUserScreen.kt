@@ -397,7 +397,10 @@ private fun AlertDialogDeleteUser(
                     style = Typography.labelMedium
                 )
                 errorMessage?.let {
-                    Text("Error: $it", color = MaterialTheme.colorScheme.error)
+                    Text(
+                        text = stringResource(string.error_label) + it,
+                        color = MaterialTheme.colorScheme.error
+                    )
                 }
             }
         },
