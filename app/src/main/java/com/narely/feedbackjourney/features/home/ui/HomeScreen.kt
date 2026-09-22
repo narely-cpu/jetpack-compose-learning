@@ -1,5 +1,6 @@
 package com.narely.feedbackjourney.features.home.ui
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,6 +35,7 @@ import com.narely.feedbackjourney.R
 import com.narely.feedbackjourney.R.string
 import com.narely.feedbackjourney.commons.ui.EnterpriseLogo
 import com.narely.feedbackjourney.features.home.domain.model.HomeListItem
+import com.narely.feedbackjourney.features.managementuser.ManagementUserActivity
 import com.narely.feedbackjourney.ui.theme.Blue40
 import com.narely.feedbackjourney.ui.theme.Blue80
 import com.narely.feedbackjourney.ui.theme.Grey40
@@ -51,11 +54,7 @@ fun HomeScreen(viewModel: HomeViewModel) {
                 .fillMaxWidth()
                 .background(Color.White)
             ) {
-                EnterpriseLogo(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .height(24.dp)
-                )
+                EnterpriseLogo(modifier = Modifier.padding(16.dp))
             }
             ProfileComponent(
                 userName = homeUiState.value.currentUser?.name ?: "",
@@ -152,7 +151,7 @@ private fun ListItemComponent(onClick: () -> Unit, painterId: Int, contentDescri
                 modifier = Modifier.size(24.dp)
             )
             Text(
-                stringResource(contentDescription),
+                text = stringResource(contentDescription),
                 style = Typography.displaySmall,
                 modifier = Modifier.padding(start = 16.dp)
             )
@@ -209,6 +208,8 @@ private fun MyJourneyComponent() {
 
 @Composable
 private fun MyTeamComponent() {
+    val context = LocalContext.current
+
     Text(
         text = stringResource(string.my_team),
         style = Typography.labelLarge,
@@ -218,7 +219,14 @@ private fun MyTeamComponent() {
     )
 
     ListItemComponent(
-        onClick = {},
+        onClick = {
+            context.startActivity(
+                Intent(
+                    context,
+                    ManagementUserActivity::class.java
+                )
+            )
+        },
         painterId = R.drawable.members,
         contentDescription = string.manage_members
     )

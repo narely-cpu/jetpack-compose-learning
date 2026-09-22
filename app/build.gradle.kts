@@ -18,9 +18,7 @@ val localProperties = Properties().apply {
 android {
     namespace = "com.narely.feedbackjourney"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 0
-        }
+        version = release(36)
     }
 
     defaultConfig {
@@ -75,6 +73,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.gson)
     implementation(libs.converter.gson)
+    implementation(libs.icons.heroicons.outline.android)
     implementation(libs.androidx.compose.material.icons.extended)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
