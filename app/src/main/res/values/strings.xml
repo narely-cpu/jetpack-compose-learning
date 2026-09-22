@@ -5,6 +5,7 @@
     <string name="cancel_button">Cancel</string>
     <string name="choose_pdm_label">Choose a PDM</string>
     <string name="choose_type_label">Choose a type</string>
+    <string name="cit_logo">CI&amp;T</string>
     <string name="collaborator_label">COLLABORATOR</string>
     <string name="create_user">Create User</string>
     <string name="delete_button">Delete</string>
@@ -12,6 +13,8 @@
     <string name="delete_dialog_title">Delete User</string>
     <string name="edit_user">Edit User</string>
     <string name="email_label">Email</string>
+    <string name="forgot_password">Esqueci a senha</string>
+    <string name="login_button_label">Fazer Login</string>
     <string name="name_label">Name</string>
     <string name="password_label">Password</string>
     <string name="pdm_label">PDM</string>
