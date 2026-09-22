@@ -35,22 +35,23 @@ import com.narely.feedbackjourney.ui.theme.Typography
 @Composable
 fun LoginScreen(viewModel: LoginViewModel) {
     val formsUiState by viewModel.uiState.collectAsState()
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            EnterpriseLogo()
-            FormLoginLayout(
-                userEmail = formsUiState.email,
-                userPassword = formsUiState.password,
-                onUserEmailChange = { viewModel.updateUiEmail(newEmail = it) },
-                onUserPasswordChange = { viewModel.updateUiPassword(newPassword = it) },
-                loginOnClick = { viewModel.login() }
-            )
-        }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        EnterpriseLogo()
+        FormLoginLayout(
+            userEmail = formsUiState.email,
+            userPassword = formsUiState.password,
+            onUserEmailChange = { viewModel.updateUiEmail(newEmail = it) },
+            onUserPasswordChange = { viewModel.updateUiPassword(newPassword = it) },
+            loginOnClick = { viewModel.login() }
+        )
+    }
 }
 
 @Composable
@@ -155,7 +156,7 @@ private fun ForgotPasswordButton(onClick: () -> Unit) {
     ) {
         TextButton(onClick = onClick) {
             Text(
-                stringResource(string.forgot_password),
+                text = stringResource(string.forgot_password),
                 style = Typography.titleMedium,
                 color = Blue80
             )
