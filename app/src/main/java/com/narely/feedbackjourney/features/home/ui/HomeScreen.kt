@@ -42,6 +42,7 @@ import com.narely.feedbackjourney.ui.theme.Typography
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
     val homeUiState = viewModel.uiState.collectAsState()
+
     Scaffold(
         containerColor = Grey40
     ) { innerPadding ->
@@ -97,12 +98,12 @@ private fun InfoUser(userName: String, userType: String) {
         )
         Column(modifier = Modifier.padding(start = 16.dp)) {
             Text(
-                userName,
+                text = userName,
                 style = Typography.titleMedium,
                 color = Blue80
             )
             Text(
-                userType,
+                text = userType,
                 style = Typography.displaySmall,
                 color = Blue80
             )
@@ -113,9 +114,7 @@ private fun InfoUser(userName: String, userType: String) {
 @Composable
 private fun StartFeedbackCollection(onClick: () -> Unit) {
     Button(
-        onClick = {
-            onClick.invoke()
-        },
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, bottom = 16.dp, end = 16.dp)
@@ -129,7 +128,7 @@ private fun StartFeedbackCollection(onClick: () -> Unit) {
         shape = RoundedCornerShape(8.dp)
     ) {
         Text(
-            stringResource(string.start_new_feedback),
+            text = stringResource(string.start_new_feedback),
             style = Typography.titleSmall
         )
     }
@@ -194,7 +193,7 @@ private fun MyJourneyComponent() {
     )
 
     Text(
-        stringResource(string.my_journey),
+        text = stringResource(string.my_journey),
         style = Typography.labelLarge,
         modifier = Modifier
             .fillMaxWidth()
@@ -211,7 +210,7 @@ private fun MyJourneyComponent() {
 @Composable
 private fun MyTeamComponent() {
     Text(
-        stringResource(string.my_team),
+        text = stringResource(string.my_team),
         style = Typography.labelLarge,
         modifier = Modifier
             .fillMaxWidth()
